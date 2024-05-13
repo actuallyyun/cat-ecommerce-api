@@ -1,0 +1,21 @@
+id;first_name;last_name;role;avatar;email;password;created_at;updated_at
+00000000-0000-0000-0000-000000000001;John;Doe;user;http://example.com/avatar1.jpg;john@example.com;password1;2024-04-23 08:00:00;2024-04-23 08:00:00
+00000000-0000-0000-0000-000000000002;Jane;Smith;admin;http://example.com/avatar2.jpg;jane@example.com;password2;2024-04-23 08:15:00;2024-04-23 08:00:00
+00000000-0000-0000-0000-000000000003;Alice;Johnson;user;http://example.com/avatar3.jpg;alice@example.com;password3;2024-04-23 08:30:00;2024-04-23 08:00:00
+00000000-0000-0000-0000-000000000004;Michael;Brown;user;http://example.com/avatar4.jpg;michael@example.com;password4;2024-04-23 08:45:00;2024-04-23 08:00:00
+00000000-0000-0000-0000-000000000005;Emily;Williams;user;http://example.com/avatar5.jpg;emily@example.com;password5;2024-04-23 09:00:00;2024-04-23 08:00:00
+00000000-0000-0000-0000-000000000006;David;Jones;admin;http://example.com/avatar6.jpg;david@example.com;password6;2024-04-23 09:15:00;2024-04-23 08:00:00
+00000000-0000-0000-0000-000000000007;Samantha;Miller;user;http://example.com/avatar7.jpg;samantha@example.com;password7;2024-04-23 09:30:00;2024-04-23 08:00:00
+00000000-0000-0000-0000-000000000008;Christopher;Taylor;user;http://example.com/avatar8.jpg;chris@example.com;password8;2024-04-23 09:45:00;2024-04-23 08:00:00
+00000000-0000-0000-0000-000000000009;Elizabeth;Wilson;user;http://example.com/avatar9.jpg;elizabeth@example.com;password9;2024-04-23 10:00:00;2024-04-23 08:00:00
+00000000-0000-0000-0000-000000000010;James;Anderson;admin;http://example.com/avatar10.jpg;james@example.com;password10;2024-04-23 10:15:00;2024-04-23 08:00:00
+00000000-0000-0000-0000-000000000011;Olivia;Moore;user;http://example.com/avatar11.jpg;olivia@example.com;password11;2024-04-23 10:30:00;2024-04-23 08:00:00
+00000000-0000-0000-0000-000000000012;Ethan;Martinez;user;http://example.com/avatar12.jpg;ethan@example.com;password12;2024-04-23 10:45:00;2024-04-23 08:00:00
+00000000-0000-0000-0000-000000000013;Sophia;Garcia;admin;http://example.com/avatar13.jpg;sophia@example.com;password13;2024-04-23 11:00:00;2024-04-23 08:00:00
+00000000-0000-0000-0000-000000000014;Daniel;Clark;user;http://example.com/avatar14.jpg;daniel@example.com;password14;2024-04-23 11:15:00;2024-04-23 08:00:00
+00000000-0000-0000-0000-000000000015;Isabella;Rodriguez;user;http://example.com/avatar15.jpg;isabella@example.com;password15;2024-04-23 11:30:00;2024-04-23 08:00:00
+00000000-0000-0000-0000-000000000016;Henry;Lewis;user;http://example.com/avatar16.jpg;henry@example.com;password16;2024-04-23 11:45:00;2024-04-23 08:00:00
+00000000-0000-0000-0000-000000000017;Charlotte;Lee;admin;http://example.com/avatar17.jpg;charlotte@example.com;password17;2024-04-23 12:00:00;2024-04-23 08:00:00
+00000000-0000-0000-0000-000000000018;Benjamin;Walker;user;http://example.com/avatar18.jpg;benjamin@example.com;password18;2024-04-23 12:15:00;2024-04-23 08:00:00
+00000000-0000-0000-0000-000000000019;Amelia;Hall;user;http://example.com/avatar19.jpg;amelia@example.com;password19;2024-04-23 12:30:00;2024-04-23 08:00:00
+00000000-0000-0000-0000-000000000020;Lucas;Allen;user;http://example.com/avatar20.jpg;lucas@example.com;password20;2024-04-23 12:45:00;2024-04-23 08:00:00
