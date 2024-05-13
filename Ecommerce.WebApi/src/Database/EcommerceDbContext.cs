@@ -150,28 +150,28 @@ namespace Ecommerce.WebApi.src.Data
             // Add dummy data
 
             var categorySeed = new CategorySeed(this);
-            modelBuilder.Entity<Category>().HasData(categorySeed.SeedCategories("../data/category.csv"));
+            modelBuilder.Entity<Category>().HasData(categorySeed.SeedCategories("./SeedingData/category.csv"));
 
             var userSeed = new UserSeed(this);
-            modelBuilder.Entity<User>().HasData(userSeed.SeedUsers("../data/users.csv"));
+            modelBuilder.Entity<User>().HasData(userSeed.SeedUsers(".SeedingData/users.csv"));
 
             var productSeed = new ProductSeed(this);
-            modelBuilder.Entity<Product>().HasData(productSeed.SeedProducts("../data/products.csv"));
+            modelBuilder.Entity<Product>().HasData(productSeed.SeedProducts("./SeedingData/products.csv"));
 
             var adddressSeed = new AddressSeed(this);
-            modelBuilder.Entity<Address>().HasData(adddressSeed.SeedAddresses("../data/addresses.csv"));
+            modelBuilder.Entity<Address>().HasData(adddressSeed.SeedAddresses("./SeedingData/addresses.csv"));
 
             var orderSeed = new OrderSeed(this);
-            modelBuilder.Entity<Order>().HasData(orderSeed.SeedOrders("../data/orders.csv"));
+            modelBuilder.Entity<Order>().HasData(orderSeed.SeedOrders("./SeedingData/orders.csv"));
 
             var orderItemSeed = new OrderItemSeed(this);
-            modelBuilder.Entity<OrderItem>().HasData(orderItemSeed.SeedOrderItem("../data/order_items.csv"));
+            modelBuilder.Entity<OrderItem>().HasData(orderItemSeed.SeedOrderItem("./SeedingData/order_items.csv"));
 
             var reviewSeed = new ReviewSeed(this);
-            modelBuilder.Entity<Review>().HasData(reviewSeed.SeedReviews("../data/review.csv"));
+            modelBuilder.Entity<Review>().HasData(reviewSeed.SeedReviews("./SeedingData/review.csv"));
 
             var imageSeed = new ImageSeed(this);
-            modelBuilder.Entity<Image>().HasData(imageSeed.SeedImage("../data/images.csv"));
+            modelBuilder.Entity<Image>().HasData(imageSeed.SeedImage("./SeedingData/images.csv"));
 
 
         }
