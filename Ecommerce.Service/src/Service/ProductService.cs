@@ -4,6 +4,7 @@ using Ecommerce.Core.src.RepoAbstraction;
 using Ecommerce.Core.src.RepositoryAbstraction;
 using Ecommerce.Service.src.DTO;
 using Ecommerce.Service.src.ServiceAbstraction;
+using AutoMapper;
 
 namespace Ecommerce.Service.src.Service
 {
@@ -12,13 +13,17 @@ namespace Ecommerce.Service.src.Service
         private readonly IProductRepository _productRepository;
         private readonly ICategoryRepository _categoryRepository;
 
+        private readonly IMapper _mapper;
+
         public ProductService(
             IProductRepository productRepository,
-            ICategoryRepository categoryRepository
+            ICategoryRepository categoryRepository,
+            IMapper mapper
         )
         {
             _productRepository = productRepository;
             _categoryRepository = categoryRepository;
+            _mapper = mapper;
         }
 
         public async Task<ProductReadDto> CreateProductAsync(ProductCreateDto product)
@@ -27,14 +32,6 @@ namespace Ecommerce.Service.src.Service
             if (categoryFound == null)
             {
                 throw new ArgumentException($"Category with id {product.CategoryId} not found.");
-            }
-            if (product.Price < 0)
-            {
-                throw new ArgumentException("Price must be greater than 0.");
-            }
-            if (product.Inventory < 0)
-            {
-                throw new ArgumentException("Inventory must be greater than 0");
             }
             var productCreate = new Product(
                 product.Name,
@@ -55,15 +52,9 @@ namespace Ecommerce.Service.src.Service
                 throw new ArgumentException("create new product failed.");
             }
 
-            return new ProductReadDto(
-                newProduct.Id,
-                newProduct.Name,
-                newProduct.Description,
-                newProduct.Price,
-                categoryFound,
-                newProduct.Inventory,
-                newProduct.Images
-            );
+            
+
+            return _mapper.Map<ProductReadDto>(newProduct);
         }
 
         public async Task<bool> DeleteProductByIdAsync(Guid id)
