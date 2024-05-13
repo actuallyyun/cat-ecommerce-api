@@ -36,8 +36,8 @@ builder.Services.AddScoped<ICategoryRepository,CategoryRepo>();
 builder.Services.AddScoped<ICategoryService,CategoryService>();
 builder.Services.AddScoped<IProductRepository,ProductRepo>();
 builder.Services.AddScoped<IProductService,ProductService>();
-builder.Services.AddScoped<IOrderRepository,OrderRepo>(); // need to implement address repo
-builder.Services.AddScoped<IOrderService,OrderService>();
+//builder.Services.AddScoped<IOrderRepository,OrderRepo>(); // need to implement address repo
+//builder.Services.AddScoped<IOrderService,OrderService>();
 builder.Services.AddScoped<IReviewRepository,ReviewRepo>();
 builder.Services.AddScoped<IReviewService,ReviewService>();
 
