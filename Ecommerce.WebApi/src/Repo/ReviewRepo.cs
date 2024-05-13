@@ -1,5 +1,4 @@
 using Ecommerce.Core.src.Common;
-using Ecommerce.Core.src.Entity;
 using Ecommerce.Core.src.RepoAbstraction;
 using Ecommerce.Core.src.ValueObject;
 using Ecommerce.WebApi.src.Data;
@@ -34,28 +33,26 @@ namespace Ecommerce.WebApi.src.Repo
 
         public async Task<IEnumerable<Review>> GetAllReviewsAsync(QueryOptions? options)
         {
-            var searchKey = options?.SearchKey ?? "";
-            var skipFrom = (options?.StartingAfter == null ? options?.StartingAfter : 0) + 1;
-            var sortBy = options?.SortBy ?? AppConstants.DEFAULT_SORT_BY;
-
+            var query=new LINQParams(options);
+  
             IEnumerable<Review> reviews;
 
             if (options?.SortOrder == SortOrder.ASC)
             {
                 reviews = await _reviews
-                    .Where(r => r.Content.Contains(searchKey))
-                    .Skip(skipFrom ?? 1)
+                    .Where(r => r.Content.Contains(query.SearchKey))
+                    .Skip(query.SkipFrom)
                     .Take(options?.Limit ?? AppConstants.PER_PAGE)
-                    .OrderBy(r => sortBy)
+                    .OrderBy(r => query.SortBy)
                     .ToListAsync();
             }
             else
             {
                 reviews = await _reviews
-                    .Where(r => r.Content.Contains(searchKey))
-                    .Skip(skipFrom ?? 1)
+                    .Where(r => r.Content.Contains(query.SearchKey))
+                    .Skip(query.SkipFrom)
                     .Take(options?.Limit ?? AppConstants.PER_PAGE)
-                    .OrderByDescending(r => sortBy)
+                    .OrderByDescending(r => query.SortBy)
                     .ToListAsync();
             }
 

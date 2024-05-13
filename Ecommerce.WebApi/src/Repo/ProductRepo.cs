@@ -38,7 +38,7 @@ namespace Ecommerce.WebApi.src.Repo
 
         public async Task<IEnumerable<Product>> GetAllProductsAsync(QueryOptions? options)
         {
-            var searchKey = options?.SearchKey ?? "";
+            var searchKey = options?.SearchKey ?? null;
             var skipFrom = (options?.StartingAfter == null ? options?.StartingAfter : 0) + 1;
             var sortBy = options?.SortBy ?? AppConstants.DEFAULT_SORT_BY;
 

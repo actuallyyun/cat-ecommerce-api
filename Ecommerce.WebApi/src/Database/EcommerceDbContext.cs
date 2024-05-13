@@ -1,6 +1,7 @@
 using Ecommerce.Core.src.Entity;
 using Ecommerce.Core.src.ValueObject;
 using Ecommerce.WebApi.src.Data.Interceptors;
+using Ecommerce.WebApi.src.Database.SeedingData;
 using Microsoft.EntityFrameworkCore;
 
 namespace Ecommerce.WebApi.src.Data
@@ -147,53 +148,31 @@ namespace Ecommerce.WebApi.src.Data
                     .HasDefaultValueSql("NOW()");
             });
 
-            // Add dummy data
+            // Seed database
 
-            var categorySeed = new CategorySeed(this);
-            modelBuilder.Entity<Category>().HasData(categorySeed.SeedCategories("./SeedingData/category.csv"));
+            var categories = SeedingData.GetCategories();
+            modelBuilder.Entity<Category>().HasData(categories);
 
-            var userSeed = new UserSeed(this);
-            modelBuilder.Entity<User>().HasData(userSeed.SeedUsers(".SeedingData/users.csv"));
+            var users = SeedingData.GetUsers();
+            modelBuilder.Entity<User>().HasData(users);
 
-            var productSeed = new ProductSeed(this);
-            modelBuilder.Entity<Product>().HasData(productSeed.SeedProducts("./SeedingData/products.csv"));
+            var products= SeedingData.GetProducts();
+            modelBuilder.Entity<Product>().HasData(products);
 
-            var adddressSeed = new AddressSeed(this);
-            modelBuilder.Entity<Address>().HasData(adddressSeed.SeedAddresses("./SeedingData/addresses.csv"));
+            var adddresses = SeedingData.GetAddresses();
+            modelBuilder.Entity<Address>().HasData(adddresses);
 
-            var orderSeed = new OrderSeed(this);
-            modelBuilder.Entity<Order>().HasData(orderSeed.SeedOrders("./SeedingData/orders.csv"));
+            var orders = SeedingData.GetOrders();
+            modelBuilder.Entity<Order>().HasData(orders);
 
-            var orderItemSeed = new OrderItemSeed(this);
-            modelBuilder.Entity<OrderItem>().HasData(orderItemSeed.SeedOrderItem("./SeedingData/order_items.csv"));
+            var orderItems = SeedingData.GetOrderItems();
+            modelBuilder.Entity<OrderItem>().HasData(orderItems);
 
-            var reviewSeed = new ReviewSeed(this);
-            modelBuilder.Entity<Review>().HasData(reviewSeed.SeedReviews("./SeedingData/review.csv"));
+            var reviews = SeedingData.GetReviews();
+            modelBuilder.Entity<Review>().HasData(reviews);
 
-            var imageSeed = new ImageSeed(this);
-            modelBuilder.Entity<Image>().HasData(imageSeed.SeedImage("./SeedingData/images.csv"));
-
-
-        }
-
-        public List<T> ReadFileSeedData<T>(string path, Func<string[], T> createObject)
-        {
-            var dataList = new List<T>();
-
-            using (var reader = new StreamReader(path))
-            {
-                // Read the first line (header) and discard it
-                reader.ReadLine();
-                string line;
-                while ((line = reader.ReadLine()) != null)
-                {
-                    var fields = line.Split(';');
-                    var dataObject = createObject(fields);
-                    dataList.Add(dataObject);
-                }
-            }
-
-            return dataList;
+            var images = SeedingData.GetImages();
+            modelBuilder.Entity<Image>().HasData(images);
         }
     }
 }

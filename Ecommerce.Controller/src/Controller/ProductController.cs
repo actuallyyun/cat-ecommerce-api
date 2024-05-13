@@ -1,4 +1,5 @@
 using Ecommerce.Core.src.Common;
+using Ecommerce.Core.src.Entity;
 using Ecommerce.Service.src.DTO;
 using Ecommerce.Service.src.ServiceAbstraction;
 using Microsoft.AspNetCore.Authorization;
@@ -20,7 +21,7 @@ namespace Ecommerce.Controller.src.Controller
         [Authorize(Roles = "Admin")]
         [HttpPost()]
         // should be admin and superadmin only
-        public async Task<ProductReadDto> CreateProductAsync(ProductCreateDto productCreate)
+        public async Task<Product> CreateProductAsync(ProductCreateDto productCreate)
         {
             return await _productService.CreateProductAsync(productCreate);
         }
@@ -34,14 +35,14 @@ namespace Ecommerce.Controller.src.Controller
 
         [AllowAnonymous]
         [HttpGet("id")]
-        public async Task<ProductReadDto> GetProductByIdAsync(Guid id)
+        public async Task<Product> GetProductByIdAsync(Guid id)
         {
             return await _productService.GetProductByIdAsync(id);
         }
 
         [AllowAnonymous]
         [HttpGet()]
-        public async Task<IEnumerable<ProductReadDto>> GetAllProductAsync(
+        public async Task<IEnumerable<Product>> GetAllProductAsync(
             [FromQuery] QueryOptions queryOptions
         )
         {

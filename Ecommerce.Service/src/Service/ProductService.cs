@@ -13,20 +13,17 @@ namespace Ecommerce.Service.src.Service
         private readonly IProductRepository _productRepository;
         private readonly ICategoryRepository _categoryRepository;
 
-        private readonly IMapper _mapper;
 
         public ProductService(
             IProductRepository productRepository,
-            ICategoryRepository categoryRepository,
-            IMapper mapper
+            ICategoryRepository categoryRepository
         )
         {
             _productRepository = productRepository;
             _categoryRepository = categoryRepository;
-            _mapper = mapper;
         }
 
-        public async Task<ProductReadDto> CreateProductAsync(ProductCreateDto product)
+        public async Task<Product> CreateProductAsync(ProductCreateDto product)
         {
             var categoryFound = await _categoryRepository.GetCategoryByIdAsync(product.CategoryId);
             if (categoryFound == null)
@@ -54,7 +51,7 @@ namespace Ecommerce.Service.src.Service
 
             
 
-            return _mapper.Map<ProductReadDto>(newProduct);
+            return newProduct;
         }
 
         public async Task<bool> DeleteProductByIdAsync(Guid id)
@@ -67,14 +64,15 @@ namespace Ecommerce.Service.src.Service
             return await _productRepository.DeleteProductByIdAsync(id);
         }
 
-        public Task<IEnumerable<ProductReadDto>> GetAllProductsAsync(QueryOptions options)
+        public async Task<IEnumerable<Product>> GetAllProductsAsync(QueryOptions options)
         {
-            throw new NotImplementedException();
+            return await _productRepository.GetAllProductsAsync(options);
+
         }
 
-        public Task<ProductReadDto> GetProductByIdAsync(Guid id)
+        public async Task<Product> GetProductByIdAsync(Guid id)
         {
-            throw new NotImplementedException();
+            return await _productRepository.GetProductByIdAsync(id);
         }
 
         public async Task<bool> UpdateProductByIdAsync(Guid id, ProductUpdateDto product)
@@ -87,19 +85,10 @@ namespace Ecommerce.Service.src.Service
             // TODO could refactor this to a helper function
             if (product.Price != null)
             {
-                if (product.Price < 0)
-                {
-                    throw new ArgumentException("Price must be greater than 0.");
-                }
                 productFound.Price = (decimal)product.Price;
             }
             if (product.Inventory != null)
             {
-                if (product.Inventory < 0)
-                {
-                    throw new ArgumentException("Inventory must be greater than 0");
-                }
-
                 productFound.Inventory = (int)product.Inventory;
             }
             if (product.CategoryId != null)

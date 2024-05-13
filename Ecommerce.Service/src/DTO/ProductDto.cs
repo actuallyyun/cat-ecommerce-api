@@ -61,33 +61,4 @@ namespace Ecommerce.Service.src.DTO
     }
 
 
-    public class ProductReadDto
-    {
-        public Guid Id { get; }
-        public string Name { get; }
-        public string Description { get; }
-        public decimal Price { get; }
-        public Category Category { get; }
-        public int Inventory { get; }
-        public List<Image> Images { get; }
-
-        public ProductReadDto(
-            Guid id,
-            string name,
-            string description,
-            decimal price,
-            Category category,
-            int inventory,
-            List<Image> images
-        )
-        {
-            Id = id;
-            Name = name;
-            Description = description;
-            Price = price;
-            Category = category;
-            Inventory = inventory;
-            Images = images;
-        }
-    }
 }

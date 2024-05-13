@@ -1,14 +1,15 @@
-using Ecommerce.Service.src.DTO;
 using Ecommerce.Core.src.Common;
+using Ecommerce.Core.src.Entity;
+using Ecommerce.Service.src.DTO;
 
 namespace Ecommerce.Service.src.ServiceAbstraction
 {
     public interface IProductService
     {
-        Task<ProductReadDto> CreateProductAsync(ProductCreateDto product);
+        Task<Product> CreateProductAsync(ProductCreateDto product);
         Task<bool> UpdateProductByIdAsync(Guid id,ProductUpdateDto product);
-        Task<ProductReadDto> GetProductByIdAsync(Guid id);
-        Task<IEnumerable<ProductReadDto>> GetAllProductsAsync(QueryOptions? options);
+        Task<Product> GetProductByIdAsync(Guid id);
+        Task<IEnumerable<Product>> GetAllProductsAsync(QueryOptions? options);
         Task<bool> DeleteProductByIdAsync(Guid id);
     }
 }

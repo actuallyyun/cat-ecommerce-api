@@ -1,3 +1,4 @@
+using AutoMapper;
 using Ecommerce.Core.src.Entity;
 using Ecommerce.Core.src.RepoAbstraction;
 using Ecommerce.Core.src.RepositoryAbstraction;
@@ -44,7 +45,7 @@ namespace Ecommerce.Tests.src.Service
             );
             var res = await _productService.CreateProductAsync(validProduct);
             Assert.NotNull(res);
-            Assert.IsType<ProductReadDto>(res);
+            Assert.IsType<Product>(res);
             Assert.Equal(validProduct.Name, res.Name);
         }
 

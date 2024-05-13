@@ -11,7 +11,6 @@ public class MappingProfile : Profile
         CreateMap<UserUpdateDto, User>();
 
         // Product mappings
-        CreateMap<Product, ProductReadDto>();
         CreateMap<ProductCreateDto, Product>();
         CreateMap<ProductUpdateDto, Product>();
 
