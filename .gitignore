@@ -100,3 +100,10 @@ frontend/package-*.json
 .DS_Store
 .AppleDouble
 .LSOverride
+
+
+#ignore files for local testing and documentation purpose
+http/
+DOCUMENTATIONS.md
+public/
+NOTES.md
