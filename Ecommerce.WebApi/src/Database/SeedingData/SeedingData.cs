@@ -59,21 +59,20 @@ namespace Ecommerce.WebApi.src.Database.SeedingData
             );
         }
 
-        public static List<Image> GetImages()
-        {
-            return ReadCsvData(
-                "./src/Database/SeedingData/csv/images.csv",
-                fields =>
-                {
-                    return new Image
-                    {
-                        Id = Guid.Parse(fields[0]),
-                        EntityId = Guid.Parse(fields[1]),
-                        Url = fields[2]
-                    };
-                }
-            );
-        }
+        //public static List<Image> GetImages()
+        //{
+        //    return ReadCsvData(
+        //        "./src/Database/SeedingData/csv/images.csv",
+        //        fields =>
+        //        {
+        //            return new Image
+        //            {
+        //                Id = Guid.Parse(fields[0]),
+        //                Url = fields[2]
+        //            };
+        //        }
+        //    );
+        //}
 
         public static List<Address> GetAddresses()
         {

@@ -18,16 +18,15 @@ namespace Ecommerce.Controller.src.Controller
             _productService = productService;
         }
 
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin")] // only admin can create
         [HttpPost()]
-        // should be admin and superadmin only
         public async Task<Product> CreateProductAsync(ProductCreateDto productCreate)
         {
             return await _productService.CreateProductAsync(productCreate);
         }
 
-        [Authorize(Roles = "Admin")]
-        [HttpPut]
+        [Authorize(Roles = "Admin")] // only admin can update
+        [HttpPut("{id}")]
         public async Task<bool> UpdateProductAsync(Guid id, ProductUpdateDto productUpdate)
         {
             return await _productService.UpdateProductByIdAsync(id, productUpdate);
@@ -49,8 +48,8 @@ namespace Ecommerce.Controller.src.Controller
             return await _productService.GetAllProductsAsync(queryOptions);
         }
 
-        [AllowAnonymous]
-        [HttpDelete("id")]
+        [Authorize(Roles = "Admin")] // only admin can delete
+        [HttpDelete("{id}")]
         public async Task<bool> DeleteProductByIdAsync([FromRoute] Guid id)
         {
             return await _productService.DeleteProductByIdAsync(id);

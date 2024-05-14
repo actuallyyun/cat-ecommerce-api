@@ -56,7 +56,9 @@ namespace  Ecommerce.Tests.src.Core
             var isAnonymous = false;
             var content = "This is a review.";
             var rating = 4;
-            var image = new Image(userId,"imageurl");
+            byte[] byteArray = { 0x48, 0x65, 0x6C, 0x6C, 0x6F, 0x2C, 0x20, 0x77, 0x6F, 0x72, 0x6C, 0x64, 0x21 };
+
+            var image = new ReviewImage(userId,byteArray);
 
             var review = new Review(userId, productId, isAnonymous, content, rating);
             review.Images.Add(image);

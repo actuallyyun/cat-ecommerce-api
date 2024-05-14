@@ -2,9 +2,9 @@ using Ecommerce.Core.src.Common;
 using Ecommerce.Core.src.Entity;
 using Ecommerce.Core.src.RepoAbstraction;
 using Ecommerce.Core.src.RepositoryAbstraction;
+using Ecommerce.Core.src.ValueObject;
 using Ecommerce.Service.src.DTO;
 using Ecommerce.Service.src.ServiceAbstraction;
-using AutoMapper;
 
 namespace Ecommerce.Service.src.Service
 {
@@ -38,9 +38,9 @@ namespace Ecommerce.Service.src.Service
                 product.Inventory
             );
 
-            foreach (string image in product.Images)
+            foreach (var image in product.Images)
             {
-                productCreate.Images.Add(new Image(productCreate.Id, image));
+                productCreate.Images.Add(new        ProductImage(productCreate.Id, image));
             }
             var newProduct = await _productRepository.CreateProductAsync(productCreate);
 
@@ -82,7 +82,6 @@ namespace Ecommerce.Service.src.Service
             {
                 throw new ArgumentException("product not found");
             }
-            // TODO could refactor this to a helper function
             if (product.Price != null)
             {
                 productFound.Price = (decimal)product.Price;
@@ -111,7 +110,7 @@ namespace Ecommerce.Service.src.Service
             if (product.Images != null)
             {
                 productFound.Images.Clear();
-                productFound.Images.AddRange(product.Images.Select(url => new Image(productFound.Id, url)));
+                productFound.Images.AddRange(product.Images.Select(data => new ProductImage(productFound.Id, data)));
             }
             return await _productRepository.UpdateProductAsync(productFound);
         }

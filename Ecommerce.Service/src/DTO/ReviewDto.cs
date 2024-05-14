@@ -9,7 +9,7 @@ namespace Ecommerce.Service.src.DTO
         public bool IsAnonymous { get; set; }
         public string Content { get; set; }
         public int Rating { get; set; }
-        public List<string> Images { get; set; }
+        public List<byte[]> Images { get; set; }
     }
 
     public class ReviewUpdateDto
@@ -17,7 +17,7 @@ namespace Ecommerce.Service.src.DTO
         public bool? IsAnonymous { get; set; }
         public string? Content { get; set; }
         public int? Rating { get; set; }
-        public List<string> Images { get; set; }
+        public List<byte[]> Images { get; set; }
     }
 
     public class ReviewReadDto:BaseEntity

@@ -11,11 +11,13 @@ namespace Ecommerce.WebApi.src.Repo
     {
         private readonly EcommerceDbContext _context;
         private readonly DbSet<Product> _products;
+        private readonly DbSet<ProductImage> _images;
 
         public ProductRepo(EcommerceDbContext context)
         {
             _context = context;
             _products = _context.Products;
+            _images = _context.ProductImages;
         }
 
         /* EF core work flow
@@ -74,19 +76,38 @@ namespace Ecommerce.WebApi.src.Repo
 
         public async Task<bool> UpdateProductAsync(Product product)
         {
-            var productFound = await _products
-                .Where(p => p.Id == product.Id)
-                .ExecuteUpdateAsync(setters =>
-                    setters
-                        .SetProperty(p => p.Category, product.Category)
-                        .SetProperty(p => p.Description, product.Description)
-                        .SetProperty(p => p.Images, product.Images)
-                        .SetProperty(p => p.Inventory, product.Inventory)
-                        .SetProperty(p => p.Name, product.Name)
-                        .SetProperty(p => p.Price, product.Price)
-                );
-            await _context.SaveChangesAsync();
-            return true;
+            using (var transaction = await _context.Database.BeginTransactionAsync())
+            {
+                try
+                {
+                    var productFound = await _products
+                        .Where(p => p.Id == product.Id)
+                        .ExecuteUpdateAsync(setters =>
+                            setters
+                                .SetProperty(p => p.CategoryId, product.CategoryId)
+                                .SetProperty(p => p.Description, product.Description)
+                                .SetProperty(p => p.Inventory, product.Inventory)
+                                .SetProperty(p => p.Name, product.Name)
+                                .SetProperty(p => p.Price, product.Price)
+                        );
+                    foreach (var image in product.Images)
+                    {
+                        var foundImage = await _images
+                            .Where(i => i.Id == image.Id)
+                            .ExecuteUpdateAsync(setters =>
+                                setters.SetProperty(i => i.Data, image.Data)
+                            );
+                    }
+                    await _context.SaveChangesAsync();
+
+                    return true;
+                }
+                catch (DbUpdateException)
+                {
+                    await transaction.RollbackAsync();
+                    throw;
+                }
+            }
         }
     }
 }

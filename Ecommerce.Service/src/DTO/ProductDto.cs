@@ -1,5 +1,3 @@
-using Ecommerce.Core.src.Entity;
-
 namespace Ecommerce.Service.src.DTO
 {
     public class ProductCreateDto
@@ -9,7 +7,7 @@ namespace Ecommerce.Service.src.DTO
         public decimal Price { get; set; }
         public Guid CategoryId { get; set; }
         public int Inventory { get; set; }
-        public List<string> Images { get; set; }
+        public List<byte[]>? Images { get; set; }
 
         public ProductCreateDto(
             string name,
@@ -17,7 +15,7 @@ namespace Ecommerce.Service.src.DTO
             decimal price,
             Guid categoryId,
             int inventory,
-            List<string> images
+            List<byte[]>? images
         )
         {
             Name = name;
@@ -36,9 +34,9 @@ namespace Ecommerce.Service.src.DTO
         public decimal? Price { get; set; }
         public Guid? CategoryId { get; set; }
         public int? Inventory { get; set; }
-        public List<string>? Images { get; set; }
+        public List<byte[]>? Images { get; set; }
 
-        public ProductUpdateDto(string? name,string? description,decimal? price,Guid? categoryId,int? inventory,List<string>? images){
+        public ProductUpdateDto(string? name,string? description,decimal? price,Guid? categoryId,int? inventory,List<byte[]>? images){
                 if(name !=null){
                     Name=name;
                 }

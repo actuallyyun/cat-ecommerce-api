@@ -107,3 +107,6 @@ http/
 DOCUMENTATIONS.md
 public/
 NOTES.md
+
+# ignore migrations
+**/Migrations/

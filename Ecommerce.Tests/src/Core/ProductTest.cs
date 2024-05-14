@@ -1,11 +1,11 @@
-using Ecommerce.Core.src.Entity;
 using System.ComponentModel.DataAnnotations;
+using Ecommerce.Core.src.Entity;
+using Ecommerce.Core.src.ValueObject;
 
 namespace Ecommerce.Tests.src.Core
 {
     public class ProductTests
     {
-
         private void ValidateProduct(Product product)
         {
             var validationContext = new ValidationContext(product);
@@ -41,8 +41,23 @@ namespace Ecommerce.Tests.src.Core
             var inventory = 100;
 
             var product = new Product(name, description, category, price, inventory);
-
-            var image = new Image(Guid.NewGuid(), "http://example.com/smartphone.jpg");
+            byte[] byteArray =
+            {
+                0x48,
+                0x65,
+                0x6C,
+                0x6C,
+                0x6F,
+                0x2C,
+                0x20,
+                0x77,
+                0x6F,
+                0x72,
+                0x6C,
+                0x64,
+                0x21
+            };
+            var image = new ProductImage(Guid.NewGuid(), byteArray);
             product.Images.Add(image);
 
             Assert.Contains(image, product.Images);
@@ -58,12 +73,28 @@ namespace Ecommerce.Tests.src.Core
             var inventory = 100;
 
             var product = new Product(name, description, category, price, inventory);
-
-            var images = new List<Image>
+            byte[] image =
             {
-                new Image(Guid.NewGuid(), "http://example.com/image1.jpg"),
-                new Image(Guid.NewGuid(), "http://example.com/image2.jpg"),
-                new Image(Guid.NewGuid(), "http://example.com/image3.jpg")
+                0x48,
+                0x65,
+                0x6C,
+                0x6C,
+                0x6F,
+                0x2C,
+                0x20,
+                0x77,
+                0x6F,
+                0x72,
+                0x6C,
+                0x64,
+                0x21
+            };
+
+            var images = new List<ProductImage>
+            {
+                new ProductImage(Guid.NewGuid(), image),
+                new ProductImage(Guid.NewGuid(), image),
+                new ProductImage(Guid.NewGuid(), image)
             };
 
             product.SetProductImages(images);
@@ -83,7 +114,6 @@ namespace Ecommerce.Tests.src.Core
 
             Assert.Throws<ValidationException>(() => ValidateProduct(product));
         }
-
 
         [Fact]
         public void UpdateProductDetails_ShouldUpdateCorrectly()

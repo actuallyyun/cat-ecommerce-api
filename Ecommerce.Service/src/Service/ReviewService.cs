@@ -2,6 +2,7 @@ using AutoMapper;
 using Ecommerce.Core.src.Common;
 using Ecommerce.Core.src.Entity;
 using Ecommerce.Core.src.RepoAbstraction;
+using Ecommerce.Core.src.ValueObject;
 using Ecommerce.Service.src.DTO;
 using Ecommerce.Service.src.ServiceAbstraction;
 
@@ -34,9 +35,9 @@ namespace Ecommerce.Service.src.Service
 
             var review = _mapper.Map<Review>(reviewDto); // Use AutoMapper to map from DTO to Entity
 
-            foreach (var imageUrl in reviewDto.Images)
+            foreach (var data in reviewDto.Images)
             {
-                review.Images.Add(new Image(review.Id, imageUrl));
+                review.Images.Add(new ReviewImage(review.Id,data));
             }
 
             await _reviewRepository.CreateReviewAsync(review);

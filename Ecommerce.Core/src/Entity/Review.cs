@@ -37,7 +37,7 @@ public class Review : BaseEntity
             _rating = value;
         }
     }
-    public List<Image> Images { get; set; } = new List<Image>();
+    public List<ReviewImage> Images { get; set; } = new List<ReviewImage>();
 
     [ForeignKey("ProductId")]
     public Product product { get; }

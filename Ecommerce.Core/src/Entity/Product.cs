@@ -6,8 +6,6 @@ namespace Ecommerce.Core.src.Entity
     [Table("products")]
     public class Product : BaseEntity
     {
-
-
         // Constructor with parameters
         public Product(string name, string description, Category category, decimal price, int inventory)
         {
@@ -20,9 +18,6 @@ namespace Ecommerce.Core.src.Entity
 
         // Parameterless constructor for Entity Framework Core
         public Product() { }
-
-
-
         [Required]
         [MaxLength(255)]
         public string Name { get; set; }
@@ -36,12 +31,12 @@ namespace Ecommerce.Core.src.Entity
         [Range(0, int.MaxValue, ErrorMessage = "Inventory must be greater than or equal to 0")]
         public int Inventory { get; set; }
 
-        public List<Image> Images { get; set; } = new List<Image>();
+        public List<ProductImage> Images { get; set; } = new List<ProductImage>();
 
         [ForeignKey("CategoryId")]
         public Category Category { get; set; }
 
-        public void SetProductImages(List<Image> images)
+        public void SetProductImages(List<ProductImage> images)
         {
             Images = images;
         }

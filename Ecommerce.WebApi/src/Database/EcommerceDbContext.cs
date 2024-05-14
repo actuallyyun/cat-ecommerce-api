@@ -11,6 +11,9 @@ namespace Ecommerce.WebApi.src.Data
         //this is just a inject configuration so we can get connection string in appasettings.json
         protected readonly IConfiguration configuration;
         public DbSet<Category> Categories { get; set; }
+        public DbSet<ProductImage> ProductImages { get; set; }
+        public DbSet<ReviewImage> ReviewImages { get; set; }
+
         public DbSet<Product> Products { get; set; }
         public DbSet<Order> Orders { get; set; }
         public DbSet<Review> Reviews { get; set; }
@@ -63,7 +66,6 @@ namespace Ecommerce.WebApi.src.Data
                 entity.HasIndex(p => p.Email).IsUnique();
                 entity.Property(u => u.FirstName).IsRequired().HasMaxLength(255);
                 entity.Property(u => u.LastName).IsRequired().HasMaxLength(255);
-                
                 entity.Property(u => u.Password).IsRequired().HasMaxLength(255);
                 entity
                     .Property(e => e.Role)
@@ -86,7 +88,11 @@ namespace Ecommerce.WebApi.src.Data
             {
                 entity.ToTable("products");
                 entity.HasKey(e => e.Id);
-                entity.HasOne(e => e.Category).WithMany().HasForeignKey(e => e.CategoryId);
+                entity
+                    .HasOne(e => e.Category)
+                    .WithMany()
+                    .HasForeignKey(e => e.CategoryId)
+                    .OnDelete(DeleteBehavior.NoAction);
             });
 
             modelBuilder.Entity<Address>(entity =>
@@ -146,6 +152,7 @@ namespace Ecommerce.WebApi.src.Data
             {
                 entity.ToTable("reviews");
                 entity.HasKey(e => e.Id);
+                entity.HasMany(e => e.Images).WithOne().HasForeignKey(e => e.ReviewId);
                 entity
                     .HasOne(e => e.User)
                     .WithMany()
@@ -158,19 +165,30 @@ namespace Ecommerce.WebApi.src.Data
                     .OnDelete(DeleteBehavior.Cascade);
             });
 
-            modelBuilder.Entity<Image>(entity =>
+            modelBuilder.Entity<ProductImage>(entity =>
             {
-                entity.ToTable("images");
+                entity.ToTable("product_images");
                 entity.HasKey(e => e.Id);
-
+                entity
+                    .HasOne(e => e.Product)
+                    .WithMany()
+                    .HasForeignKey(e => e.ProductId)
+                    .OnDelete(DeleteBehavior.Cascade);
                 // Define the foreign key relationship with the products table
-                entity.Property(e => e.EntityId).IsRequired();
+                entity.Property(e => e.Data).IsRequired();
+            });
 
-                entity.Property(e => e.Url).IsRequired();
-
-                entity.Property(e => e.CreatedAt).HasDefaultValueSql("NOW()");
-
-                entity.Property(e => e.UpdatedAt).HasDefaultValueSql("NOW()");
+            modelBuilder.Entity<ReviewImage>(entity =>
+            {
+                entity.ToTable("review_images");
+                entity.HasKey(e => e.Id);
+                entity
+                    .HasOne(e => e.Review)
+                    .WithMany()
+                    .HasForeignKey(e => e.ReviewId)
+                    .OnDelete(DeleteBehavior.Cascade);
+                // Define the foreign key relationship with the products table
+                entity.Property(e => e.Data).IsRequired();
             });
 
             // Seed database
@@ -195,9 +213,6 @@ namespace Ecommerce.WebApi.src.Data
 
             var reviews = SeedingData.GetReviews();
             modelBuilder.Entity<Review>().HasData(reviews);
-
-            var images = SeedingData.GetImages();
-            modelBuilder.Entity<Image>().HasData(images);
         }
     }
 }
