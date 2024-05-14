@@ -34,7 +34,7 @@ namespace Ecommerce.Controller.src.Controller
         }
 
         [AllowAnonymous]
-        [HttpGet("id")]
+        [HttpGet("{id}")]
         public async Task<Product> GetProductByIdAsync(Guid id)
         {
             return await _productService.GetProductByIdAsync(id);
