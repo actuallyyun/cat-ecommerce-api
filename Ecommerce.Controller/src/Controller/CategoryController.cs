@@ -22,19 +22,11 @@ namespace Ecommerce.Controller.src.Controller
             CategoryCreateDto categoryCreate
         )
         {
-            try
-            {
-                var category = await _categoryService.CreateCategoryAsync(categoryCreate);
-                return Ok(category);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            return await _categoryService.CreateCategoryAsync(categoryCreate);
         }
 
         [Authorize(Roles = "Admin")]
-        [HttpPut("id")]
+        [HttpPut("{id}")]
         public async Task<bool> UpdateCategory(
             [FromRoute] Guid id,
             CategoryUpdateDto categoryUpdate
@@ -44,50 +36,26 @@ namespace Ecommerce.Controller.src.Controller
         }
 
         [AllowAnonymous]
-        [HttpGet("id")]
+        [HttpGet("{id}")]
         public async Task<ActionResult<CategoryReadDto>> RetrieveCategoryByIdAsync(
             [FromRoute] Guid id
         )
         {
-            try
-            {
-                var category = await _categoryService.GetCategoryByIdAsync(id);
-                return Ok(category);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            return await _categoryService.GetCategoryByIdAsync(id);
         }
 
         [AllowAnonymous]
         [HttpGet()]
-        public async Task<ActionResult<IEnumerable<CategoryReadDto>>> ListAllCategories()
+        public async Task<IEnumerable<CategoryReadDto>> ListAllCategories()
         {
-            try
-            {
-                var categories = await _categoryService.GetAllCategoriesAsync();
-                return Ok(categories);
-            }
-            catch (Exception e)
-            {
-                return BadRequest(e.Message);
-            }
+            return await _categoryService.GetAllCategoriesAsync();
         }
 
         [Authorize(Roles = "Admin")]
-        [HttpDelete("id")]
+        [HttpDelete("{id}")]
         public async Task<ActionResult<bool>> DeleteCategory([FromRoute] Guid id)
         {
-            try
-            {
-                await _categoryService.DeleteCategoryAsync(id);
-                return Ok(true);
-            }
-            catch (Exception e)
-            {
-                return BadRequest(e.Message);
-            }
+            return await _categoryService.DeleteCategoryAsync(id);
         }
     }
 }

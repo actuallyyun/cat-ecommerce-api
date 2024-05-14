@@ -9,13 +9,13 @@ namespace Ecommerce.Core.src.Entity
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid Id { get; set; } //changed from "protected set" to "set": we need to be able to set Id for adding seed data (need to set id before hand)
 
-        public DateTimeOffset CreatedAt { get; set; }
+        public DateTime CreatedAt { get; set; }
 
-        public DateTimeOffset? UpdatedAt { get; set; }
+        public DateTime? UpdatedAt { get; set; }
 
         public BaseEntity()
         {
-            CreatedAt = DateTimeOffset.Now;
+            CreatedAt = DateTime.Now;
         }
     }
 }

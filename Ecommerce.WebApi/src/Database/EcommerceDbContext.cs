@@ -24,11 +24,24 @@ namespace Ecommerce.WebApi.src.Data
             this.configuration = configuration;
             _loggerFactory = loggerFactory;
         }
+        static EcommerceDbContext(){
+            AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
+            AppContext.SetSwitch("Npgsql.DisableDateTimeInfinityConversions", true);
+        }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseNpgsql(configuration.GetConnectionString("PgDbConnection")).UseSnakeCaseNamingConvention().AddInterceptors(new SqlLoggingInterceptor(_loggerFactory.CreateLogger<SqlLoggingInterceptor>()));
+            optionsBuilder
+                .UseNpgsql(configuration.GetConnectionString("PgDbConnection"))
+                .UseSnakeCaseNamingConvention()
+                .AddInterceptors(
+                    new SqlLoggingInterceptor(_loggerFactory.CreateLogger<SqlLoggingInterceptor>())
+                )
+                .EnableSensitiveDataLogging() // for development only, delete on prod
+                .EnableDetailedErrors() // for development only, delete on prod
+                .UseSnakeCaseNamingConvention();
         }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             // craete enum table
@@ -44,14 +57,16 @@ namespace Ecommerce.WebApi.src.Data
             {
                 entity.ToTable("users");
                 entity.HasKey(e => e.Id);
-                entity.Property(e => e.Role)
+                entity
+                    .Property(e => e.Role)
                     .HasConversion(
                         v => v.ToString().ToLower(),
-                        v => (UserRole)Enum.Parse(typeof(UserRole), char.ToUpper(v[0]) + v.Substring(1))
+                        v =>
+                            (UserRole)
+                                Enum.Parse(typeof(UserRole), char.ToUpper(v[0]) + v.Substring(1))
                     )
                     .IsRequired();
             });
-
 
             modelBuilder.Entity<Category>(entity =>
             {
@@ -63,16 +78,15 @@ namespace Ecommerce.WebApi.src.Data
             {
                 entity.ToTable("products");
                 entity.HasKey(e => e.Id);
-                entity.HasOne(e => e.Category)
-                    .WithMany()
-                    .HasForeignKey(e => e.CategoryId);
+                entity.HasOne(e => e.Category).WithMany().HasForeignKey(e => e.CategoryId);
             });
 
             modelBuilder.Entity<Address>(entity =>
             {
                 entity.ToTable("addresses");
                 entity.HasKey(e => e.Id);
-                entity.HasOne(e => e.User)
+                entity
+                    .HasOne(e => e.User)
                     .WithMany()
                     .HasForeignKey(e => e.UserId)
                     .OnDelete(DeleteBehavior.Cascade);
@@ -82,31 +96,36 @@ namespace Ecommerce.WebApi.src.Data
             {
                 entity.ToTable("orders");
                 entity.HasKey(e => e.Id);
-                entity.HasOne(e => e.User)
+                entity
+                    .HasOne(e => e.User)
                     .WithMany()
                     .HasForeignKey(e => e.UserId)
                     .OnDelete(DeleteBehavior.Cascade);
-                entity.HasOne(e => e.Address)
+                entity
+                    .HasOne(e => e.Address)
                     .WithMany()
                     .HasForeignKey(e => e.AddressId)
                     .OnDelete(DeleteBehavior.SetNull);
-                entity.Property(e => e.Status)
-                .HasConversion(
-                    v => v.ToString(),
-                    v => (OrderStatus)Enum.Parse(typeof(OrderStatus), v) // String to enum
-                )
-                .IsRequired();
+                entity
+                    .Property(e => e.Status)
+                    .HasConversion(
+                        v => v.ToString(),
+                        v => (OrderStatus)Enum.Parse(typeof(OrderStatus), v) // String to enum
+                    )
+                    .IsRequired();
             });
 
             modelBuilder.Entity<OrderItem>(entity =>
             {
                 entity.ToTable("order_items");
                 entity.HasKey(e => e.Id);
-                entity.HasOne(e => e.Product)
+                entity
+                    .HasOne(e => e.Product)
                     .WithMany()
                     .HasForeignKey(e => e.ProductId)
                     .OnDelete(DeleteBehavior.SetNull);
-                entity.HasOne(e => e.Order)
+                entity
+                    .HasOne(e => e.Order)
                     .WithMany()
                     .HasForeignKey(e => e.OrderId)
                     .OnDelete(DeleteBehavior.Cascade);
@@ -119,14 +138,16 @@ namespace Ecommerce.WebApi.src.Data
             {
                 entity.ToTable("reviews");
                 entity.HasKey(e => e.Id);
-                entity.HasOne(e => e.User)
+                entity
+                    .HasOne(e => e.User)
                     .WithMany()
                     .HasForeignKey(e => e.UserId)
                     .OnDelete(DeleteBehavior.Cascade);
-                entity.HasOne(e => e.product)
-                .WithMany()
-                .HasForeignKey(e => e.ProductId)
-                .OnDelete(DeleteBehavior.Cascade);
+                entity
+                    .HasOne(e => e.product)
+                    .WithMany()
+                    .HasForeignKey(e => e.ProductId)
+                    .OnDelete(DeleteBehavior.Cascade);
             });
 
             modelBuilder.Entity<Image>(entity =>
@@ -135,17 +156,13 @@ namespace Ecommerce.WebApi.src.Data
                 entity.HasKey(e => e.Id);
 
                 // Define the foreign key relationship with the products table
-                entity.Property(e => e.EntityId)
-                    .IsRequired();
+                entity.Property(e => e.EntityId).IsRequired();
 
-                entity.Property(e => e.Url)
-                    .IsRequired();
+                entity.Property(e => e.Url).IsRequired();
 
-                entity.Property(e => e.CreatedAt)
-                    .HasDefaultValueSql("NOW()");
+                entity.Property(e => e.CreatedAt).HasDefaultValueSql("NOW()");
 
-                entity.Property(e => e.UpdatedAt)
-                    .HasDefaultValueSql("NOW()");
+                entity.Property(e => e.UpdatedAt).HasDefaultValueSql("NOW()");
             });
 
             // Seed database
@@ -156,7 +173,7 @@ namespace Ecommerce.WebApi.src.Data
             var users = SeedingData.GetUsers();
             modelBuilder.Entity<User>().HasData(users);
 
-            var products= SeedingData.GetProducts();
+            var products = SeedingData.GetProducts();
             modelBuilder.Entity<Product>().HasData(products);
 
             var adddresses = SeedingData.GetAddresses();

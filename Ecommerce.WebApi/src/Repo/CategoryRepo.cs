@@ -60,12 +60,7 @@ namespace Ecommerce.WebApi.src.Repo
 
         public async Task<Category> FindByNameAsync(string name)
         { 
-            var category= await _categories.SingleOrDefaultAsync(c => c.Name == name);
-             if (category == null)
-            {
-                throw new KeyNotFoundException($"Category with name {name} not found.");
-            }
-            return category;
+            return await _categories.SingleOrDefaultAsync(c => c.Name == name);
         }
     }
 }
