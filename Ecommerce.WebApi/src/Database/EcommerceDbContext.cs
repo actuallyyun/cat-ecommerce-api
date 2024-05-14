@@ -24,7 +24,9 @@ namespace Ecommerce.WebApi.src.Data
             this.configuration = configuration;
             _loggerFactory = loggerFactory;
         }
-        static EcommerceDbContext(){
+
+        static EcommerceDbContext()
+        {
             AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
             AppContext.SetSwitch("Npgsql.DisableDateTimeInfinityConversions", true);
         }
@@ -57,6 +59,12 @@ namespace Ecommerce.WebApi.src.Data
             {
                 entity.ToTable("users");
                 entity.HasKey(e => e.Id);
+                entity.Property(e => e.Email).IsRequired();
+                entity.HasIndex(p => p.Email).IsUnique();
+                entity.Property(u => u.FirstName).IsRequired().HasMaxLength(255);
+                entity.Property(u => u.LastName).IsRequired().HasMaxLength(255);
+                
+                entity.Property(u => u.Password).IsRequired().HasMaxLength(255);
                 entity
                     .Property(e => e.Role)
                     .HasConversion(

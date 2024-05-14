@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Ecommerce.Core.src.Common;
 using Ecommerce.Core.src.ValueObject;
 
 namespace Ecommerce.Core.src.Entity
@@ -17,7 +18,7 @@ namespace Ecommerce.Core.src.Entity
 
         [Required]
         public UserRole Role { get; set; } = UserRole.User;
-        public string Avatar { get; set; }
+        public string? Avatar { get; set; }
 
         [Required]
         [EmailAddress] //validation for email address that it need ot contain valid email fomat "example@example.com"
@@ -28,12 +29,19 @@ namespace Ecommerce.Core.src.Entity
         [MaxLength(255)]
         public string Password { get; set; }
 
-        public User(string firstName, string lastName, UserRole role, string avatar, string email, string password)
+        public User(
+            string firstName,
+            string lastName,
+            UserRole role,
+            string avatar,
+            string email,
+            string password
+        )
         {
             FirstName = firstName;
             LastName = lastName;
             Role = role;
-            Avatar = avatar;
+            Avatar = avatar ?? AppConstants.USER_DEFAULT_AVATAR;
             Email = email;
             Password = password;
         }

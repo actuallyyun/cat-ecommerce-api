@@ -1,9 +1,9 @@
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 using Ecommerce.Core.src.Common;
 using Ecommerce.Service.src.DTO;
 using Ecommerce.Service.src.ServiceAbstraction;
-using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
 namespace WebDemo.Controller.src.Controller
 {
@@ -18,9 +18,30 @@ namespace WebDemo.Controller.src.Controller
             _userService = userService;
         }
 
-        [Authorize(Roles ="Admin")]// authentication middleware would be invoked if user send get request to this endpoint
+        [AllowAnonymous]
+        [HttpPost()]
+        public async Task<UserReadDto> CreateUserAsync([FromBody] UserCreateDto userCreateDto)
+        {
+            return await _userService.CreateUserAsync(userCreateDto);
+        }
+
+        [Authorize]
+        [HttpPut("profile")]
+        public async Task<bool> UpdateUserProfileAsync(UserUpdateDto userUpdate)
+        {
+            var claims = HttpContext.User; // not user obbject, but user claims
+            var userId = Guid.Parse(claims.FindFirst(ClaimTypes.NameIdentifier).Value);
+
+            return await _userService.UpdateUserByIdAsync(userId,userUpdate);
+        }
+
+
+
+        [Authorize(Roles = "Admin")] // authentication middleware would be invoked if user send get request to this endpoint
         [HttpGet("")] // define endpoint: /users?page=1&pageSize=10
-        public async Task<IEnumerable<UserReadDto>> GetAllUsersAsync([FromQuery] QueryOptions options)
+        public async Task<IEnumerable<UserReadDto>> GetAllUsersAsync(
+            [FromQuery] QueryOptions options
+        )
         {
             try
             {
@@ -31,9 +52,9 @@ namespace WebDemo.Controller.src.Controller
                 throw new Exception(ex.Message);
             }
         }
-        
+
         // only admin can get user profile by id
-        [Authorize(Roles ="Admin")]
+        [Authorize(Roles = "Admin")]
         [HttpGet("{id}")] // define endpoint: /users/{id}
         public async Task<UserReadDto> GetUserByIdAsync([FromRoute] Guid id)
         {
@@ -49,6 +70,13 @@ namespace WebDemo.Controller.src.Controller
             var userId = Guid.Parse(claims.FindFirst(ClaimTypes.NameIdentifier).Value);
 
             return await _userService.GetUserByIdAsync(userId);
+        }
+
+        [Authorize(Roles = "Admin")]
+        [HttpDelete("{id}")] 
+        public async Task<bool> DeleteUserByIdAsync([FromRoute] Guid id)
+        {
+            return await _userService.DeleteUserByIdAsync(id);
         }
     }
 }

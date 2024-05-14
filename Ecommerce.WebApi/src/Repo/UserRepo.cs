@@ -39,10 +39,11 @@ namespace Ecommerce.WebApi.src.Repo
             return await _users.ToListAsync(); // leave it like this for now. Add logic later
         }
 
-        public async Task<User> GetUserByCredentialAsync(UserCredential credential)
+        public async Task<User>? GetUserByCredentialAsync(UserCredential credential)
         {
-            var foundUser = await _users.FirstOrDefaultAsync(user => user.Email == credential.Email && user.Password == credential.Password);
-            return foundUser;
+            return await _users.FirstOrDefaultAsync(user =>
+                user.Email == credential.Email && user.Password == credential.Password
+            );
         }
 
         public async Task<User>? GetUserByIdAsync(Guid id)

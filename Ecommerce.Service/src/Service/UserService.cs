@@ -25,28 +25,9 @@ namespace Ecommerce.Service.src.Service
 
             var user = _mapper.Map<User>(userDto);
 
-            var isUserExistWithEmail = await _userRepo.UserExistsByEmailAsync(user.Email);
-            
-            if (isUserExistWithEmail )
-            {
-                throw new ArgumentException($"A user with the email {user.Email} already exists.");
-            }
-
             var createdUser = await _userRepo.CreateUserAsync(user);
 
             return _mapper.Map<UserReadDto>(createdUser);
-        }
-
-        public async Task<bool> DeleteUserByIdAsync(Guid id)
-        {
-            var existingUser = await _userRepo.GetUserByIdAsync(id);
-           
-            if (existingUser == null)
-            {
-                throw new KeyNotFoundException($"User with ID {id} not found.");
-            }
-
-            return await _userRepo.DeleteUserByIdAsync(id);
         }
 
         public async Task<IEnumerable<UserReadDto>> GetAllUsersAsync(QueryOptions options)
@@ -79,9 +60,32 @@ namespace Ecommerce.Service.src.Service
 
             UserValidation.ValidateUserUpdateDto(userDto);
 
-            _mapper.Map(userDto, existingUser);
+            if(userDto.FirstName!=null){
+                existingUser.FirstName = userDto.FirstName;
+            }
+            if(userDto.LastName!=null){
+                existingUser.LastName=userDto.LastName;
+            }
+            if(userDto.Avatar!=null){
+                existingUser.Avatar=userDto.Avatar;
+            }
+            if(userDto.Password!=null){
+                existingUser.Password=userDto.Password;
+            }
 
             return await _userRepo.UpdateUserByIdAsync(existingUser);
+        }
+
+        public async Task<bool> DeleteUserByIdAsync(Guid id)
+        {
+            var existingUser = await _userRepo.GetUserByIdAsync(id);
+
+            if (existingUser == null)
+            {
+                throw new ArgumentException($"User with ID {id} not found.");
+            }
+
+            return await _userRepo.DeleteUserByIdAsync(id);
         }
     }
 }

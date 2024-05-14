@@ -6,9 +6,24 @@ namespace Ecommerce.Service.src.DTO
     {
         public string FirstName { get; }
         public string LastName { get; }
-        public string Avatar { get; }
+        public string? Avatar { get; }
         public string Email { get; }
         public string Password { get; }
+
+        public UserCreateDto(
+            string firstName,
+            string lastName,
+            string? avatar,
+            string email,
+            string password
+        )
+        {
+            FirstName = firstName;
+            LastName = lastName;
+            Avatar = avatar;
+            Email = email;
+            Password = password;
+        }
     }
 
     public class UserReadDto
@@ -20,7 +35,14 @@ namespace Ecommerce.Service.src.DTO
         public string Avatar { get; }
         public string Email { get; }
 
-        public UserReadDto(Guid id, string firstName, string lastName, UserRole role, string avatar, string email)
+        public UserReadDto(
+            Guid id,
+            string firstName,
+            string lastName,
+            UserRole role,
+            string avatar,
+            string email
+        )
         {
             Id = id;
             FirstName = firstName;
@@ -36,6 +58,26 @@ namespace Ecommerce.Service.src.DTO
         public string? FirstName { get; }
         public string? LastName { get; }
         public string? Avatar { get; }
-         public string? Password { get; }
+        public string? Password { get; }
+
+        public UserUpdateDto(string? firstName, string? lastName, string? avatar, string? password)
+        {
+            if (firstName != null)
+            {
+                FirstName = firstName;
+            }
+            if (lastName != null)
+            {
+                LastName = lastName;
+            }
+            if (avatar != null)
+            {
+                Avatar = avatar;
+            }
+            if (password != null)
+            {
+                Password = password;
+            }
+        }
     }
 }
