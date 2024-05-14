@@ -37,10 +37,10 @@ namespace Ecommerce.WebApi.src.middleware
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "An unexpected error occurred.");
+                _logger.LogError(ex.Message);
 
                 context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-                var errorMessage = new { StatusCode = context.Response.StatusCode, Message = "An unexpected error occurred. Please try again later." };
+                var errorMessage = new { StatusCode = context.Response.StatusCode, Message = ex.Message };
                 await context.Response.WriteAsJsonAsync(errorMessage);
             }
         }
