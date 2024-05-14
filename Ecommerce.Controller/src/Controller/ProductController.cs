@@ -32,6 +32,14 @@ namespace Ecommerce.Controller.src.Controller
             return await _productService.UpdateProductByIdAsync(id, productUpdate);
         }
 
+
+        [AllowAnonymous]
+        [HttpGet("{id}/reviews")]
+        public async Task<IEnumerable<Review>> ListReviewsAsync([FromRoute] Guid id)
+        {
+            return await _productService.GetAllReviews(id);
+        }
+
         [AllowAnonymous]
         [HttpGet("{id}")]
         public async Task<Product> GetProductByIdAsync(Guid id)
@@ -54,5 +62,6 @@ namespace Ecommerce.Controller.src.Controller
         {
             return await _productService.DeleteProductByIdAsync(id);
         }
+
     }
 }

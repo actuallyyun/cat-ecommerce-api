@@ -8,8 +8,9 @@ namespace Ecommerce.Service.src.ServiceAbstraction
     {
         Task<Review> CreateReviewAsync(ReviewCreateDto review);
         Task<bool> UpdateReviewByIdAsync(Guid userId,Guid reviewId,ReviewUpdateDto review);
-        Task<ReviewReadDto> GetReviewByIdAsync(Guid id);
-        Task<IEnumerable<ReviewReadDto>> GetAllReviewsAsync(QueryOptions options);
+        Task<Review>? GetReviewByIdAsync(Guid id);
+        Task<IEnumerable<Review>> GetAllReviewsAsync(QueryOptions options);
         Task<bool> DeleteReviewByIdAsync(Guid userId,Guid id);
+        
     }
 }

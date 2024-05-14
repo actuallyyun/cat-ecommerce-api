@@ -35,8 +35,6 @@ namespace WebDemo.Controller.src.Controller
             return await _userService.UpdateUserByIdAsync(userId,userUpdate);
         }
 
-
-
         [Authorize(Roles = "Admin")] // authentication middleware would be invoked if user send get request to this endpoint
         [HttpGet("")] // define endpoint: /users?page=1&pageSize=10
         public async Task<IEnumerable<UserReadDto>> GetAllUsersAsync(
@@ -70,6 +68,16 @@ namespace WebDemo.Controller.src.Controller
             var userId = Guid.Parse(claims.FindFirst(ClaimTypes.NameIdentifier).Value);
 
             return await _userService.GetUserByIdAsync(userId);
+        }
+        // user can get her own reviews
+        [Authorize]
+        [HttpGet("reviews")]
+        public async Task<IEnumerable<Review>> ListAllReviews()
+        {
+            var claims = HttpContext.User; // not user obbject, but user claims
+            var userId = Guid.Parse(claims.FindFirst(ClaimTypes.NameIdentifier).Value);
+
+            return await _userService.GetAllReviewsAsync(userId);
         }
 
         [Authorize(Roles = "Admin")]

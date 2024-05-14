@@ -2,7 +2,6 @@ using AutoMapper;
 using Ecommerce.Core.src.Common;
 using Ecommerce.Core.src.Entity;
 using Ecommerce.Core.src.RepoAbstraction;
-using Ecommerce.Core.src.ValueObject;
 using Ecommerce.Service.src.DTO;
 using Ecommerce.Service.src.ServiceAbstraction;
 
@@ -37,7 +36,7 @@ namespace Ecommerce.Service.src.Service
 
             foreach (var data in reviewDto.Images)
             {
-                review.Images.Add(new ReviewImage(review.Id,data));
+                review.Images.Add(new ReviewImage(review.Id, data));
             }
 
             await _reviewRepository.CreateReviewAsync(review);
@@ -61,15 +60,29 @@ namespace Ecommerce.Service.src.Service
                 );
             }
 
-            _mapper.Map(reviewDto, review);
+            if(reviewDto.Content != null){
+                review.Content=reviewDto.Content;
+            }
+            if(reviewDto.IsAnonymous!=null){
+                review.IsAnonymous=(bool)reviewDto.IsAnonymous;
+            }
+            if(reviewDto.Rating!=null){
+                review.Rating=(int)reviewDto.Rating;
+            }
+            if (review.Images != null)
+            {
+                review.Images.Clear();
+                review.Images.AddRange(
+                    review.Images.Select(img => new ReviewImage(review.Id, img.Data))
+                );
+            }
 
             return await _reviewRepository.UpdateReviewByIdAsync(review);
         }
 
-        public async Task<IEnumerable<ReviewReadDto>> GetAllReviewsAsync(QueryOptions options)
+        public async Task<IEnumerable<Review>> GetAllReviewsAsync(QueryOptions options)
         {
-            var reviews = await _reviewRepository.GetAllReviewsAsync(options);
-            return _mapper.Map<IEnumerable<ReviewReadDto>>(reviews);
+            return await _reviewRepository.GetAllReviewsAsync(options);
         }
 
         public async Task<bool> DeleteReviewByIdAsync(Guid userId, Guid id)
@@ -79,6 +92,7 @@ namespace Ecommerce.Service.src.Service
             {
                 throw new ArgumentException("Review not found with the specified ID.");
             }
+            
             if (id != userId)
             {
                 throw new UnauthorizedAccessException(
@@ -88,13 +102,13 @@ namespace Ecommerce.Service.src.Service
             return await _reviewRepository.DeleteReviewByIdAsync(id);
         }
 
-        public async Task<ReviewReadDto> GetReviewByIdAsync(Guid id)
+        public async Task<Review> GetReviewByIdAsync(Guid id)
         {
             var review = await _reviewRepository.GetReviewByIdAsync(id);
             if (review == null)
                 throw new ArgumentException("Review not found.");
 
-            return _mapper.Map<ReviewReadDto>(review);
+            return review;
         }
 
         private async Task ValidateIdAsync(Guid id, string entityType)

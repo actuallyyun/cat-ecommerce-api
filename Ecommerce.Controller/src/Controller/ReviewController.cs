@@ -1,4 +1,5 @@
 using System.Security.Claims;
+using Ecommerce.Core.src.Common;
 using Ecommerce.Service.src.DTO;
 using Ecommerce.Service.src.ServiceAbstraction;
 using Microsoft.AspNetCore.Authorization;
@@ -7,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Ecommerce.Controller.src.Controller
 {
     [ApiController]
-    [Route("api/v1/reiviews")]
+    [Route("api/v1/reviews")]
     public class ReviewController : ControllerBase
     {
         private readonly IReviewService _reviewService;
@@ -21,71 +22,43 @@ namespace Ecommerce.Controller.src.Controller
         [HttpPost()]
         public async Task<ActionResult<Review>> CreateReview(ReviewCreateDto reviewCreate)
         {
-            try
-            {
-                var review = await _reviewService.CreateReviewAsync(reviewCreate);
-                return Ok(review);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            return await _reviewService.CreateReviewAsync(reviewCreate);
         }
 
-        [Authorize]
-        [HttpPut("id")]
+        [Authorize(Roles = "Admin")] // only admin can update reivews
+        [HttpPut("{id}")]
         public async Task<ActionResult<bool>> UpdateReview(
             [FromRoute] Guid id,
             ReviewUpdateDto reviewUpdate
         )
         {
             var claims = HttpContext.User;
-
             var userId = Guid.Parse(claims.FindFirst(ClaimTypes.NameIdentifier).Value);
 
-            try
-            {
-                var res = await _reviewService.UpdateReviewByIdAsync(userId, id, reviewUpdate);
-                return Ok(res);
-            }
-            catch (Exception e)
-            {
-                return BadRequest(e.Message);
-            }
+            return await _reviewService.UpdateReviewByIdAsync(userId, id, reviewUpdate);
         }
 
         [AllowAnonymous]
-        [HttpGet("id")]
-        public async Task<ActionResult<Review>> RetrieveSingleReview([FromRoute] Guid id)
+        [HttpGet("{id}")]
+        public async Task<Review> RetrieveSingleReview([FromRoute] Guid id)
         {
-            try
-            {
-                var review = await _reviewService.GetReviewByIdAsync(id);
-                return Ok(review);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            return await _reviewService.GetReviewByIdAsync(id);
+        }
+
+        [AllowAnonymous]
+        [HttpGet()]
+        public async Task<IEnumerable<Review>> ListReviews([FromQuery] QueryOptions queryOptions)
+        {
+            return await _reviewService.GetAllReviewsAsync(queryOptions);
         }
 
         [Authorize]
-        [HttpDelete("id")]
+        [HttpDelete("{id}")]
         public async Task<ActionResult<bool>> DeleteReview([FromRoute] Guid id)
         {
             var claims = HttpContext.User;
-
             var userId = Guid.Parse(claims.FindFirst(ClaimTypes.NameIdentifier).Value);
-
-            try
-            {
-                await _reviewService.DeleteReviewByIdAsync(userId, id);
-                return Ok(true);
-            }
-            catch (Exception e)
-            {
-                return BadRequest(e.Message);
-            }
+            return await _reviewService.DeleteReviewByIdAsync(userId, id);
         }
     }
 }

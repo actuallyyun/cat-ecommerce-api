@@ -1,4 +1,5 @@
 using Ecommerce.Core.src.Common;
+using Ecommerce.Core.src.Entity;
 using Ecommerce.Core.src.RepoAbstraction;
 using Ecommerce.Core.src.ValueObject;
 using Ecommerce.WebApi.src.Data;
@@ -10,11 +11,13 @@ namespace Ecommerce.WebApi.src.Repo
     {
         private readonly EcommerceDbContext _context;
         private readonly DbSet<Review> _reviews;
+        private readonly DbSet<ReviewImage> _reviewImages;
 
         public ReviewRepo(EcommerceDbContext context)
         {
             _context = context;
             _reviews = _context.Reviews;
+            _reviewImages = _context.ReviewImages;
         }
 
         public async Task<Review> CreateReviewAsync(Review review)
@@ -33,8 +36,8 @@ namespace Ecommerce.WebApi.src.Repo
 
         public async Task<IEnumerable<Review>> GetAllReviewsAsync(QueryOptions? options)
         {
-            var query=new LINQParams(options);
-  
+            var query = new LINQParams(options);
+
             IEnumerable<Review> reviews;
 
             if (options?.SortOrder == SortOrder.ASC)
@@ -71,13 +74,14 @@ namespace Ecommerce.WebApi.src.Repo
 
         public async Task<bool> UpdateReviewByIdAsync(Review review)
         {
-             await _reviews
+            await _reviews
                 .Where(r => r.Id == review.Id)
-                .ExecuteUpdateAsync(setters => setters
-                    .SetProperty(r => r.IsAnonymous, review.IsAnonymous)
-                    .SetProperty(r => r.Content, review.Content)
-                    .SetProperty(r => r.Rating, review.Rating)
-                    .SetProperty(r => r.Images, review.Images)
+                .ExecuteUpdateAsync(setters =>
+                    setters
+                        .SetProperty(r => r.IsAnonymous, review.IsAnonymous)
+                        .SetProperty(r => r.Content, review.Content)
+                        .SetProperty(r => r.Rating, review.Rating)
+                        .SetProperty(r => r.Images, review.Images)
                 );
 
             return true;

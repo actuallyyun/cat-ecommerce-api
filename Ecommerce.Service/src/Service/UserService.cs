@@ -11,11 +11,13 @@ namespace Ecommerce.Service.src.Service
     public class UserService : IUserService
     {
         private readonly IUserRepository _userRepo;
+        private readonly IReviewRepository _reviewRepo;
         private readonly IMapper _mapper;
 
-        public UserService(IUserRepository userRepo, IMapper mapper)
+        public UserService(IUserRepository userRepo, IReviewRepository reviewRepo,IMapper mapper)
         {
             _userRepo = userRepo;
+            _reviewRepo=reviewRepo;
             _mapper = mapper;
         }
 
@@ -47,6 +49,10 @@ namespace Ecommerce.Service.src.Service
             }
 
             return _mapper.Map<UserReadDto>(user);
+        }
+
+        public async Task<IEnumerable<Review>> GetAllReviewsAsync(Guid id){
+            return await _reviewRepo.GetReviewsByUserIdAsync(id);
         }
 
         public async Task<bool> UpdateUserByIdAsync(Guid id, UserUpdateDto userDto)

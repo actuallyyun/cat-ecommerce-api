@@ -12,15 +12,17 @@ namespace Ecommerce.Service.src.Service
     {
         private readonly IProductRepository _productRepository;
         private readonly ICategoryRepository _categoryRepository;
-
+        private readonly IReviewRepository _reviewRepository;
 
         public ProductService(
             IProductRepository productRepository,
-            ICategoryRepository categoryRepository
+            ICategoryRepository categoryRepository,
+            IReviewRepository reviewRepo
         )
         {
             _productRepository = productRepository;
             _categoryRepository = categoryRepository;
+            _reviewRepository = reviewRepo;
         }
 
         public async Task<Product> CreateProductAsync(ProductCreateDto product)
@@ -40,7 +42,7 @@ namespace Ecommerce.Service.src.Service
 
             foreach (var image in product.Images)
             {
-                productCreate.Images.Add(new        ProductImage(productCreate.Id, image));
+                productCreate.Images.Add(new ProductImage(productCreate.Id, image));
             }
             var newProduct = await _productRepository.CreateProductAsync(productCreate);
 
@@ -48,8 +50,6 @@ namespace Ecommerce.Service.src.Service
             {
                 throw new ArgumentException("create new product failed.");
             }
-
-            
 
             return newProduct;
         }
@@ -67,7 +67,6 @@ namespace Ecommerce.Service.src.Service
         public async Task<IEnumerable<Product>> GetAllProductsAsync(QueryOptions options)
         {
             return await _productRepository.GetAllProductsAsync(options);
-
         }
 
         public async Task<Product> GetProductByIdAsync(Guid id)
@@ -92,7 +91,9 @@ namespace Ecommerce.Service.src.Service
             }
             if (product.CategoryId != null)
             {
-                var categoryFound = await _categoryRepository.GetCategoryByIdAsync((Guid)product.CategoryId);
+                var categoryFound = await _categoryRepository.GetCategoryByIdAsync(
+                    (Guid)product.CategoryId
+                );
                 if (categoryFound == null)
                 {
                     throw new ArgumentException("category not found");
@@ -110,9 +111,16 @@ namespace Ecommerce.Service.src.Service
             if (product.Images != null)
             {
                 productFound.Images.Clear();
-                productFound.Images.AddRange(product.Images.Select(data => new ProductImage(productFound.Id, data)));
+                productFound.Images.AddRange(
+                    product.Images.Select(data => new ProductImage(productFound.Id, data))
+                );
             }
             return await _productRepository.UpdateProductAsync(productFound);
+        }
+
+        public async Task<IEnumerable<Review>> GetAllReviews(Guid id)
+        {
+            return await _reviewRepository.GetReviewsByProductIdAsync(id);
         }
     }
 }
