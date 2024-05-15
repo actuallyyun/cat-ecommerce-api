@@ -33,5 +33,8 @@ namespace Ecommerce.Core.src.Entity
             AddressId = addressId;
             Status = status;
         }
+        public void SetOrderItems(List<OrderItem> items){
+            Items = items;
+        }
     }
 }

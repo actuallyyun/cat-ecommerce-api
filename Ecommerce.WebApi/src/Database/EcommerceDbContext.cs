@@ -45,8 +45,7 @@ namespace Ecommerce.WebApi.src.Data
                     new SqlLoggingInterceptor(_loggerFactory.CreateLogger<SqlLoggingInterceptor>())
                 )
                 .EnableSensitiveDataLogging() // for development only, delete on prod
-                .EnableDetailedErrors() // for development only, delete on prod
-                .UseSnakeCaseNamingConvention();
+                .EnableDetailedErrors(); // for development only, delete on prod
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -142,7 +141,7 @@ namespace Ecommerce.WebApi.src.Data
                     .OnDelete(DeleteBehavior.SetNull);
                 entity
                     .HasOne(e => e.Order)
-                    .WithMany()
+                    .WithMany(e=>e.Items)
                     .HasForeignKey(e => e.OrderId)
                     .OnDelete(DeleteBehavior.Cascade);
 

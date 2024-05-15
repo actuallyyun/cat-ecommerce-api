@@ -40,7 +40,7 @@ namespace Ecommerce.WebApi.src.middleware
                 _logger.LogError(ex.Message);
 
                 context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-                var errorMessage = new { StatusCode = context.Response.StatusCode, Message = ex.Message };
+                var errorMessage = new { StatusCode = context.Response.StatusCode, Message = ex.StackTrace };
                 await context.Response.WriteAsJsonAsync(errorMessage);
             }
         }

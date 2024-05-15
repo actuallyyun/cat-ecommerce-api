@@ -12,6 +12,11 @@ namespace Ecommerce.WebApi.src.Repo
         private readonly EcommerceDbContext _context;
         private readonly DbSet<OrderItem> _items;
 
+        public OrderItemRepo(EcommerceDbContext context){
+            _context=context;
+            _items=context.OrderItems;
+        }
+
         public async Task<OrderItem> CreateAsync(OrderItem item)
         {
             await _items.AddAsync(item);

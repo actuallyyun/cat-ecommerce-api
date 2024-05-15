@@ -23,7 +23,7 @@ namespace Ecommerce.WebApi.src.Repo
             _orderItems = context.OrderItems;
         }
 
-        public async Task<Order> CreateOrderAsync(Order order)
+        public async Task<Order> CreateOrderAsync(Order order,List<OrderItem> items)
         {
             using (var transaction = await _context.Database.BeginTransactionAsync())
             {
@@ -35,9 +35,10 @@ namespace Ecommerce.WebApi.src.Repo
                         AddressId = order.AddressId,
                         Status = order.Status
                     };
-                    foreach (var item in order.Items)
+                    await _orders.AddAsync(newOrder);
+                    foreach (var item in items)
                     {
-                        var foundProduct = await _products.FindAsync(item.ProductId); // ef core tracking
+                        var foundProduct = await _products.FindAsync(item.ProductId); 
                         var newItem=new OrderItem{
                             ProductId = item.ProductId,
                             OrderId=newOrder.Id,
@@ -45,9 +46,10 @@ namespace Ecommerce.WebApi.src.Repo
                             Price=item.Price,
                         };
                         await _orderItems.AddAsync(newItem);
-                        foundProduct.Inventory -= item.Quantity;
+                        _products.Where(p=>p.Id==item.ProductId).ExecuteUpdate(setters=>setters.SetProperty(p=>p.Inventory,p=>p.Inventory-item.Quantity));
+
                     }
-                    await _orders.AddAsync(newOrder);
+                    
                     await _context.SaveChangesAsync();
                     await transaction.CommitAsync();
                     return newOrder;
