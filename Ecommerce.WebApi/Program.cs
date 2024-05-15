@@ -3,6 +3,7 @@ using Ecommerce.Core.src.RepoAbstraction;
 using Ecommerce.Core.src.RepositoryAbstraction;
 using Ecommerce.Service.src.Service;
 using Ecommerce.Service.src.ServiceAbstraction;
+using Ecommerce.WebApi.src.Authorization;
 using Ecommerce.WebApi.src.Data;
 using Ecommerce.WebApi.src.middleware;
 using Ecommerce.WebApi.src.Repo;
@@ -36,11 +37,12 @@ builder.Services.AddScoped<ICategoryRepository,CategoryRepo>();
 builder.Services.AddScoped<ICategoryService,CategoryService>();
 builder.Services.AddScoped<IProductRepository,ProductRepo>();
 builder.Services.AddScoped<IProductService,ProductService>();
-//builder.Services.AddScoped<IOrderRepository,OrderRepo>(); // need to implement address repo
-//builder.Services.AddScoped<IOrderService,OrderService>();
+builder.Services.AddScoped<IOrderRepository,OrderRepo>(); 
+builder.Services.AddScoped<IOrderService,OrderService>();
 builder.Services.AddScoped<IReviewRepository,ReviewRepo>();
 builder.Services.AddScoped<IReviewService,ReviewService>();
-
+builder.Services.AddScoped<IAddressRepository,AddressRepo>();
+builder.Services.AddScoped<IOrderItemRepo,OrderItemRepo>();
 
 // Add authentication instructions
 builder
@@ -61,6 +63,14 @@ builder
     });
 
 builder.Services.AddAutoMapper(typeof(MappingProfile));
+
+
+builder.Services.AddAuthorization(
+    policy =>
+    {
+      policy.AddPolicy("AdminOrOwner", policy => policy.Requirements.Add(new AdminOrOwnerRequirement()));
+     }
+);
 
 var app = builder.Build();
 

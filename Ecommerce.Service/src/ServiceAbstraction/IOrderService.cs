@@ -8,8 +8,9 @@ namespace Ecommerce.Service.src.ServiceAbstraction
     {
         Task<Order> CreateOrderAsync(OrderCreateDto order);
         Task<bool> UpdateOrderByIdAsync(Guid id, OrderUpdateDto order);
-        Task<Order>? GetOrderByIdAsync(Guid id);
-        Task<IEnumerable<Order>> GetAllUserOrdersAsync(Guid userId, QueryOptions? options);
+        Task<Order> GetOrderByIdAsync(Guid id);
+        Task<IEnumerable<Order>> GetAllOrdersAsync(QueryOptions? options);
+        Task<IEnumerable<Order>> GetAllOrdersByUserAsync(Guid userId);
         Task<bool> DeleteOrderByIdAsync(Guid id);
     }
 }

@@ -14,19 +14,16 @@ namespace Ecommerce.Service.src.Service
         private readonly IOrderRepository _orderRepository;
         private readonly IUserRepository _userRepository;
         private readonly IAddressRepository _addressRepository;
-        private readonly IMapper _mapper;
 
         public OrderService(
             IOrderRepository orderRepository,
             IUserRepository userRepo,
-            IAddressRepository addressRepo,
-            IMapper mapper
+            IAddressRepository addressRepo
         )
         {
             _orderRepository = orderRepository;
             _userRepository = userRepo;
             _addressRepository = addressRepo;
-            _mapper = mapper;
         }
 
         public async Task<Order> CreateOrderAsync(OrderCreateDto orderDto)
@@ -34,7 +31,8 @@ namespace Ecommerce.Service.src.Service
             await ValidateIdAsync(orderDto.UserId, "User");
             await ValidateIdAsync(orderDto.AddressId, "Address");
 
-            var order = _mapper.Map<Order>(orderDto);
+            var order = new Order(orderDto.UserId,orderDto.AddressId,orderDto.Status);
+            
             foreach (OrderItemDto o in orderDto.ItemsDto)
             {
                 var orderItem = new OrderItem(o.ProductId, order.Id, o.Quantity, o.Price);
@@ -55,16 +53,18 @@ namespace Ecommerce.Service.src.Service
             return true;
         }
 
-        public async Task<IEnumerable<Order>> GetAllUserOrdersAsync(
-            Guid userId,
-            QueryOptions? options
-        )
+        public async Task<IEnumerable<Order>> GetAllOrdersAsync(QueryOptions? options)
         {
-            await ValidateIdAsync(userId, "User");
-            return await _orderRepository.GetAllUserOrdersAsync(userId, options);
+            return await _orderRepository.GetAllOrdersAsync(options);
         }
 
-        public async Task<Order>? GetOrderByIdAsync(Guid id)
+        public async Task<IEnumerable<Order>> GetAllOrdersByUserAsync(Guid userId)
+        {
+            await ValidateIdAsync(userId, "User");
+            return await _orderRepository.GetAllUserOrdersAsync(userId);
+        }
+
+        public async Task<Order> GetOrderByIdAsync(Guid id)
         {
             var order = await _orderRepository.GetOrderByIdAsync(id);
             if (order == null)

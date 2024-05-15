@@ -104,11 +104,7 @@ namespace Ecommerce.Service.src.Service
 
         public async Task<Review> GetReviewByIdAsync(Guid id)
         {
-            var review = await _reviewRepository.GetReviewByIdAsync(id);
-            if (review == null)
-                throw new ArgumentException("Review not found.");
-
-            return review;
+            return await _reviewRepository.GetReviewByIdAsync(id);
         }
 
         private async Task ValidateIdAsync(Guid id, string entityType)

@@ -2,6 +2,7 @@ using AutoMapper;
 using Ecommerce.Core.src.Common;
 using Ecommerce.Core.src.Entity;
 using Ecommerce.Core.src.RepoAbstraction;
+using Ecommerce.Core.src.RepositoryAbstraction;
 using Ecommerce.Service.src.DTO;
 using Ecommerce.Service.src.ServiceAbstraction;
 using Ecommerce.Service.src.Validation;
@@ -12,12 +13,14 @@ namespace Ecommerce.Service.src.Service
     {
         private readonly IUserRepository _userRepo;
         private readonly IReviewRepository _reviewRepo;
+        private readonly IOrderRepository _orderRepo;
         private readonly IMapper _mapper;
 
-        public UserService(IUserRepository userRepo, IReviewRepository reviewRepo,IMapper mapper)
+        public UserService(IUserRepository userRepo, IReviewRepository reviewRepo,IOrderRepository orderRepo,IMapper mapper)
         {
             _userRepo = userRepo;
             _reviewRepo=reviewRepo;
+            _orderRepo=orderRepo;
             _mapper = mapper;
         }
 
@@ -92,6 +95,11 @@ namespace Ecommerce.Service.src.Service
             }
 
             return await _userRepo.DeleteUserByIdAsync(id);
+        }
+
+        public async Task<IEnumerable<Order>> GetAllOrdersAsync(Guid id)//get orders of a user
+        {
+            return await _orderRepo.GetAllUserOrdersAsync(id);
         }
     }
 }
