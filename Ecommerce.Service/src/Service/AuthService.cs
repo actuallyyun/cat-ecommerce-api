@@ -11,33 +11,39 @@ namespace Ecommerce.Service.src.Service
     {
         private readonly IUserRepository _userRepo;
         private readonly ITokenService _tokenService;
-        private User _currentUser;
+        private readonly IPasswordService _passwordService;
 
-        public AuthService(IUserRepository userRepo, ITokenService tokenService)
+        public AuthService(
+            IUserRepository userRepo,
+            ITokenService tokenService,
+            IPasswordService passwordService
+        )
         {
             _userRepo = userRepo;
             _tokenService = tokenService;
-        }
-
-        private void SetCurrentUser(User user)
-        {
-            _currentUser = user ?? throw new ArgumentNullException(nameof(user));
+            _passwordService = passwordService;
         }
 
         public async Task<string> LoginAsync(UserCredential credential)
         {
-            var user = await _userRepo.GetUserByCredentialAsync(credential);
-            if (user == null)
+            var user =
+                await _userRepo.GetUserByCredentialAsync(credential)
+                ?? throw new UnauthorizedAccessException("Email is not correct");
+
+            var isValidPassword = _passwordService.VerifyPassword(
+                credential.Password,
+                user.Password,
+                user.Salt
+            );
+
+            if (isValidPassword)
             {
-                throw new UnauthorizedAccessException("Invalid credentials.");
+                return _tokenService.GenerateToken(user, TokenType.AccessToken);
             }
-
-            SetCurrentUser(user);
-
-            var accessToken = _tokenService.GenerateToken(user, TokenType.AccessToken);
-            //var refreshToken=_tokenService.GenerateToken(user,TokenType.RefreshToken);
-
-            return accessToken;
+            else
+            {
+                throw new UnauthorizedAccessException("Password is not correct.");
+            }
         }
 
         public Task<TokenDto> RefreshTokenAsync(RefreshTokenDto refreshTokenDto)
@@ -50,25 +56,5 @@ namespace Ecommerce.Service.src.Service
             throw new NotImplementedException();
         }
 
-        public bool HasPermission(UserRole requiredRole)
-        {
-            if (_currentUser == null)
-            {
-                throw new InvalidOperationException("User must be authenticated to check permissions.");
-            }
-
-            var roles = new List<UserRole> { _currentUser.Role };
-
-            if (_currentUser.Role == UserRole.SuperAdmin)
-            {
-                roles.AddRange(Enum.GetValues(typeof(UserRole)).Cast<UserRole>());
-            }
-            else if (_currentUser.Role == UserRole.Admin)
-            {
-                roles.Add(UserRole.User);
-            }
-
-            return roles.Contains(requiredRole);
-        }
     }
 }

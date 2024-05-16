@@ -28,6 +28,7 @@ builder.Services.AddDbContext<EcommerceDbContext>(options =>
 });
 
 // service registration -> automatically create all instances of dependencies
+builder.Services.AddScoped<IPasswordService,PasswordService>();
 builder.Services.AddScoped<IUserRepository, UserRepo>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<ITokenService, TokenService>();

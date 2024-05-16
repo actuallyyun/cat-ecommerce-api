@@ -29,6 +29,10 @@ namespace Ecommerce.Core.src.Entity
         [MaxLength(255)]
         public string Password { get; set; }
 
+        [Required]
+        [Column(TypeName = "bytea")]
+        public required byte[] Salt { get; set; }
+
         public User(
             string firstName,
             string lastName,

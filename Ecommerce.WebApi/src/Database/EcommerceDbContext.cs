@@ -166,31 +166,31 @@ namespace Ecommerce.WebApi.src.Data
                     .OnDelete(DeleteBehavior.Cascade);
             });
 
-            modelBuilder.Entity<ProductImage>(entity =>
-            {
-                entity.ToTable("product_images");
-                entity.HasKey(e => e.Id);
-                entity
-                    .HasOne(e => e.Product)
-                    .WithMany()
-                    .HasForeignKey(e => e.ProductId)
-                    .OnDelete(DeleteBehavior.Cascade);
-                // Define the foreign key relationship with the products table
-                entity.Property(e => e.Data).IsRequired();
-            });
+            //modelBuilder.Entity<ProductImage>(entity =>
+            //{
+            //    entity.ToTable("product_images");
+            //    entity.HasKey(e => e.Id);
+            //    entity
+            //        .HasOne(e => e.Product)
+            //        .WithMany()
+            //        .HasForeignKey(e => e.ProductId)
+            //        .OnDelete(DeleteBehavior.Cascade);
+            //    // Define the foreign key relationship with the products table
+            //    entity.Property(e => e.Data).IsRequired();
+            //});
 
-            modelBuilder.Entity<ReviewImage>(entity =>
-            {
-                entity.ToTable("review_images");
-                entity.HasKey(e => e.Id);
-                entity
-                    .HasOne(e => e.Review)
-                    .WithMany()
-                    .HasForeignKey(e => e.ReviewId)
-                    .OnDelete(DeleteBehavior.Cascade);
-                // Define the foreign key relationship with the products table
-                entity.Property(e => e.Data).IsRequired();
-            });
+            //modelBuilder.Entity<ReviewImage>(entity =>
+            //{
+            //    entity.ToTable("review_images");
+            //    entity.HasKey(e => e.Id);
+            //    entity
+            //        .HasOne(e => e.Review)
+            //        .WithMany()
+            //        .HasForeignKey(e => e.ReviewId)
+            //        .OnDelete(DeleteBehavior.Cascade);
+            //    // Define the foreign key relationship with the products table
+            //    entity.Property(e => e.Data).IsRequired();
+            //});
 
             // Seed database
 

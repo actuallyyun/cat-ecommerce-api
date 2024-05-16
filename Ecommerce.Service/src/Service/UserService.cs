@@ -14,22 +14,25 @@ namespace Ecommerce.Service.src.Service
         private readonly IUserRepository _userRepo;
         private readonly IReviewRepository _reviewRepo;
         private readonly IOrderRepository _orderRepo;
+        private readonly IPasswordService _passwordService;
         private readonly IMapper _mapper;
 
-        public UserService(IUserRepository userRepo, IReviewRepository reviewRepo,IOrderRepository orderRepo,IMapper mapper)
+        public UserService(IUserRepository userRepo, IReviewRepository reviewRepo,IOrderRepository orderRepo,IPasswordService passwordService,IMapper mapper)
         {
             _userRepo = userRepo;
             _reviewRepo=reviewRepo;
             _orderRepo=orderRepo;
+            _passwordService=passwordService;
             _mapper = mapper;
         }
 
         public async Task<UserReadDto> CreateUserAsync(UserCreateDto userDto)
         {
             UserValidation.ValidateUserCreateDto(userDto);
-
+                        
             var user = _mapper.Map<User>(userDto);
-
+            user.Password=_passwordService.HashPassword(userDto.Password,out byte[]salt);
+            user.Salt=salt;    
             var createdUser = await _userRepo.CreateUserAsync(user);
 
             return _mapper.Map<UserReadDto>(createdUser);

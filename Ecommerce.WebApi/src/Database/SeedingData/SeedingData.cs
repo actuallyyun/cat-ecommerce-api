@@ -1,3 +1,4 @@
+using System.Text;
 using Ecommerce.Core.src.Entity;
 using Ecommerce.Core.src.ValueObject;
 
@@ -32,7 +33,8 @@ namespace Ecommerce.WebApi.src.Database.SeedingData
                         Role = Enum.Parse<UserRole>(fields[3], true),
                         Avatar = fields[4],
                         Email = fields[5],
-                        Password = fields[6]
+                        Password = fields[6],
+                        Salt=Encoding.UTF8.GetBytes(fields[7])
                     };
                 }
             );
