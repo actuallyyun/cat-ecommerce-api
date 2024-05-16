@@ -96,16 +96,16 @@ namespace Ecommerce.WebApi.src.Data
                     .OnDelete(DeleteBehavior.NoAction);
             });
 
-            modelBuilder.Entity<Address>(entity =>
-            {
-                entity.ToTable("addresses");
-                entity.HasKey(e => e.Id);
-                entity
-                    .HasOne(e => e.User)
-                    .WithMany()
-                    .HasForeignKey(e => e.UserId)
-                    .OnDelete(DeleteBehavior.Cascade);
-            });
+            //modelBuilder.Entity<Address>(entity =>
+            //{
+            //    entity.ToTable("addresses");
+            //    entity.HasKey(e => e.Id);
+            //    entity
+            //        .HasOne(e => e.User)
+            //        .WithMany()
+            //        .HasForeignKey(e => e.UserId)
+            //        .OnDelete(DeleteBehavior.Cascade);
+            //});
 
             //modelBuilder.Entity<Order>(entity =>
             //{

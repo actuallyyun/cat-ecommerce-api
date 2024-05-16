@@ -7,6 +7,7 @@ namespace Ecommerce.Core.src.Entity
     public class Address : BaseEntity
     {
         [Required]
+        [ForeignKey("UserId")]
         public Guid UserId { get; set; }
 
         [Required]
@@ -22,20 +23,5 @@ namespace Ecommerce.Core.src.Entity
 
         [MaxLength(40)]
         public string PhoneNumber { get; set; }
-
-        // Navigation property
-        [ForeignKey("UserId")]
-        public User User { get; set; }
-
-        public Address() { }
-
-        public Address(Guid userId, string addressLine, string postalCode, string country, string phoneNumber)
-        {
-            UserId = userId;
-            AddressLine = addressLine;
-            PostalCode = postalCode;
-            Country = country;
-            PhoneNumber = phoneNumber;
-        }
     }
 }

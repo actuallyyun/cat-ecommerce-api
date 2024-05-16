@@ -49,7 +49,5 @@ namespace Ecommerce.Core.src.Entity
             Email = email;
             Password = password;
         }
-
-        public User() { }
     }
 }

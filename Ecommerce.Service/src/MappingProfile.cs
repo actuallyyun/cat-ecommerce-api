@@ -1,11 +1,11 @@
 using AutoMapper;
 using Ecommerce.Core.src.Entity;
 using Ecommerce.Service.src.DTO;
+
 public class MappingProfile : Profile
 {
     public MappingProfile()
     {
-
         // User mappings
         CreateMap<User, UserReadDto>();
         CreateMap<UserCreateDto, User>();
@@ -22,10 +22,10 @@ public class MappingProfile : Profile
 
         // Order mappings
         CreateMap<OrderCreateDto, Order>()
-        .ForMember(dest=>dest.OrderItems,opt=>opt.MapFrom(src=>src.OrderItemCreateDto));
-        
-        CreateMap<OrderItemCreateDto,OrderItem>()
-        .ForMember(dest=>dest.OrderId,opt=>opt.Ignore());
+            .ForMember(dest => dest.OrderItems, opt => opt.MapFrom(src => src.OrderItemCreateDto));
+
+        CreateMap<OrderItemCreateDto, OrderItem>()
+            .ForMember(dest => dest.OrderId, opt => opt.Ignore());
 
         CreateMap<OrderUpdateDto, Order>();
 

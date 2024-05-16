@@ -1,3 +1,4 @@
+using AutoMapper;
 using Ecommerce.Core.src.Entity;
 using Ecommerce.Core.src.RepoAbstraction;
 using Ecommerce.Core.src.RepositoryAbstraction;
@@ -11,11 +12,13 @@ namespace Ecommerce.Service.src.Service
     {
         private readonly IAddressRepository _addressRepo;
         private readonly IUserRepository _userRepo;
+        private readonly IMapper _mapper;
 
-        public AddressService(IAddressRepository addressRepo, IUserRepository userRepo)
+        public AddressService(IAddressRepository addressRepo, IUserRepository userRepo,IMapper mapper)
         {
             _addressRepo = addressRepo;
             _userRepo = userRepo;
+            _mapper=mapper;
         }
 
         public async Task<Address> CreateAddressAsync(AddressCreateDto address)
@@ -30,13 +33,8 @@ namespace Ecommerce.Service.src.Service
                 }
             }
 
-            var newAddress = new Address(
-                address.UserId,
-                address.AddressLine,
-                address.PostalCode,
-                address.Country,
-                address.PhoneNumber
-            );
+            var newAddress = _mapper.Map<Address>(address);
+
             return await _addressRepo.CreateAddressAsync(newAddress);
         }
 
