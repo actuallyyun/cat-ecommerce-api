@@ -42,7 +42,7 @@ namespace Ecommerce.WebApi.src.Repo
         public async Task<User>? GetUserByCredentialAsync(UserCredential credential)
         {
             return await _users.FirstOrDefaultAsync(user =>
-                user.Email == credential.Email && user.Password == credential.Password
+                user.Email == credential.Email
             );
         }
 
