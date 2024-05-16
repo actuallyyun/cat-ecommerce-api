@@ -1,5 +1,6 @@
 using Ecommerce.Core.src.Entity;
 using Ecommerce.Core.src.RepositoryAbstraction;
+using Ecommerce.Service.src.DTO;
 using Ecommerce.WebApi.src.Data;
 using Microsoft.EntityFrameworkCore;
 
@@ -23,6 +24,19 @@ namespace Ecommerce.WebApi.src.Repo
             return address;
         }
 
+        public async Task<bool> UpdateAddressAsync(Address address)
+        {
+            await _addresses.ExecuteUpdateAsync(setters =>
+                setters
+                    .SetProperty(a => a.AddressLine, address.AddressLine)
+                    .SetProperty(a => a.Country, address.Country)
+                    .SetProperty(a => a.UpdatedAt, address.UpdatedAt)
+                    .SetProperty(a => a.PhoneNumber, address.PhoneNumber)
+                    .SetProperty(a => a.PostalCode, address.PostalCode)
+            );
+            return true;
+        }
+
         public async Task<bool> DeleteAddressByIdAsync(Guid id)
         {
             await _addresses.Where(a => a.Id == id).ExecuteDeleteAsync();
@@ -37,12 +51,7 @@ namespace Ecommerce.WebApi.src.Repo
 
         public async Task<IEnumerable<Address>> GetAllUserAddressesAsync(Guid userId)
         {
-            return await _addresses.ToListAsync();
-        }
-
-        public Task<bool> UpdateAddressAsync(Address address)
-        {
-            throw new NotImplementedException();
+            return await _addresses.Where(a=>a.UserId==userId).ToListAsync();
         }
     }
 }

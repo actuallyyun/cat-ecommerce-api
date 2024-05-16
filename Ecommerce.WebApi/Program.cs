@@ -43,6 +43,8 @@ builder.Services.AddScoped<IReviewRepository,ReviewRepo>();
 builder.Services.AddScoped<IReviewService,ReviewService>();
 builder.Services.AddScoped<IAddressRepository,AddressRepo>();
 builder.Services.AddScoped<IOrderItemRepo,OrderItemRepo>();
+builder.Services.AddScoped<IAddressService,AddressService>();
+
 
 // Add authentication instructions
 builder

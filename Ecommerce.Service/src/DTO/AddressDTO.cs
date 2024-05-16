@@ -1,3 +1,6 @@
+using System.Diagnostics.CodeAnalysis;
+using Ecommerce.Core.src.Entity;
+
 namespace Ecommerce.Service.src.DTO
 {
     public class AddressCreateDto
@@ -7,6 +10,14 @@ namespace Ecommerce.Service.src.DTO
         public string PostalCode { get; set; }
         public string Country { get; set; }
         public string PhoneNumber { get; set; }
+
+        public AddressCreateDto(Guid userId, string addressLine,string postalCode,string country,string phoneNumber){
+            UserId = userId;
+            AddressLine = addressLine;
+            PostalCode = postalCode;
+            Country = country;
+            PhoneNumber = phoneNumber;
+        }
     }
 
     public class AddressUpdateDto
@@ -20,7 +31,7 @@ namespace Ecommerce.Service.src.DTO
     public class AddressReadDto
     {
         public Guid Id {get;}
-        public Guid UserId { get; }
+        public User User { get; }
         public string AddressLine { get; }
         public string PostalCode { get; }
         public string Country { get; }
