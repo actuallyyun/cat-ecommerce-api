@@ -33,9 +33,10 @@ private readonly IProductRepository _productRepo;
             await ValidateIdAsync(orderDto.UserId,"User");
             await ValidateIdAsync(orderDto.AddressId,"Address");
 
-            var order = new Order(orderDto.UserId,orderDto.AddressId,OrderStatus.Created);
+            //var order = new Order(orderDto.UserId,orderDto.AddressId,OrderStatus.Created);
 
-            var items=new List<OrderItem>(); 
+var order=new Order();
+                var items=new List<OrderItem>(); 
 
             foreach (var item in orderDto.Items)
             {
