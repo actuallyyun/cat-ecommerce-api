@@ -14,41 +14,36 @@ namespace Ecommerce.Service.src.Service
         private readonly IOrderRepository _orderRepository;
         private readonly IUserRepository _userRepository;
         private readonly IAddressRepository _addressRepository;
-private readonly IProductRepository _productRepo;
+        private readonly IProductRepository _productRepo;
+        private readonly IMapper  _mapper;
+
         public OrderService(
             IOrderRepository orderRepository,
             IUserRepository userRepo,
             IAddressRepository addressRepo,
-            IProductRepository productRepo
+            IProductRepository productRepo,
+            IMapper mapper
         )
         {
             _orderRepository = orderRepository;
             _userRepository = userRepo;
             _addressRepository = addressRepo;
-            _productRepo=productRepo;
+            _productRepo = productRepo;
+            _mapper = mapper;
         }
 
         public async Task<Order> CreateOrderAsync(OrderCreateDto orderDto)
         {
-            await ValidateIdAsync(orderDto.UserId,"User");
-            await ValidateIdAsync(orderDto.AddressId,"Address");
+            await ValidateIdAsync(orderDto.AddressId, "Address");
+            
+            var order=_mapper.Map<Order>(orderDto);
 
-            //var order = new Order(orderDto.UserId,orderDto.AddressId,OrderStatus.Created);
-
-var order=new Order();
-                var items=new List<OrderItem>(); 
-
-            foreach (var item in orderDto.Items)
+            foreach (var item in orderDto.OrderItemCreateDto)
             {
-                
-                await ValidateIdAsync(item.ProductId,"Product");
-
-                var orderItem = new OrderItem(item.ProductId, order.Id, item.Quantity, item.Price);
-                items.Add(orderItem);
+                await ValidateIdAsync(item.ProductId, "Product");
             }
-            //order.SetOrderItems(items);
 
-            return await _orderRepository.CreateOrderAsync(order,items);
+            return await _orderRepository.CreateOrderAsync(order);
         }
 
         public async Task<bool> DeleteOrderByIdAsync(Guid id)
@@ -106,13 +101,14 @@ var order=new Order();
 
             return await _orderRepository.UpdateOrderAsync(orderFound);
         }
-         private async Task<bool> ValidateIdAsync(Guid id, string entityType)
+
+        private async Task<bool> ValidateIdAsync(Guid id, string entityType)
         {
             bool exists = entityType switch
             {
                 "User" => await _userRepository.GetUserByIdAsync(id) != null,
                 "Address" => await _addressRepository.GetAddressByIdAsync(id) != null,
-                "Product" =>await _productRepo.GetProductByIdAsync(id) != null,
+                "Product" => await _productRepo.GetProductByIdAsync(id) != null,
                 _ => throw new ArgumentException("Unknown entity type")
             };
 
@@ -122,7 +118,5 @@ var order=new Order();
             }
             return exists;
         }
-
-        
     }
 }

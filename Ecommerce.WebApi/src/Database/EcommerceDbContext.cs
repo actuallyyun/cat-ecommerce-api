@@ -1,7 +1,7 @@
 using Ecommerce.Core.src.Entity;
 using Ecommerce.Core.src.ValueObject;
 using Ecommerce.WebApi.src.Data.Interceptors;
-using Ecommerce.WebApi.src.Database.SeedingData;
+//using Ecommerce.WebApi.src.Database.SeedingData;
 using Microsoft.EntityFrameworkCore;
 
 namespace Ecommerce.WebApi.src.Data
@@ -107,47 +107,47 @@ namespace Ecommerce.WebApi.src.Data
                     .OnDelete(DeleteBehavior.Cascade);
             });
 
-            modelBuilder.Entity<Order>(entity =>
-            {
-                entity.ToTable("orders");
-                entity.HasKey(e => e.Id);
-                entity
-                    .HasOne(e => e.User)
-                    .WithMany()
-                    .HasForeignKey(e => e.UserId)
-                    .OnDelete(DeleteBehavior.Cascade);
-                entity
-                    .HasOne(e => e.Address)
-                    .WithMany()
-                    .HasForeignKey(e => e.AddressId)
-                    .OnDelete(DeleteBehavior.SetNull);
-                entity
-                    .Property(e => e.Status)
-                    .HasConversion(
-                        v => v.ToString(),
-                        v => (OrderStatus)Enum.Parse(typeof(OrderStatus), v) // String to enum
-                    )
-                    .IsRequired();
-            });
+            //modelBuilder.Entity<Order>(entity =>
+            //{
+            //    entity.ToTable("orders");
+            //    entity.HasKey(e => e.Id);
+            //    entity
+            //        .HasOne(e => e.User)
+            //        .WithMany()
+            //        .HasForeignKey(e => e.UserId)
+            //        .OnDelete(DeleteBehavior.Cascade);
+            //    entity
+            //        .HasOne(e => e.Address)
+            //        .WithMany()
+            //        .HasForeignKey(e => e.AddressId)
+            //        .OnDelete(DeleteBehavior.SetNull);
+            //    entity
+            //        .Property(e => e.Status)
+            //        .HasConversion(
+            //            v => v.ToString(),
+            //            v => (OrderStatus)Enum.Parse(typeof(OrderStatus), v) // String to enum
+            //        )
+            //        .IsRequired();
+            //});
 
-            modelBuilder.Entity<OrderItem>(entity =>
-            {
-                entity.ToTable("order_items");
-                entity.HasKey(e => e.Id);
-                entity
-                    .HasOne(e => e.Product)
-                    .WithMany()
-                    .HasForeignKey(e => e.ProductId)
-                    .OnDelete(DeleteBehavior.SetNull);
-                entity
-                    .HasOne(e => e.Order)
-                    .WithMany(e=>e.Items)
-                    .HasForeignKey(e => e.OrderId)
-                    .OnDelete(DeleteBehavior.Cascade);
+            //modelBuilder.Entity<OrderItem>(entity =>
+            //{
+            //    entity.ToTable("order_items");
+            //    entity.HasKey(e => e.Id);
+            //    entity
+            //        .HasOne(e => e.Product)
+            //        .WithMany()
+            //        .HasForeignKey(e => e.ProductId)
+            //        .OnDelete(DeleteBehavior.SetNull);
+            //    entity
+            //        .HasOne(e => e.Order)
+            //        .WithMany(e=>e.OrderItems)
+            //        .HasForeignKey(e => e.OrderId)
+            //        .OnDelete(DeleteBehavior.Cascade);
 
-                // Add unique constraint for order_id and product_id combination
-                entity.HasIndex(e => new { e.OrderId, e.ProductId }).IsUnique();
-            });
+            //    // Add unique constraint for order_id and product_id combination
+            //    entity.HasIndex(e => new { e.OrderId, e.ProductId }).IsUnique();
+            //});
 
             modelBuilder.Entity<Review>(entity =>
             {
@@ -194,26 +194,26 @@ namespace Ecommerce.WebApi.src.Data
 
             // Seed database
 
-            var categories = SeedingData.GetCategories();
-            modelBuilder.Entity<Category>().HasData(categories);
+            //var categories = SeedingData.GetCategories();
+            //modelBuilder.Entity<Category>().HasData(categories);
 
-            var users = SeedingData.GetUsers();
-            modelBuilder.Entity<User>().HasData(users);
+            //var users = SeedingData.GetUsers();
+            //modelBuilder.Entity<User>().HasData(users);
 
-            var products = SeedingData.GetProducts();
-            modelBuilder.Entity<Product>().HasData(products);
+            //var products = SeedingData.GetProducts();
+            //modelBuilder.Entity<Product>().HasData(products);
 
-            var adddresses = SeedingData.GetAddresses();
-            modelBuilder.Entity<Address>().HasData(adddresses);
+            //var adddresses = SeedingData.GetAddresses();
+            //modelBuilder.Entity<Address>().HasData(adddresses);
 
-            var orders = SeedingData.GetOrders();
-            modelBuilder.Entity<Order>().HasData(orders);
+            //var orders = SeedingData.GetOrders();
+            //modelBuilder.Entity<Order>().HasData(orders);
 
-            var orderItems = SeedingData.GetOrderItems();
-            modelBuilder.Entity<OrderItem>().HasData(orderItems);
+            //var orderItems = SeedingData.GetOrderItems();
+            //modelBuilder.Entity<OrderItem>().HasData(orderItems);
 
-            var reviews = SeedingData.GetReviews();
-            modelBuilder.Entity<Review>().HasData(reviews);
+            //var reviews = SeedingData.GetReviews();
+            //modelBuilder.Entity<Review>().HasData(reviews);
         }
     }
 }

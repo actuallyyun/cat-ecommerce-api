@@ -7,7 +7,7 @@ namespace Ecommerce.Service.src.DTO
     {
         public Guid UserId { get; set; }
         public Guid AddressId { get; set; }
-        public List<OrderItemCreateDto> Items { get; set; }
+        public List<OrderItemCreateDto> OrderItemCreateDto { get; set; }
     }
 
     public class OrderItemCreateDto

@@ -5,6 +5,7 @@ public class MappingProfile : Profile
 {
     public MappingProfile()
     {
+
         // User mappings
         CreateMap<User, UserReadDto>();
         CreateMap<UserCreateDto, User>();
@@ -20,7 +21,12 @@ public class MappingProfile : Profile
         CreateMap<AddressUpdateDto, Address>();
 
         // Order mappings
-        CreateMap<OrderCreateDto, Order>();
+        CreateMap<OrderCreateDto, Order>()
+        .ForMember(dest=>dest.OrderItems,opt=>opt.MapFrom(src=>src.OrderItemCreateDto));
+        
+        CreateMap<OrderItemCreateDto,OrderItem>()
+        .ForMember(dest=>dest.OrderId,opt=>opt.Ignore());
+
         CreateMap<OrderUpdateDto, Order>();
 
         // Review mappings

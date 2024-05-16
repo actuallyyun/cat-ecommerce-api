@@ -5,7 +5,7 @@ namespace Ecommerce.Core.src.RepositoryAbstraction
 {
     public interface IOrderRepository
     {
-        Task<Order> CreateOrderAsync(Order order,List<OrderItem> items);
+        Task<Order> CreateOrderAsync(Order order);
         Task<bool> UpdateOrderAsync(Order order);
         Task<Order>? GetOrderByIdAsync(Guid orderId);
         Task<IEnumerable<Order>> GetAllOrdersAsync(QueryOptions? options);

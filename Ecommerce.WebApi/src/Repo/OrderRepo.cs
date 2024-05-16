@@ -23,36 +23,30 @@ namespace Ecommerce.WebApi.src.Repo
             _orderItems = context.OrderItems;
         }
 
-        public async Task<Order> CreateOrderAsync(Order order,List<OrderItem> items)
+        public async Task<Order> CreateOrderAsync(Order order)
         {
             using (var transaction = await _context.Database.BeginTransactionAsync())
             {
                 try
                 {
-                    var newOrder = new Order
+                    await _orders.AddAsync(order);
+                    foreach (var item in order.OrderItems)
                     {
-                        UserId = order.UserId,
-                        AddressId = order.AddressId,
-                        Status = order.Status
-                    };
-                    await _orders.AddAsync(newOrder);
-                    foreach (var item in items)
-                    {
-                        var foundProduct = await _products.FindAsync(item.ProductId); 
-                        var newItem=new OrderItem{
-                            ProductId = item.ProductId,
-                            OrderId=newOrder.Id,
-                            Quantity=item.Quantity,
-                            Price=item.Price,
-                        };
-                        await _orderItems.AddAsync(newItem);
-                        _products.Where(p=>p.Id==item.ProductId).ExecuteUpdate(setters=>setters.SetProperty(p=>p.Inventory,p=>p.Inventory-item.Quantity));
-
+                        var foundProduct = await _products.FindAsync(item.ProductId);
+                        await _orderItems.AddAsync(item);
+                        _products
+                            .Where(p => p.Id == item.ProductId)
+                            .ExecuteUpdate(setters =>
+                                setters.SetProperty(
+                                    p => p.Inventory,
+                                    p => p.Inventory - item.Quantity
+                                )
+                            );
                     }
-                    
+
                     await _context.SaveChangesAsync();
                     await transaction.CommitAsync();
-                    return newOrder;
+                    return order;
                 }
                 catch (DbUpdateException)
                 {
