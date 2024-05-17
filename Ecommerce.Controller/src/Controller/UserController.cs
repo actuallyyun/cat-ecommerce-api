@@ -4,9 +4,10 @@ using Ecommerce.Core.src.Entity;
 using Ecommerce.Service.src.DTO;
 using Ecommerce.Service.src.ServiceAbstraction;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
-namespace WebDemo.Controller.src.Controller
+namespace Ecommerce.Controller.src.Controller
 {
     [ApiController]
     [Route("api/v1/users")]
@@ -62,7 +63,7 @@ namespace WebDemo.Controller.src.Controller
 
         // only admin can get user reviews by user id
         [Authorize(Roles = "Admin")]
-        [HttpGet("{id}/reviews")] 
+        [HttpGet("{id}/reviews")]
         public async Task<IEnumerable<Review>> GetUserReviewsByUserIdAsync([FromRoute] Guid id)
         {
             return await _userService.GetAllReviewsAsync(id);
@@ -70,7 +71,7 @@ namespace WebDemo.Controller.src.Controller
 
         // only admin can get user orders by user id
         [Authorize(Roles = "Admin")]
-        [HttpGet("{id}/orders")] 
+        [HttpGet("{id}/orders")]
         public async Task<IEnumerable<Order>> GetUserOrdersByUserIdAsync([FromRoute] Guid id)
         {
             return await _userService.GetAllOrdersAsync(id);
@@ -111,6 +112,32 @@ namespace WebDemo.Controller.src.Controller
         public async Task<bool> DeleteUserByIdAsync([FromRoute] Guid id)
         {
             return await _userService.DeleteUserByIdAsync(id);
+        }
+
+        [HttpPost("upload-avatar")]
+        [Consumes("multipart/form-data")]
+        public async Task<IActionResult> UploadAvatar([FromForm] UserForm userForm)
+        {
+            if (userForm.AvatarImage == null || userForm.AvatarImage.Length == 0)
+            {
+                return BadRequest("Avatar is missing");
+            }
+            else
+            {
+                using (var ms = new MemoryStream())
+                {
+                    await userForm.AvatarImage.CopyToAsync(ms);
+                    var content = ms.ToArray();
+                    // return File(content, userForm.AvatarImage.ContentType);
+                    return File(content, userForm.AvatarImage.ContentType);
+                }
+            }
+        }
+
+        public class UserForm
+        {
+            public IFormFile AvatarImage { get; set; }
+            public Guid UserId { get; set; }
         }
     }
 }

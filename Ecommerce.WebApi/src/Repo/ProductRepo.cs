@@ -1,3 +1,4 @@
+using System.Data.Common;
 using Ecommerce.Core.src.Common;
 using Ecommerce.Core.src.Entity;
 using Ecommerce.Core.src.RepoAbstraction;
@@ -11,13 +12,13 @@ namespace Ecommerce.WebApi.src.Repo
     {
         private readonly EcommerceDbContext _context;
         private readonly DbSet<Product> _products;
-        private readonly DbSet<ProductImage> _images;
+        private readonly DbSet<Image> _images;
 
         public ProductRepo(EcommerceDbContext context)
         {
             _context = context;
             _products = _context.Products;
-            _images = _context.ProductImages;
+            _images = _context.Images;
         }
 
         /* EF core work flow
@@ -26,9 +27,22 @@ namespace Ecommerce.WebApi.src.Repo
          */
         public async Task<Product> CreateProductAsync(Product product)
         {
-            await _products.AddAsync(product);
-            await _context.SaveChangesAsync();
-            return product;
+            using (var transaction = await _context.Database.BeginTransactionAsync())
+            {
+                try
+                {
+                    await _products.AddAsync(product);
+                    foreach(var image in product.Images){
+                        await _images.AddAsync(image);
+                    }
+                    await _context.SaveChangesAsync();
+                    return product;
+                }
+                catch (DbException)
+                {
+                    throw;
+                }
+            }
         }
 
         public async Task<bool> DeleteProductByIdAsync(Guid id)

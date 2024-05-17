@@ -1,3 +1,4 @@
+using AutoMapper;
 using Ecommerce.Core.src.Common;
 using Ecommerce.Core.src.Entity;
 using Ecommerce.Core.src.RepoAbstraction;
@@ -13,45 +14,33 @@ namespace Ecommerce.Service.src.Service
         private readonly IProductRepository _productRepository;
         private readonly ICategoryRepository _categoryRepository;
         private readonly IReviewRepository _reviewRepository;
+        private readonly IMapper _mapper;
 
         public ProductService(
             IProductRepository productRepository,
             ICategoryRepository categoryRepository,
-            IReviewRepository reviewRepo
+            IReviewRepository reviewRepo,
+            IMapper mapper
         )
         {
             _productRepository = productRepository;
             _categoryRepository = categoryRepository;
             _reviewRepository = reviewRepo;
+            _mapper = mapper;
         }
 
-        public async Task<Product> CreateProductAsync(ProductCreateDto product)
+        public async Task<Product> CreateProductAsync(ProductCreateDto productCreate)
         {
-            var categoryFound = await _categoryRepository.GetCategoryByIdAsync(product.CategoryId);
-            if (categoryFound == null)
-            {
-                throw new ArgumentException($"Category with id {product.CategoryId} not found.");
-            }
-            var productCreate = new Product(
-                product.Name,
-                product.Description,
-                categoryFound,
-                product.Price,
-                product.Inventory
-            );
+            await ValidateIdAsync(productCreate.CategoryId,"Category");
+           
+            var newProduct = _mapper.Map<Product>(productCreate);
 
-            foreach (var image in product.Images)
-            {
-                productCreate.Images.Add(new ProductImage(productCreate.Id, image));
-            }
-            var newProduct = await _productRepository.CreateProductAsync(productCreate);
+            //foreach (var image in product.Images)
+            //{
+            //    productCreate.Images.Add(new ProductImage(productCreate.Id, image));
+            //}
 
-            if (newProduct == null)
-            {
-                throw new ArgumentException("create new product failed.");
-            }
-
-            return newProduct;
+            return await _productRepository.CreateProductAsync(newProduct);
         }
 
         public async Task<bool> DeleteProductByIdAsync(Guid id)
@@ -98,7 +87,6 @@ namespace Ecommerce.Service.src.Service
                 {
                     throw new ArgumentException("category not found");
                 }
-                productFound.Category = categoryFound;
             }
             if (product.Description != null)
             {
@@ -108,19 +96,34 @@ namespace Ecommerce.Service.src.Service
             {
                 productFound.Name = product.Name;
             }
-            if (product.Images != null)
-            {
-                productFound.Images.Clear();
-                productFound.Images.AddRange(
-                    product.Images.Select(data => new ProductImage(productFound.Id, data))
-                );
-            }
+            //if (product.Images != null)
+            //{
+            //    productFound.Images.Clear();
+            //    productFound.Images.AddRange(
+            //        product.Images.Select(data => new ProductImage(productFound.Id, data))
+            //    );
+            //}
             return await _productRepository.UpdateProductAsync(productFound);
         }
 
         public async Task<IEnumerable<Review>> GetAllReviews(Guid id)
         {
             return await _reviewRepository.GetReviewsByProductIdAsync(id);
+        }
+
+        private async Task ValidateIdAsync(Guid id, string entityType)
+        {
+            bool exists = entityType switch
+            {
+                "Category" => await _categoryRepository.GetCategoryByIdAsync(id) != null,
+                "Product" => await _productRepository.GetProductByIdAsync(id) != null,
+                _ => throw new ArgumentException("Unknown entity type")
+            };
+
+            if (!exists)
+            {
+                throw new ArgumentException($"{entityType} with ID {id} does not exist.");
+            }
         }
     }
 }

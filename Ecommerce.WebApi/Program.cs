@@ -60,6 +60,7 @@ builder.Services.AddScoped<IReviewService, ReviewService>();
 builder.Services.AddScoped<IAddressRepository, AddressRepo>();
 builder.Services.AddScoped<IOrderItemRepo, OrderItemRepo>();
 builder.Services.AddScoped<IAddressService, AddressService>();
+builder.Services.AddScoped<IImageRepository,ImageRepo>();
 
 // Add authentication instructions
 builder
@@ -106,5 +107,6 @@ app.UseRouting();
 app.UseAuthentication(); // extract auth header and validate it
 app.UseAuthorization();
 
+app.MapControllers();
 
 app.Run();

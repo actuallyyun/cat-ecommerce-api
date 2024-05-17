@@ -2,7 +2,6 @@ using Ecommerce.Core.src.Entity;
 using Ecommerce.Core.src.ValueObject;
 using Ecommerce.WebApi.src.Data.Interceptors;
 using Ecommerce.WebApi.src.Database;
-
 //using Ecommerce.WebApi.src.Database.SeedingData;
 using Microsoft.EntityFrameworkCore;
 
@@ -13,7 +12,8 @@ namespace Ecommerce.WebApi.src.Data
         //this is just a inject configuration so we can get connection string in appasettings.json
         protected readonly IConfiguration configuration;
         public DbSet<Category> Categories { get; set; }
-        public DbSet<ProductImage> ProductImages { get; set; }
+        public DbSet<Image> Images { get; set; }
+
         public DbSet<ReviewImage> ReviewImages { get; set; }
 
         public DbSet<Product> Products { get; set; }
@@ -89,16 +89,6 @@ namespace Ecommerce.WebApi.src.Data
                 entity.HasKey(e => e.Id);
             });
 
-            modelBuilder.Entity<Product>(entity =>
-            {
-                entity.ToTable("products");
-                entity.HasKey(e => e.Id);
-                entity
-                    .HasOne(e => e.Category)
-                    .WithMany()
-                    .HasForeignKey(e => e.CategoryId)
-                    .OnDelete(DeleteBehavior.NoAction);
-            });
 
             //modelBuilder.Entity<Address>(entity =>
             //{
@@ -153,48 +143,23 @@ namespace Ecommerce.WebApi.src.Data
             //    entity.HasIndex(e => new { e.OrderId, e.ProductId }).IsUnique();
             //});
 
-            modelBuilder.Entity<Review>(entity =>
-            {
-                entity.ToTable("reviews");
-                entity.HasKey(e => e.Id);
-                entity.HasMany(e => e.Images).WithOne().HasForeignKey(e => e.ReviewId);
-                entity
-                    .HasOne(e => e.User)
-                    .WithMany()
-                    .HasForeignKey(e => e.UserId)
-                    .OnDelete(DeleteBehavior.Cascade);
-                entity
-                    .HasOne(e => e.product)
-                    .WithMany()
-                    .HasForeignKey(e => e.ProductId)
-                    .OnDelete(DeleteBehavior.Cascade);
-            });
-
-            //modelBuilder.Entity<ProductImage>(entity =>
+            //modelBuilder.Entity<Review>(entity =>
             //{
-            //    entity.ToTable("product_images");
+            //    entity.ToTable("reviews");
             //    entity.HasKey(e => e.Id);
+            //    entity.HasMany(e => e.Images).WithOne().HasForeignKey(e => e.ReviewId);
             //    entity
-            //        .HasOne(e => e.Product)
+            //        .HasOne(e => e.User)
+            //        .WithMany()
+            //        .HasForeignKey(e => e.UserId)
+            //        .OnDelete(DeleteBehavior.Cascade);
+            //    entity
+            //        .HasOne(e => e.product)
             //        .WithMany()
             //        .HasForeignKey(e => e.ProductId)
             //        .OnDelete(DeleteBehavior.Cascade);
-            //    // Define the foreign key relationship with the products table
-            //    entity.Property(e => e.Data).IsRequired();
             //});
 
-            //modelBuilder.Entity<ReviewImage>(entity =>
-            //{
-            //    entity.ToTable("review_images");
-            //    entity.HasKey(e => e.Id);
-            //    entity
-            //        .HasOne(e => e.Review)
-            //        .WithMany()
-            //        .HasForeignKey(e => e.ReviewId)
-            //        .OnDelete(DeleteBehavior.Cascade);
-            //    // Define the foreign key relationship with the products table
-            //    entity.Property(e => e.Data).IsRequired();
-            //});
 
             // Seed database
 

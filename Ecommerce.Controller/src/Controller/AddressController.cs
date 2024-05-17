@@ -13,6 +13,7 @@ namespace Ecommerce.Controller.src.Controller
     public class AddressController : ControllerBase
     {
         private readonly IAddressService _addressService;
+        private readonly IAuthorizationService _authService;
 
         public AddressController(IAddressService addressService)
         {
@@ -25,8 +26,16 @@ namespace Ecommerce.Controller.src.Controller
             [FromBody] AddressCreateDto addressCreate
         )
         {
+            //var res=_authService.AuthorizeAsync("AdminOrOwner",)
             var claims = HttpContext.User;
             var userId = Guid.Parse(claims.FindFirst(ClaimTypes.NameIdentifier).Value);
+
+            // var result = _authorizationService.AuthorizeAsync(HttpContext.User, address, "AdminOrOwner");
+            //            if(result.Result.Succeeded)
+            //            {
+            //                return await base.UpdateOneAsync(id, updateObject);
+            //            }
+            //            return Forbid();
 
             addressCreate.UserId = userId;
             return await _addressService.CreateAddressAsync(addressCreate);

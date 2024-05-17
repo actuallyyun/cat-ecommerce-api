@@ -12,7 +12,13 @@ public class MappingProfile : Profile
         CreateMap<UserUpdateDto, User>();
 
         // Product mappings
-        CreateMap<ProductCreateDto, Product>();
+        CreateMap<ProductCreateDto, Product>()
+            .ForMember(dest => dest.Images, opt => opt.MapFrom(src => src.ImageCreateDto));
+
+        CreateMap<ImageCreateDto, Image>()
+            .ForMember(dest => dest.ProductId, opt => opt.Ignore())
+            .ForMember(dest => dest.ReviewId, opt => opt.Ignore());
+
         CreateMap<ProductUpdateDto, Product>();
 
         // Address mappings

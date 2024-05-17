@@ -39,7 +39,7 @@ public class Review : BaseEntity
     }
     public List<ReviewImage> Images { get; set; } = new List<ReviewImage>();
 
-    [ForeignKey("ProductId")]
+
     public Product product { get; }
 
     [ForeignKey("UserId")]
