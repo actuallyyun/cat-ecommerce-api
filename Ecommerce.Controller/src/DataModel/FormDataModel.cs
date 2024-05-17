@@ -23,5 +23,14 @@ namespace Ecommerce.Controller.src.DataModel
             public int Rating { get; set; }
             public List<IFormFile> Images { get; set; }
         }
+
+        public class UserForm
+        {
+            public string FirstName { get; set;}
+            public string LastName { get; set;}
+            public IFormFile Avatar { get; set;}
+            public string Email { get; set;}
+            public string Password { get; set;}
+        }
     }
 }

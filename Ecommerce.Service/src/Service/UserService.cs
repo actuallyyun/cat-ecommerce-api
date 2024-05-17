@@ -31,6 +31,7 @@ namespace Ecommerce.Service.src.Service
             UserValidation.ValidateUserCreateDto(userDto);
                         
             var user = _mapper.Map<User>(userDto);
+            
             user.Password=_passwordService.HashPassword(userDto.Password,out byte[]salt);
             user.Salt=salt;    
             var createdUser = await _userRepo.CreateUserAsync(user);

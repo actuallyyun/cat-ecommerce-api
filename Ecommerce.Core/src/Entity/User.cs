@@ -18,7 +18,7 @@ namespace Ecommerce.Core.src.Entity
 
         [Required]
         public UserRole Role { get; set; } = UserRole.User;
-        public string? Avatar { get; set; }
+        public Image Avatar { get; set; }
 
         [Required]
         [EmailAddress] //validation for email address that it need ot contain valid email fomat "example@example.com"
@@ -33,22 +33,5 @@ namespace Ecommerce.Core.src.Entity
         [Column(TypeName = "bytea")]
         public required byte[] Salt { get; set; }
 
-        public User(
-            string firstName,
-            string lastName,
-            UserRole role,
-            string avatar,
-            string email,
-            string password
-        )
-        {
-            FirstName = firstName;
-            LastName = lastName;
-            Role = role;
-            Avatar = avatar ?? AppConstants.USER_DEFAULT_AVATAR;
-            Email = email;
-            Password = password;
-        }
-        public User(){}
     }
 }

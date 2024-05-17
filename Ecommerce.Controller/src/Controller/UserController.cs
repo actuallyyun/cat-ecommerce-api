@@ -6,6 +6,7 @@ using Ecommerce.Service.src.ServiceAbstraction;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using static Ecommerce.Controller.src.DataModel.FormDataModel;
 
 namespace Ecommerce.Controller.src.Controller
 {
@@ -20,10 +21,32 @@ namespace Ecommerce.Controller.src.Controller
             _userService = userService;
         }
 
+        [Consumes("multipart/form-data")]
         [AllowAnonymous]
         [HttpPost()]
-        public async Task<UserReadDto> CreateUserAsync([FromBody] UserCreateDto userCreateDto)
+        public async Task<ActionResult<UserReadDto>> CreateFromFormAsync([FromForm] UserForm userForm)
         {
+            if (userForm == null || userForm.Avatar == null)
+            {
+                return BadRequest("user data and avatar image are required.");
+            }
+
+            ImageCreateDto image;
+
+            using (var ms = new MemoryStream())
+            {
+                await userForm.Avatar.CopyToAsync(ms);
+                image = new ImageCreateDto(ms.ToArray());
+            }
+
+            var userCreateDto = new UserCreateDto
+            {
+                FirstName = userForm.FirstName,
+                LastName = userForm.LastName,
+                Avatar = image,
+                Email = userForm.Email,
+                Password = userForm.Password
+            };
             return await _userService.CreateUserAsync(userCreateDto);
         }
 
@@ -114,30 +137,6 @@ namespace Ecommerce.Controller.src.Controller
             return await _userService.DeleteUserByIdAsync(id);
         }
 
-        [HttpPost("upload-avatar")]
-        [Consumes("multipart/form-data")]
-        public async Task<IActionResult> UploadAvatar([FromForm] UserForm userForm)
-        {
-            if (userForm.AvatarImage == null || userForm.AvatarImage.Length == 0)
-            {
-                return BadRequest("Avatar is missing");
-            }
-            else
-            {
-                using (var ms = new MemoryStream())
-                {
-                    await userForm.AvatarImage.CopyToAsync(ms);
-                    var content = ms.ToArray();
-                    // return File(content, userForm.AvatarImage.ContentType);
-                    return File(content, userForm.AvatarImage.ContentType);
-                }
-            }
-        }
 
-        public class UserForm
-        {
-            public IFormFile AvatarImage { get; set; }
-            public Guid UserId { get; set; }
-        }
     }
 }

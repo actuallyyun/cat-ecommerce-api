@@ -8,16 +8,19 @@ public class MappingProfile : Profile
     {
         // User mappings
         CreateMap<User, UserReadDto>();
-        CreateMap<UserCreateDto, User>();
-        CreateMap<UserUpdateDto, User>();
 
+        CreateMap<UserCreateDto, User>()
+            .ForMember(dest => dest.Avatar, opt => opt.MapFrom(src => src.Avatar));
+
+     
         // Product mappings
         CreateMap<ProductCreateDto, Product>()
             .ForMember(dest => dest.Images, opt => opt.MapFrom(src => src.ImageCreateDto));
 
         CreateMap<ImageCreateDto, Image>()
             .ForMember(dest => dest.ProductId, opt => opt.AllowNull())
-            .ForMember(dest => dest.ReviewId, opt => opt.AllowNull());
+            .ForMember(dest => dest.ReviewId, opt => opt.AllowNull())
+            .ForMember(dest => dest.UserId, opt => opt.AllowNull());
 
         CreateMap<ProductUpdateDto, Product>();
 

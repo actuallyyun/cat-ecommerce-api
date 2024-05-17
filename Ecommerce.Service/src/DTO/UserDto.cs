@@ -1,29 +1,15 @@
+using Ecommerce.Core.src.Entity;
 using Ecommerce.Core.src.ValueObject;
 
 namespace Ecommerce.Service.src.DTO
 {
     public class UserCreateDto
     {
-        public string FirstName { get; }
-        public string LastName { get; }
-        public string? Avatar { get; }
-        public string Email { get; }
-        public string Password { get; }
-
-        public UserCreateDto(
-            string firstName,
-            string lastName,
-            string? avatar,
-            string email,
-            string password
-        )
-        {
-            FirstName = firstName;
-            LastName = lastName;
-            Avatar = avatar;
-            Email = email;
-            Password = password;
-        }
+        public string FirstName { get; set;}
+        public string LastName { get; set;}
+        public ImageCreateDto Avatar { get; set;}
+        public string Email { get; set;}
+        public string Password { get; set;}
     }
 
     public class UserReadDto
@@ -57,27 +43,8 @@ namespace Ecommerce.Service.src.DTO
     {
         public string? FirstName { get; }
         public string? LastName { get; }
-        public string? Avatar { get; }
+        public Image? Avatar { get; }
         public string? Password { get; }
 
-        public UserUpdateDto(string? firstName, string? lastName, string? avatar, string? password)
-        {
-            if (firstName != null)
-            {
-                FirstName = firstName;
-            }
-            if (lastName != null)
-            {
-                LastName = lastName;
-            }
-            if (avatar != null)
-            {
-                Avatar = avatar;
-            }
-            if (password != null)
-            {
-                Password = password;
-            }
-        }
     }
 }

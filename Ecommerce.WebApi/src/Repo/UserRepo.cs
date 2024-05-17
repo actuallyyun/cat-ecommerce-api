@@ -1,3 +1,4 @@
+using System.Data.Common;
 using AutoMapper;
 using Ecommerce.Core.src.Common;
 using Ecommerce.Core.src.Entity;
@@ -11,20 +12,32 @@ namespace Ecommerce.WebApi.src.Repo
     {
         private readonly EcommerceDbContext _context;
         private readonly DbSet<User> _users;
-        private readonly IMapper _mapper;
-
+        private readonly DbSet<Image> _images;
+     
         public UserRepo(EcommerceDbContext context, IMapper mapper)
         {
             _context = context;
             _users = _context.Users;
-            _mapper = mapper;
+            _images = _context.Images;
         }
 
         public async Task<User> CreateUserAsync(User user)
         {
-            await _users.AddAsync(user);
-            await _context.SaveChangesAsync();
-            return user;
+            using (var transaction = await _context.Database.BeginTransactionAsync())
+            {
+                try
+                {
+                    await _users.AddAsync(user);
+                    await _images.AddAsync(user.Avatar);
+
+                    await _context.SaveChangesAsync();
+                    return user;
+                }
+                catch (DbException)
+                {
+                    throw;
+                }
+            }
         }
 
         public async Task<bool> DeleteUserByIdAsync(Guid id)
@@ -41,9 +54,7 @@ namespace Ecommerce.WebApi.src.Repo
 
         public async Task<User>? GetUserByCredentialAsync(UserCredential credential)
         {
-            return await _users.FirstOrDefaultAsync(user =>
-                user.Email == credential.Email
-            );
+            return await _users.FirstOrDefaultAsync(user => user.Email == credential.Email);
         }
 
         public async Task<User>? GetUserByIdAsync(Guid id)
