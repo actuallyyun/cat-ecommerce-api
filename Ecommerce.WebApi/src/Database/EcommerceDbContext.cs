@@ -1,6 +1,8 @@
 using Ecommerce.Core.src.Entity;
 using Ecommerce.Core.src.ValueObject;
 using Ecommerce.WebApi.src.Data.Interceptors;
+using Ecommerce.WebApi.src.Database;
+
 //using Ecommerce.WebApi.src.Database.SeedingData;
 using Microsoft.EntityFrameworkCore;
 
@@ -34,12 +36,14 @@ namespace Ecommerce.WebApi.src.Data
         {
             AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
             AppContext.SetSwitch("Npgsql.DisableDateTimeInfinityConversions", true);
+            AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder
                 .UseNpgsql(configuration.GetConnectionString("PgDbConnection"))
+                .AddInterceptors(new TimestampInterceptor())
                 .UseSnakeCaseNamingConvention()
                 .AddInterceptors(
                     new SqlLoggingInterceptor(_loggerFactory.CreateLogger<SqlLoggingInterceptor>())
