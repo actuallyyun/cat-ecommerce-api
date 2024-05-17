@@ -21,10 +21,6 @@ namespace Ecommerce.WebApi.src.Repo
             _images = _context.Images;
         }
 
-        /* EF core work flow
-        - snapshot -> create a snapshot of the current state of the entity
-        - saved changes -> update actual database
-         */
         public async Task<Product> CreateProductAsync(Product product)
         {
             using (var transaction = await _context.Database.BeginTransactionAsync())

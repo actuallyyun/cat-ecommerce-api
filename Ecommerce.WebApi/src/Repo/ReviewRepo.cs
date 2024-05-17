@@ -1,3 +1,4 @@
+using System.Data.Common;
 using Ecommerce.Core.src.Common;
 using Ecommerce.Core.src.Entity;
 using Ecommerce.Core.src.RepoAbstraction;
@@ -11,20 +12,34 @@ namespace Ecommerce.WebApi.src.Repo
     {
         private readonly EcommerceDbContext _context;
         private readonly DbSet<Review> _reviews;
-        private readonly DbSet<ReviewImage> _reviewImages;
+        private readonly DbSet<Image> _images;
 
         public ReviewRepo(EcommerceDbContext context)
         {
             _context = context;
             _reviews = _context.Reviews;
-            _reviewImages = _context.ReviewImages;
+            _images = _context.Images;
         }
 
         public async Task<Review> CreateReviewAsync(Review review)
         {
-            await _reviews.AddAsync(review);
-            await _context.SaveChangesAsync();
-            return review;
+            using (var transaction = await _context.Database.BeginTransactionAsync())
+            {
+                try
+                {
+                    await _reviews.AddAsync(review);
+                    foreach (var image in review.Images)
+                    {
+                        await _images.AddAsync(image);
+                    }
+                    await _context.SaveChangesAsync();
+                    return review;
+                }
+                catch (DbException)
+                {
+                    throw;
+                }
+            }
         }
 
         public async Task<bool> DeleteReviewByIdAsync(Guid id)

@@ -34,11 +34,6 @@ namespace Ecommerce.Service.src.Service
 
             var review = _mapper.Map<Review>(reviewDto); // Use AutoMapper to map from DTO to Entity
 
-            //foreach (var data in reviewDto.Images)
-            //{
-            //    review.Images.Add(new Image(review.Id, data));
-            //}
-
             await _reviewRepository.CreateReviewAsync(review);
             return review;
         }

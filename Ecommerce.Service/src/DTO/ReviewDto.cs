@@ -9,7 +9,7 @@ namespace Ecommerce.Service.src.DTO
         public bool IsAnonymous { get; set; }
         public string Content { get; set; }
         public int Rating { get; set; }
-        public List<byte[]>? Images { get; set; }
+        public List<ImageCreateDto>? ImageCreateDto { get; set; }
     }
 
     public class ReviewUpdateDto
@@ -29,16 +29,5 @@ namespace Ecommerce.Service.src.DTO
         public string Content { get; }
         public int Rating { get; }
         public List<Image> Images { get; }
-
-        public ReviewReadDto(Guid id, Guid userId, Guid productId, bool isAnonymous, string content, int rating, List<Image> images)
-        {
-            Id = id;
-            UserId = userId;
-            ProductId = productId;
-            IsAnonymous = isAnonymous;
-            Content = content;
-            Rating = rating;
-            Images = images;
-        }
     }
 }

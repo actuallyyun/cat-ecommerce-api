@@ -4,7 +4,7 @@ using Ecommerce.Service.src.DTO;
 using Ecommerce.Service.src.ServiceAbstraction;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Http;
+using static Ecommerce.Controller.src.DataModel.FormDataModel;
 
 
 namespace Ecommerce.Controller.src.Controller
@@ -93,15 +93,6 @@ namespace Ecommerce.Controller.src.Controller
             return await _productService.DeleteProductByIdAsync(id);
         }
 
-        public class ProductForm
-        {
-            public int Inventory { get; set; }
-            public string Name { get; set; }
-            public string Description { get; set; }
-            public decimal Price { get; set; }
-
-            public Guid CategoryId{get;set;}
-            public List<IFormFile> Images { get; set; }
-        }
+        
     }
 }

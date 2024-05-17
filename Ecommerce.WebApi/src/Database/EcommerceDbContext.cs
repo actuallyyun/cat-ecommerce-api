@@ -13,9 +13,6 @@ namespace Ecommerce.WebApi.src.Data
         protected readonly IConfiguration configuration;
         public DbSet<Category> Categories { get; set; }
         public DbSet<Image> Images { get; set; }
-
-        public DbSet<ReviewImage> ReviewImages { get; set; }
-
         public DbSet<Product> Products { get; set; }
         public DbSet<Order> Orders { get; set; }
         public DbSet<Review> Reviews { get; set; }

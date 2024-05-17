@@ -4,6 +4,7 @@ using Ecommerce.Service.src.DTO;
 using Ecommerce.Service.src.ServiceAbstraction;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using static Ecommerce.Controller.src.DataModel.FormDataModel;
 
 namespace Ecommerce.Controller.src.Controller
 {
@@ -18,11 +19,40 @@ namespace Ecommerce.Controller.src.Controller
             _reviewService = reviewService;
         }
 
+        [Consumes("multipart/form-data")]
         [Authorize]
         [HttpPost()]
-        public async Task<ActionResult<Review>> CreateReview(ReviewCreateDto reviewCreate)
+        public async Task<ActionResult<Review>> CreateReview(ReviewForm reviewForm)
         {
-            return await _reviewService.CreateReviewAsync(reviewCreate);
+            if (reviewForm == null || reviewForm.Images == null || reviewForm.Images.Count == 0)
+            {
+                return BadRequest("Review data and images are required.");
+            }
+
+            var imageList = new List<ImageCreateDto>();
+            foreach (var image in reviewForm.Images)
+            {
+                if (image.Length > 0) //check image size for max length as well
+                {
+                    using (var ms = new MemoryStream())
+                    {
+                        await image.CopyToAsync(ms);
+                        imageList.Add(new ImageCreateDto(ms.ToArray()));
+                    }
+                }
+            }
+            var claims = HttpContext.User;
+            var userId = Guid.Parse(claims.FindFirst(ClaimTypes.NameIdentifier).Value);
+
+            var reviewCreateDto = new ReviewCreateDto {
+                UserId=userId,
+                ProductId=reviewForm.ProductId,
+                IsAnonymous=reviewForm.IsAnonymous,
+                Content=reviewForm.Content,
+                Rating=reviewForm.Rating,
+                ImageCreateDto=imageList
+             };
+            return await _reviewService.CreateReviewAsync(reviewCreateDto);
         }
 
         [Authorize(Roles = "Admin")] // only admin can update reivews

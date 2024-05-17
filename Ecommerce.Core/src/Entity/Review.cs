@@ -1,4 +1,3 @@
-
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Ecommerce.Core.src.Entity;
@@ -9,11 +8,12 @@ public class Review : BaseEntity
     public Review() { }
 
     [Required]
+    [ForeignKey("UserId")]
     public Guid UserId { get; set; }
 
     [Required]
+    [ForeignKey("ProductId")]
     public Guid ProductId { get; set; }
-
 
     [Required]
     public bool IsAnonymous { get; set; }
@@ -37,20 +37,5 @@ public class Review : BaseEntity
             _rating = value;
         }
     }
-    public List<ReviewImage> Images { get; set; } = new List<ReviewImage>();
-
-
-    public Product product { get; }
-
-    [ForeignKey("UserId")]
-    public User User { get; }
-
-    public Review(Guid userId, Guid productId, bool isAnonymous, string content, int rating)
-    {
-        UserId = userId;
-        ProductId = productId;
-        IsAnonymous = isAnonymous;
-        Content = content;
-        Rating = rating;
-    }
+    public List<Image> Images { get; set; } = new List<Image>();
 }

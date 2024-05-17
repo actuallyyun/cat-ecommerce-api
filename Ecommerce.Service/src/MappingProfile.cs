@@ -16,8 +16,8 @@ public class MappingProfile : Profile
             .ForMember(dest => dest.Images, opt => opt.MapFrom(src => src.ImageCreateDto));
 
         CreateMap<ImageCreateDto, Image>()
-            .ForMember(dest => dest.ProductId, opt => opt.Ignore())
-            .ForMember(dest => dest.ReviewId, opt => opt.Ignore());
+            .ForMember(dest => dest.ProductId, opt => opt.AllowNull())
+            .ForMember(dest => dest.ReviewId, opt => opt.AllowNull());
 
         CreateMap<ProductUpdateDto, Product>();
 
@@ -37,7 +37,10 @@ public class MappingProfile : Profile
 
         // Review mappings
         CreateMap<Review, ReviewReadDto>();
-        CreateMap<ReviewCreateDto, Review>();
+
+        CreateMap<ReviewCreateDto, Review>()
+            .ForMember(dest => dest.Images, opt => opt.MapFrom(src => src.ImageCreateDto));
+
         CreateMap<ReviewUpdateDto, Review>();
 
         // Category mappings

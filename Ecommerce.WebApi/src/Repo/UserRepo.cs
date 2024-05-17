@@ -48,7 +48,7 @@ namespace Ecommerce.WebApi.src.Repo
 
         public async Task<User>? GetUserByIdAsync(Guid id)
         {
-            return await _users.SingleAsync(p => p.Id == id);
+            return await _users.FirstOrDefaultAsync(p => p.Id == id);
         }
 
         public async Task<bool> UpdateUserByIdAsync(User user)

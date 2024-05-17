@@ -35,11 +35,6 @@ namespace Ecommerce.Service.src.Service
            
             var newProduct = _mapper.Map<Product>(productCreate);
 
-            //foreach (var image in product.Images)
-            //{
-            //    productCreate.Images.Add(new ProductImage(productCreate.Id, image));
-            //}
-
             return await _productRepository.CreateProductAsync(newProduct);
         }
 
