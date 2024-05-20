@@ -15,11 +15,11 @@ namespace Ecommerce.Controller.src.Controller
             _imageService = service;
         }
 
-        [HttpGet("get-file/{id}")]
-        public async Task<FileContentResult> GetFile(Guid id)
-        {
-            var file = await _imageService.GetByIdAsync(id);
-            return File(file.Data, "image/jpeg");
-        }
+        //[HttpGet("get-file/{id}")]
+        //public async Task<FileContentResult> GetFile(Guid id)
+        //{
+        //    var file = await _imageService.GetByIdAsync(id);
+        //    return File(file.Data, "image/jpeg");
+        //}
     }
 }

@@ -16,6 +16,6 @@ namespace Ecommerce.Core.src.Entity
         [ForeignKey("UserId")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public Guid? UserId { get; set; }
-        public byte[] Data { get; set; }
+        public string Url { get; set; }
     }
 }

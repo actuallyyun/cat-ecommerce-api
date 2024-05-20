@@ -11,6 +11,14 @@ namespace Ecommerce.Core.src.Entity
         public Guid UserId { get; set; }
 
         [Required]
+        [MaxLength(40)]
+        public string FirstName { get; set; }
+
+        [Required]
+        [MaxLength(40)]
+        public string LastName { get; set; }
+
+        [Required]
         public string AddressLine { get; set; }
 
         [Required]

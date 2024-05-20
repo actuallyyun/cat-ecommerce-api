@@ -1,6 +1,5 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using Ecommerce.Core.src.Common;
 using Ecommerce.Core.src.ValueObject;
 
 namespace Ecommerce.Core.src.Entity
@@ -18,7 +17,7 @@ namespace Ecommerce.Core.src.Entity
 
         [Required]
         public UserRole Role { get; set; } = UserRole.User;
-        public Image Avatar { get; set; }
+        public string Avatar { get; set; }
 
         [Required]
         [EmailAddress] //validation for email address that it need ot contain valid email fomat "example@example.com"

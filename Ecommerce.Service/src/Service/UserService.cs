@@ -80,7 +80,7 @@ namespace Ecommerce.Service.src.Service
                 existingUser.LastName=userDto.LastName;
             }
             if(userDto.Avatar!=null){
-                existingUser.Avatar=userDto.Avatar;
+                existingUser.Avatar=AppConstants.CATEGORY_DEFAULT_IMAGE;
             }
             if(userDto.Password!=null){
                 existingUser.Password=userDto.Password;

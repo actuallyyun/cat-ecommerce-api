@@ -28,7 +28,6 @@ namespace Ecommerce.WebApi.src.Repo
                 try
                 {
                     await _users.AddAsync(user);
-                    await _images.AddAsync(user.Avatar);
 
                     await _context.SaveChangesAsync();
                     return user;

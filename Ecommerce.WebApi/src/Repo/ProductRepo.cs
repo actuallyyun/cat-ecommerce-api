@@ -104,7 +104,7 @@ namespace Ecommerce.WebApi.src.Repo
                         var foundImage = await _images
                             .Where(i => i.Id == image.Id)
                             .ExecuteUpdateAsync(setters =>
-                                setters.SetProperty(i => i.Data, image.Data)
+                                setters.SetProperty(i => i.Url, image.Url)
                             );
                     }
                     await _context.SaveChangesAsync();
