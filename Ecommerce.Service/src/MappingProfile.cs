@@ -1,11 +1,16 @@
 using AutoMapper;
 using Ecommerce.Core.src.Entity;
 using Ecommerce.Service.src.DTO;
+using static Ecommerce.Service.src.DTO.TokenDto;
 
 public class MappingProfile : Profile
 {
     public MappingProfile()
     {
+
+        // Token mapping
+        CreateMap<ResponseToken,ResponseTokenReadDto>();
+
         // User mappings
         CreateMap<User, UserReadDto>();
 

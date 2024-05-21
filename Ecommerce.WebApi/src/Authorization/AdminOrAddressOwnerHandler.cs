@@ -20,10 +20,7 @@ namespace Ecommerce.WebApi.src.Authorization
         {
             var claims = context.User;
             var userRole = claims.FindFirst(c => c.Type == ClaimTypes.Role)!.Value;
-            var userId = claims.FindFirst(c => c.Type == ClaimTypes.NameIdentifier)!.Value; // id of logged in user
-            Console.WriteLine("Running authorization check =============");
-            Console.WriteLine($"user id: {user.Id}");
-            Console.WriteLine($"user role: {userRole}");
+            var userId = claims.FindFirst(c => c.Type == ClaimTypes.NameIdentifier)!.Value;
             if (userRole == UserRole.Admin.ToString() || userId == user.Id.ToString())
             {
                 context.Succeed(requirement);

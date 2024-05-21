@@ -1,12 +1,12 @@
 using Ecommerce.Core.src.Common;
-using Ecommerce.Service.src.DTO;
+using static Ecommerce.Service.src.DTO.TokenDto;
 
 namespace Ecommerce.Service.src.ServiceAbstraction
 {
     public interface IAuthService
     {
-        Task<string> LoginAsync(UserCredential credential);
-        Task<TokenDto> RefreshTokenAsync(RefreshTokenDto refreshTokenDto);
-        Task<bool> RevokeTokenAsync(string refreshToken);
+        Task<ResponseTokenReadDto> LoginAsync(UserCredential credential);
+        Task<ResponseTokenReadDto> RefreshTokenAsync(string refreshToken);
+        Task<bool> LogoutAsync(Guid userId);
     }
 }

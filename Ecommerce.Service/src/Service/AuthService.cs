@@ -1,9 +1,10 @@
+using AutoMapper;
 using Ecommerce.Core.src.Common;
 using Ecommerce.Core.src.Entity;
 using Ecommerce.Core.src.RepoAbstraction;
-using Ecommerce.Core.src.ValueObject;
-using Ecommerce.Service.src.DTO;
+
 using Ecommerce.Service.src.ServiceAbstraction;
+using static Ecommerce.Service.src.DTO.TokenDto;
 
 namespace Ecommerce.Service.src.Service
 {
@@ -13,18 +14,22 @@ namespace Ecommerce.Service.src.Service
         private readonly ITokenService _tokenService;
         private readonly IPasswordService _passwordService;
 
+        private readonly IMapper _mapper;
+
         public AuthService(
             IUserRepository userRepo,
             ITokenService tokenService,
-            IPasswordService passwordService
+            IPasswordService passwordService,
+            IMapper mapper
         )
         {
             _userRepo = userRepo;
             _tokenService = tokenService;
             _passwordService = passwordService;
+            _mapper=mapper;
         }
 
-        public async Task<string> LoginAsync(UserCredential credential)
+        public async Task<ResponseTokenReadDto> LoginAsync(UserCredential credential)
         {
             var user =
                 await _userRepo.GetUserByCredentialAsync(credential)
@@ -38,7 +43,8 @@ namespace Ecommerce.Service.src.Service
 
             if (isValidPassword)
             {
-                return _tokenService.GenerateToken(user, TokenType.AccessToken);
+                var token=await _tokenService.GenerateToken(user);
+                return _mapper.Map<ResponseTokenReadDto>(token);
             }
             else
             {
@@ -46,14 +52,16 @@ namespace Ecommerce.Service.src.Service
             }
         }
 
-        public Task<TokenDto> RefreshTokenAsync(RefreshTokenDto refreshTokenDto)
+        public async Task<ResponseTokenReadDto> RefreshTokenAsync(string refreshTokenDto)
         {
-            throw new NotImplementedException();
+            var token= await _tokenService.RefreshToken(refreshTokenDto);
+            return _mapper.Map<ResponseTokenReadDto>(token);
         }
 
-        public Task<bool> RevokeTokenAsync(string refreshToken)
+        public async Task<bool> LogoutAsync(Guid userId)
         {
-            throw new NotImplementedException();
+            return await _tokenService.InvalidateTokenAsync(userId);
+
         }
 
     }

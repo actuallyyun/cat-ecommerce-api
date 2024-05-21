@@ -19,5 +19,6 @@ namespace Ecommerce.Core.src.Entity
         [Required]
         [Range(0.01, 999999.99, ErrorMessage = "Price must be greater than 0.00")]
         public decimal Price { get; set; }
+        
     }
 }

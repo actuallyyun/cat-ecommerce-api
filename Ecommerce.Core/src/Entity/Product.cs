@@ -22,6 +22,8 @@ namespace Ecommerce.Core.src.Entity
         [Range(0, int.MaxValue, ErrorMessage = "Inventory must be greater than or equal to 0")]
         public int Inventory { get; set; }
 
+        [Range(0, int.MaxValue)]
+        public decimal? Rating { get; set; }
         public List<Image> Images { get; set; } = new List<Image>();
     }
 }

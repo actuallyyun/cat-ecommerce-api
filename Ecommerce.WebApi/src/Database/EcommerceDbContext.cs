@@ -15,11 +15,12 @@ namespace Ecommerce.WebApi.src.Data
         public DbSet<Product> Products { get; set; }
         public DbSet<Order> Orders { get; set; }
         public DbSet<Review> Reviews { get; set; }
-        public DbSet<OrderItem>? OrderItems { get; set; }
-        public DbSet<User>? Users { get; set; }
+        public DbSet<OrderItem> OrderItems { get; set; }
+        public DbSet<User> Users { get; set; }
 
-        public DbSet<Address>? Addresses { get; set; }
+        public DbSet<Address> Addresses { get; set; }
 
+        public DbSet<RefreshToken> RefreshTokens { get; set; }
         private readonly ILoggerFactory _loggerFactory;
 
         public EcommerceDbContext(IConfiguration configuration, ILoggerFactory loggerFactory)
@@ -95,6 +96,9 @@ namespace Ecommerce.WebApi.src.Data
 
             var products = SeedData.GenerateProducts(categories);
             modelBuilder.Entity<Product>().HasData(products);
+
+            var productImages=SeedData.GenerateProductImages(products);
+            modelBuilder.Entity<Image>().HasData(productImages);
 
             var adddresses = SeedData.GenerateAddresses(users);
             modelBuilder.Entity<Address>().HasData(adddresses);

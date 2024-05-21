@@ -5,11 +5,11 @@ namespace Ecommerce.Service.src.DTO
 {
     public class UserCreateDto
     {
-        public string FirstName { get; set;}
-        public string LastName { get; set;}
-        public ImageCreateDto Avatar { get; set;}
-        public string Email { get; set;}
-        public string Password { get; set;}
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+        public ImageCreateDto Avatar { get; set; }
+        public string Email { get; set; }
+        public string Password { get; set; }
     }
 
     public class UserReadDto
@@ -39,12 +39,18 @@ namespace Ecommerce.Service.src.DTO
         }
     }
 
+    public class UserAuthDto
+    {
+        public string Email { get; set; }
+        public Guid Id { get; set; }
+        public UserRole Role { get; set; }
+    }
+
     public class UserUpdateDto
     {
         public string? FirstName { get; }
         public string? LastName { get; }
         public Image? Avatar { get; }
         public string? Password { get; }
-
     }
 }
