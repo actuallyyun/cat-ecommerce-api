@@ -59,7 +59,7 @@ namespace Ecommerce.WebApi.src.Repo
             if (options?.SortOrder == SortOrder.ASC)
             {
                 products = await _products
-                    .Where(p => p.Name.Contains(searchKey))
+                    .Where(p => p.Title.Contains(searchKey))
                     .Skip(skipFrom ?? 1)
                     .Take(options?.Limit ?? AppConstants.PER_PAGE)
                     .OrderBy(p => sortBy)
@@ -68,7 +68,7 @@ namespace Ecommerce.WebApi.src.Repo
             else
             {
                 products = await _products
-                    .Where(p => p.Name.Contains(searchKey))
+                    .Where(p => p.Title.Contains(searchKey))
                     .Skip(skipFrom ?? 1)
                     .Take(options?.Limit ?? AppConstants.PER_PAGE)
                     .OrderByDescending(p => sortBy)
@@ -99,7 +99,7 @@ namespace Ecommerce.WebApi.src.Repo
                                 .SetProperty(p => p.CategoryId, product.CategoryId)
                                 .SetProperty(p => p.Description, product.Description)
                                 .SetProperty(p => p.Inventory, product.Inventory)
-                                .SetProperty(p => p.Name, product.Name)
+                                .SetProperty(p => p.Title, product.Title)
                                 .SetProperty(p => p.Price, product.Price)
                         );
                     foreach (var image in product.Images)

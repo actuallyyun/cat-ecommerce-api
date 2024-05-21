@@ -47,7 +47,7 @@ namespace Ecommerce.Controller.src.Controller
             var productCreateDto = new ProductCreateDto
             {
                 Inventory = productForm.Inventory,
-                Name = productForm.Name,
+                Title = productForm.Name,
                 Description = productForm.Description,
                 Price = productForm.Price,
                 ImageCreateDto = imageList,

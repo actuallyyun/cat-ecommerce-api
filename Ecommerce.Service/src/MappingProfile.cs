@@ -27,10 +27,6 @@ public class MappingProfile : Profile
 
         CreateMap<Product,ProductReadDto>();
 
-        // Address mappings
-        CreateMap<Address, AddressReadDto>();
-        CreateMap<AddressCreateDto, Address>();
-        CreateMap<AddressUpdateDto, Address>();
 
         // Order mappings
         CreateMap<OrderCreateDto, Order>()
@@ -39,16 +35,14 @@ public class MappingProfile : Profile
         CreateMap<OrderItemCreateDto, OrderItem>()
             .ForMember(dest => dest.OrderId, opt => opt.Ignore());
 
-        CreateMap<OrderUpdateDto, Order>();
-
+  
         // Review mappings
         CreateMap<Review, ReviewReadDto>();
 
         CreateMap<ReviewCreateDto, Review>()
             .ForMember(dest => dest.Images, opt => opt.MapFrom(src => src.ImageCreateDto));
 
-        CreateMap<ReviewUpdateDto, Review>();
-
+    
         // Category mappings
         CreateMap<Category, CategoryReadDto>();
         CreateMap<CategoryCreateDto, Category>();

@@ -132,7 +132,7 @@ namespace Ecommerce.WebApi.src.Database
                     var product = new Product
                     {
                         Id = Guid.NewGuid(),
-                        Name =
+                        Title =
                             $"{faker.Commerce.ProductAdjective()} {faker.Commerce.Product()} {faker.Random.Word()}",
                         Description = faker.Commerce.ProductDescription(),
                         Price = decimal.Parse(faker.Commerce.Price()),

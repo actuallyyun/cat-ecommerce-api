@@ -4,7 +4,7 @@ namespace Ecommerce.Service.src.DTO
 {
     public class ProductReadDto : BaseEntity
     {
-        public string Name { get; set; }
+        public string Title { get; set; }
         public string Description { get; set; }
         public decimal Price { get; set; }
         public Category Category { get; set; }
@@ -16,7 +16,7 @@ namespace Ecommerce.Service.src.DTO
 
     public class ProductCreateDto
     {
-        public string Name { get; set; }
+        public string Title { get; set; }
         public string Description { get; set; }
         public decimal Price { get; set; }
         public Guid CategoryId { get; set; }
@@ -26,7 +26,7 @@ namespace Ecommerce.Service.src.DTO
 
     public class ProductUpdateDto
     {
-        public string? Name { get; set; }
+        public string? Title { get; set; }
         public string? Description { get; set; }
         public decimal? Price { get; set; }
         public Guid? CategoryId { get; set; }
