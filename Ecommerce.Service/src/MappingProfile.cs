@@ -22,12 +22,10 @@ public class MappingProfile : Profile
         CreateMap<ProductCreateDto, Product>()
             .ForMember(dest => dest.Images, opt => opt.MapFrom(src => src.ImageCreateDto));
 
-        CreateMap<ImageCreateDto, Image>()
-            .ForMember(dest => dest.ProductId, opt => opt.AllowNull())
-            .ForMember(dest => dest.ReviewId, opt => opt.AllowNull())
-            .ForMember(dest => dest.UserId, opt => opt.AllowNull());
+        CreateMap<ImageCreateDto, ProductImage>()
+            .ForMember(dest => dest.ProductId, opt => opt.AllowNull());
 
-        CreateMap<ProductUpdateDto, Product>();
+        CreateMap<Product,ProductReadDto>();
 
         // Address mappings
         CreateMap<Address, AddressReadDto>();

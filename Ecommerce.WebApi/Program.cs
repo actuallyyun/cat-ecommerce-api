@@ -61,7 +61,7 @@ builder.Services.AddScoped<IReviewService, ReviewService>();
 builder.Services.AddScoped<IAddressRepository, AddressRepo>();
 builder.Services.AddScoped<IOrderItemRepo, OrderItemRepo>();
 builder.Services.AddScoped<IAddressService, AddressService>();
-builder.Services.AddScoped<IImageRepository,ImageRepo>();
+builder.Services.AddScoped<IProductImageRepository,ProductImageRepo>();
 
 // Add authentication instructions
 builder

@@ -28,6 +28,6 @@ namespace Ecommerce.Service.src.DTO
         public bool IsAnonymous { get; }
         public string Content { get; }
         public int Rating { get; }
-        public List<Image> Images { get; }
+        public List<ReviewImage> Images { get; }
     }
 }

@@ -11,7 +11,9 @@ namespace Ecommerce.WebApi.src.Data
         //this is just a inject configuration so we can get connection string in appasettings.json
         protected readonly IConfiguration configuration;
         public DbSet<Category> Categories { get; set; }
-        public DbSet<Image> Images { get; set; }
+        public DbSet<ProductImage> ProductImages { get; set; }
+        public DbSet<ReviewImage> ReviewImages { get; set; }
+
         public DbSet<Product> Products { get; set; }
         public DbSet<Order> Orders { get; set; }
         public DbSet<Review> Reviews { get; set; }
@@ -86,6 +88,20 @@ namespace Ecommerce.WebApi.src.Data
                 entity.HasKey(e => e.Id);
             });
 
+            modelBuilder
+                .Entity<ProductImage>()
+                .HasOne(pi => pi.Product)
+                .WithMany(p => p.Images)
+                .HasForeignKey(pi => pi.ProductId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder
+                .Entity<ReviewImage>()
+                .HasOne(pi => pi.Review)
+                .WithMany(p => p.Images)
+                .HasForeignKey(pi => pi.ReviewId)
+                .OnDelete(DeleteBehavior.Cascade);
+
             // Seed database
 
             var categories = SeedData.GenerateCategories();
@@ -97,20 +113,23 @@ namespace Ecommerce.WebApi.src.Data
             var products = SeedData.GenerateProducts(categories);
             modelBuilder.Entity<Product>().HasData(products);
 
-            var productImages=SeedData.GenerateProductImages(products);
-            modelBuilder.Entity<Image>().HasData(productImages);
+            var productImages = SeedData.GenerateProductImages(products);
+            modelBuilder.Entity<ProductImage>().HasData(productImages);
 
             var adddresses = SeedData.GenerateAddresses(users);
             modelBuilder.Entity<Address>().HasData(adddresses);
 
-            var orders = SeedData.GenerateOrders(users,adddresses);
+            var orders = SeedData.GenerateOrders(users, adddresses);
             modelBuilder.Entity<Order>().HasData(orders);
 
-            var orderItems = SeedData.GenerateOrderItems(orders,products);
+            var orderItems = SeedData.GenerateOrderItems(orders, products);
             modelBuilder.Entity<OrderItem>().HasData(orderItems);
 
             var reviews = SeedData.GenerateReviews(users, products);
             modelBuilder.Entity<Review>().HasData(reviews);
+
+              var reviewImages = SeedData.GenerateReviewImages(reviews);
+            modelBuilder.Entity<ReviewImage>().HasData(reviewImages);
         }
     }
 }

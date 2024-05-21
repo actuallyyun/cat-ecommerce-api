@@ -12,13 +12,13 @@ namespace Ecommerce.WebApi.src.Repo
     {
         private readonly EcommerceDbContext _context;
         private readonly DbSet<Product> _products;
-        private readonly DbSet<Image> _images;
+        private readonly DbSet<ProductImage> _images;
 
         public ProductRepo(EcommerceDbContext context)
         {
             _context = context;
             _products = _context.Products;
-            _images = _context.Images;
+            _images = _context.ProductImages;
         }
 
         public async Task<Product> CreateProductAsync(Product product)
@@ -78,6 +78,9 @@ namespace Ecommerce.WebApi.src.Repo
             return products;
         }
 
+        public async Task<IEnumerable<Product>> GetProductsByCategoryAsync(Guid catId){
+            return await _products.Where(p=>p.CategoryId==catId).OrderByDescending(p=>p.Price).ToListAsync();
+        }
         public async Task<Product>? GetProductByIdAsync(Guid id)
         {
             return await _products.FirstOrDefaultAsync(p => p.Id == id);

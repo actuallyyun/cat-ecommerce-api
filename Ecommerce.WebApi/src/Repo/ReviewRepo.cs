@@ -12,13 +12,13 @@ namespace Ecommerce.WebApi.src.Repo
     {
         private readonly EcommerceDbContext _context;
         private readonly DbSet<Review> _reviews;
-        private readonly DbSet<Image> _images;
+        private readonly DbSet<ReviewImage> _images;
 
         public ReviewRepo(EcommerceDbContext context)
         {
             _context = context;
             _reviews = _context.Reviews;
-            _images = _context.Images;
+            _images = _context.ReviewImages;
         }
 
         public async Task<Review> CreateReviewAsync(Review review)

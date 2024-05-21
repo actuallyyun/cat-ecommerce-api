@@ -1,5 +1,8 @@
+using AutoMapper;
 using Ecommerce.Core.src.Entity;
+using Ecommerce.Core.src.RepoAbstraction;
 using Ecommerce.Core.src.RepositoryAbstraction;
+using Ecommerce.Service.src.DTO;
 using Ecommerce.Service.src.ServiceAbstraction;
 
 namespace Ecommerce.Service.src.Service
@@ -7,10 +10,15 @@ namespace Ecommerce.Service.src.Service
     public class CategoryService : ICategoryService
     {
         private readonly ICategoryRepository _categoryRepository;
+        private readonly IProductRepository _productRepo;
 
-        public CategoryService(ICategoryRepository categoryRepository)
+        private readonly IMapper _mapper;
+
+        public CategoryService(ICategoryRepository categoryRepository,IProductRepository productRepo,IMapper mapper)
         {
             _categoryRepository = categoryRepository;
+            _mapper=mapper;
+            _productRepo=productRepo;
         }
 
         public async Task<Category> CreateCategoryAsync(CategoryCreateDto categoryDto)
@@ -74,6 +82,11 @@ namespace Ecommerce.Service.src.Service
                  category.Name,
                  category.Image
         ));
+        }
+
+        public async Task<IEnumerable<ProductReadDto>>GetProductsByCategoryAsync(Guid id){
+            var products=await _productRepo.GetProductsByCategoryAsync(id);
+            return _mapper.Map<IEnumerable<ProductReadDto>>(products);// TODO map to product read dto
         }
 
         public async Task<bool> DeleteCategoryAsync(Guid categoryId)

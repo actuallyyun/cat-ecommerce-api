@@ -2,9 +2,9 @@ using Ecommerce.Core.src.Entity;
 
 namespace Ecommerce.Core.src.RepoAbstraction
 {
-    public interface IImageRepository
+    public interface IProductImageRepository
     {
-        Task<Image> CreateAsync(Image image);
+        Task<ProductImage> CreateAsync(ProductImage image);
         Task<bool> DeleteByIdAsync(Guid id);
     }
 }

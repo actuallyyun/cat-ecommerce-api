@@ -15,8 +15,10 @@ namespace Ecommerce.Core.src.Entity
         [Range(0, 9999999.99, ErrorMessage = "Price must be greater than or equal to 0")]
         public decimal Price { get; set; }
 
-        [ForeignKey("CategoryId")]
         public Guid CategoryId { get; set; }
+
+        [ForeignKey("CategoryId")]
+        public Category Category { get; set; }
 
         [Required]
         [Range(0, int.MaxValue, ErrorMessage = "Inventory must be greater than or equal to 0")]
@@ -24,6 +26,6 @@ namespace Ecommerce.Core.src.Entity
 
         [Range(0, int.MaxValue)]
         public decimal? Rating { get; set; }
-        public List<Image> Images { get; set; } = new List<Image>();
+        public List<ProductImage> Images { get; set; } = new List<ProductImage>();
     }
 }

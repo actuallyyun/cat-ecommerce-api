@@ -1,4 +1,5 @@
 using Ecommerce.Core.src.Entity;
+using Ecommerce.Service.src.DTO;
 using Ecommerce.Service.src.ServiceAbstraction;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -29,7 +30,7 @@ namespace Ecommerce.Controller.src.Controller
         [HttpPut("{id}")]
         public async Task<bool> UpdateCategory(
             [FromRoute] Guid id,
-            CategoryUpdateDto categoryUpdate
+            [FromBody]CategoryUpdateDto categoryUpdate
         )
         {
             return await _categoryService.UpdateCategoryAsync(id, categoryUpdate);
@@ -49,6 +50,13 @@ namespace Ecommerce.Controller.src.Controller
         public async Task<IEnumerable<CategoryReadDto>> ListAllCategories()
         {
             return await _categoryService.GetAllCategoriesAsync();
+        }
+
+        [AllowAnonymous]
+        [HttpGet("{id}/products")]
+        public async Task<IEnumerable<ProductReadDto>> ListProductsByCategory([FromRoute] Guid id)
+        {
+            return await _categoryService.GetProductsByCategoryAsync(id);
         }
 
         [Authorize(Roles = "Admin")]

@@ -50,7 +50,7 @@ namespace Ecommerce.Service.src.DTO
     {
         public string? FirstName { get; }
         public string? LastName { get; }
-        public Image? Avatar { get; }
+        public string? Avatar { get; }
         public string? Password { get; }
     }
 }

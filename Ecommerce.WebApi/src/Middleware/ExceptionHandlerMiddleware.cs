@@ -1,6 +1,7 @@
-using Microsoft.EntityFrameworkCore;
 using System.Net;
 using Ecommerce.Core.src.Common;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 
 namespace Ecommerce.WebApi.src.middleware
 {
@@ -24,7 +25,11 @@ namespace Ecommerce.WebApi.src.middleware
                 _logger.LogError(dbEx, "Database update error occurred.");
 
                 context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
-                var errorMessage = new { StatusCode = context.Response.StatusCode, Message = "A database error occurred. Please check your input or try again later." };
+                var errorMessage = new
+                {
+                    StatusCode = context.Response.StatusCode,
+                    Message = "A database error occurred. Please check your input or try again later."
+                };
                 await context.Response.WriteAsJsonAsync(errorMessage);
             }
             catch (AppException appEx)
@@ -32,15 +37,28 @@ namespace Ecommerce.WebApi.src.middleware
                 _logger.LogError(appEx, $"Application-specific error: {appEx.ErrorMessage}");
 
                 context.Response.StatusCode = (int)appEx.StatusCode;
-                var errorMessage = new { StatusCode = context.Response.StatusCode, Message = appEx.ErrorMessage };
+                var errorMessage = new
+                {
+                    StatusCode = context.Response.StatusCode,
+                    Message = appEx.ErrorMessage
+                };
                 await context.Response.WriteAsJsonAsync(errorMessage);
+            }
+            catch (SecurityTokenException securityEx)
+            {
+                _logger.LogError(securityEx, $"Security-specific error: {securityEx.Message}");
+                await context.Response.WriteAsJsonAsync(securityEx.Message);
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex.Message);
 
                 context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-                var errorMessage = new { StatusCode = context.Response.StatusCode, Message = ex.StackTrace };
+                var errorMessage = new
+                {
+                    StatusCode = context.Response.StatusCode,
+                    Message = ex.StackTrace
+                };
                 await context.Response.WriteAsJsonAsync(errorMessage);
             }
         }

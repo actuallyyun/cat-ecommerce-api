@@ -12,13 +12,11 @@ namespace Ecommerce.WebApi.src.Repo
     {
         private readonly EcommerceDbContext _context;
         private readonly DbSet<User> _users;
-        private readonly DbSet<Image> _images;
      
         public UserRepo(EcommerceDbContext context, IMapper mapper)
         {
             _context = context;
             _users = _context.Users;
-            _images = _context.Images;
         }
 
         public async Task<User> CreateUserAsync(User user)

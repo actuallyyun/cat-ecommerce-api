@@ -5,9 +5,9 @@ using Ecommerce.Service.src.ServiceAbstraction;
 
 namespace Ecommerce.Service.src.Service
 {
-    public class ImageService : IImageService
+    public class ImageService : IProductImageService
     {
-        public Task<Image> CreateImageAsync(ImageCreateDto createDto)
+        public Task<ProductImage> CreateImageAsync(ImageCreateDto createDto)
         {
             throw new NotImplementedException();
         }
@@ -17,12 +17,7 @@ namespace Ecommerce.Service.src.Service
             throw new NotImplementedException();
         }
 
-        public Task<Image> GetByIdAsync(Guid imageId)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<IEnumerable<Image>> GetImagesByProductIdAsync(Guid productId)
+        public Task<ProductImage> GetByIdAsync(Guid imageId)
         {
             throw new NotImplementedException();
         }

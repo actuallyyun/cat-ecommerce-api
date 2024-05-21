@@ -49,7 +49,7 @@ namespace Ecommerce.WebApi.src.Database
             return categories;
         }
 
-         public static List<User> GenerateUsers()
+        public static List<User> GenerateUsers()
         {
             var passwordService = new PasswordService();
             var users = new List<User>();
@@ -58,22 +58,22 @@ namespace Ecommerce.WebApi.src.Database
             for (int i = 0; i < 100; i++)
             {
                 var faker = new Faker();
-                var userId=Guid.NewGuid();
-                var userFirstName=faker.Person.FirstName;                
+                var userId = Guid.NewGuid();
+                var userFirstName = faker.Person.FirstName;
                 var user = new User
                 {
                     Id = Guid.NewGuid(),
                     FirstName = userFirstName,
                     LastName = faker.Person.LastName,
                     Email = faker.Person.Email,
-                    Password = passwordService.HashPassword(userFirstName,out byte[] salt),// user first name is used as password
+                    Password = passwordService.HashPassword(userFirstName, out byte[] salt), // user first name is used as password
                     Salt = salt,
-                    Avatar =faker.Person.Avatar,
+                    Avatar = faker.Person.Avatar,
                     Role = UserRole.User
                 };
                 users.Add(user);
             }
-            
+
             // create an admin
             var admin = new User()
             {
@@ -81,12 +81,12 @@ namespace Ecommerce.WebApi.src.Database
                 FirstName = "Admin",
                 LastName = "Admin",
                 Email = "admin@mail.com",
-                Password = passwordService.HashPassword("admin",out byte[]adminSalt),
+                Password = passwordService.HashPassword("admin", out byte[] adminSalt),
                 Salt = adminSalt,
                 Avatar = new Faker().Person.Avatar,
                 Role = UserRole.Admin,
             };
-           
+
             users.Add(admin);
 
             return users;
@@ -107,12 +107,12 @@ namespace Ecommerce.WebApi.src.Database
                     {
                         Id = Guid.NewGuid(),
                         UserId = user.Id,
-                        FirstName=faker.Person.FirstName,
-                        LastName=faker.Person.LastName,
+                        FirstName = faker.Person.FirstName,
+                        LastName = faker.Person.LastName,
                         AddressLine = faker.Address.FullAddress(),
-                        Country=faker.Address.Country(),
+                        Country = faker.Address.Country(),
                         PostalCode = faker.Address.ZipCode(),
-                        PhoneNumber=faker.Person.Phone
+                        PhoneNumber = faker.Person.Phone
                     };
                     addresses.Add(address);
                 }
@@ -120,7 +120,7 @@ namespace Ecommerce.WebApi.src.Database
             return addresses;
         }
 
-          public static List<Product> GenerateProducts(List<Category> categories)
+        public static List<Product> GenerateProducts(List<Category> categories)
         {
             var products = new List<Product>();
 
@@ -132,11 +132,13 @@ namespace Ecommerce.WebApi.src.Database
                     var product = new Product
                     {
                         Id = Guid.NewGuid(),
-                        Name = $"{faker.Commerce.ProductAdjective()} {faker.Commerce.Product()} {faker.Random.Word()}",
+                        Name =
+                            $"{faker.Commerce.ProductAdjective()} {faker.Commerce.Product()} {faker.Random.Word()}",
                         Description = faker.Commerce.ProductDescription(),
                         Price = decimal.Parse(faker.Commerce.Price()),
                         Inventory = faker.Commerce.Random.Int(0, 200),
                         CategoryId = category.Id,
+                        Rating = new Random().Next(1, 5),
                     };
 
                     products.Add(product);
@@ -145,16 +147,15 @@ namespace Ecommerce.WebApi.src.Database
             return products;
         }
 
-        public static List<Image> GenerateProductImages(List<Product> products)
+        public static List<ProductImage> GenerateProductImages(List<Product> products)
         {
-
-            var images = new List<Image>();
+            var images = new List<ProductImage>();
             foreach (var product in products)
             {
                 for (int i = 0; i < 4; i++)
                 {
                     var faker = new Faker("en");
-                    var image = new Image
+                    var image = new ProductImage
                     {
                         Id = Guid.NewGuid(),
                         Url = faker.Image.PicsumUrl(),
@@ -167,9 +168,7 @@ namespace Ecommerce.WebApi.src.Database
             return images;
         }
 
-
-
-        public static List<Order> GenerateOrders(List<User> users,List<Address> addresses)
+        public static List<Order> GenerateOrders(List<User> users, List<Address> addresses)
         {
             var orders = new List<Order>();
 
@@ -179,13 +178,15 @@ namespace Ecommerce.WebApi.src.Database
                 for (int i = 0; i < orderCount; i++)
                 {
                     var faker = new Faker("fi");
-                    var userAddresses=addresses.Where(address => address.UserId==user.Id).ToArray();
+                    var userAddresses = addresses
+                        .Where(address => address.UserId == user.Id)
+                        .ToArray();
 
                     var order = new Order
                     {
                         Id = Guid.NewGuid(),
                         UserId = user.Id,
-                        AddressId=userAddresses[0].Id,
+                        AddressId = userAddresses[0].Id,
                         Status = faker.PickRandom<OrderStatus>(),
                     };
                     orders.Add(order);
@@ -195,7 +196,7 @@ namespace Ecommerce.WebApi.src.Database
             return orders;
         }
 
-         public static List<OrderItem> GenerateOrderItems(List<Order> orders, List<Product> products)
+        public static List<OrderItem> GenerateOrderItems(List<Order> orders, List<Product> products)
         {
             var orderItems = new List<OrderItem>();
 
@@ -208,7 +209,7 @@ namespace Ecommerce.WebApi.src.Database
                 {
                     var randomProduct = randomProducts[i];
 
-                    var price = faker.Random.Decimal(1,1000);
+                    var price = faker.Random.Decimal(1, 1000);
                     var quantity = faker.Random.Int(1, 30);
 
                     var orderItem = new OrderItem
@@ -217,8 +218,8 @@ namespace Ecommerce.WebApi.src.Database
                         OrderId = order.Id,
                         ProductId = randomProduct.Id,
                         Quantity = quantity,
-                        Price=price,
-                        };
+                        Price = price,
+                    };
 
                     orderItems.Add(orderItem);
                 }
@@ -251,6 +252,27 @@ namespace Ecommerce.WebApi.src.Database
                 }
             }
             return reviews;
+        }
+
+        public static List<ReviewImage> GenerateReviewImages(List<Review> reviews)
+        {
+            var images = new List<ReviewImage>();
+            foreach (var review in reviews)
+            {
+                for (int i = 0; i < 4; i++)
+                {
+                    var faker = new Faker("en");
+                    var image = new ReviewImage
+                    {
+                        Id = Guid.NewGuid(),
+                        Url = faker.Image.PicsumUrl(),
+                        ReviewId = review.Id,
+                    };
+                    images.Add(image);
+                }
+            }
+
+            return images;
         }
     }
 }
