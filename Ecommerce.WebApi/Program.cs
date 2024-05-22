@@ -92,6 +92,9 @@ builder.Services.AddAuthorization(policy =>
 });
 
 var app = builder.Build();
+app.UseCors(options => options.AllowAnyOrigin()      
+.AllowAnyMethod()
+      .AllowAnyHeader());
 
 app.UseSwagger();
 app.UseSwaggerUI(options =>
@@ -101,7 +104,7 @@ app.UseSwaggerUI(options =>
 });
 
 
-app.UseCors(options => options.AllowAnyOrigin());
+
 app.UseHttpsRedirection();
 app.UseMiddleware<ExceptionHandlerMiddleware>();
 app.UseRouting();

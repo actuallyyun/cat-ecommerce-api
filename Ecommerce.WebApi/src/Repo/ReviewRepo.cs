@@ -76,7 +76,7 @@ namespace Ecommerce.WebApi.src.Repo
                     .ToListAsync();
             }
 
-            return reviews;
+            return Enumerable.Cast<Review>(reviews);
         }
 
         public async Task<Review> GetReviewByIdAsync(Guid id)

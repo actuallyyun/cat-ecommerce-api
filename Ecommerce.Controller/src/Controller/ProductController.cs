@@ -23,7 +23,7 @@ namespace Ecommerce.Controller.src.Controller
         [Consumes("multipart/form-data")]
         [Authorize(Roles = "Admin")] 
         [HttpPost()]
-        public async Task<ActionResult<Product>> CreateFromFormAsync(
+        public async Task<ActionResult<ProductReadDto>> CreateFromFormAsync(
             [FromForm] ProductForm productForm
         )
         {
@@ -63,21 +63,21 @@ namespace Ecommerce.Controller.src.Controller
 
         [AllowAnonymous]
         [HttpGet("{id}/reviews")]
-        public async Task<IEnumerable<Review>> ListReviewsAsync([FromRoute] Guid id)
+        public async Task<IEnumerable<ReviewReadDto>> ListReviewsAsync([FromRoute] Guid id)
         {
             return await _productService.GetAllReviews(id);
         }
 
         [AllowAnonymous]
         [HttpGet("{id}")]
-        public async Task<Product> GetProductByIdAsync(Guid id)
+        public async Task<ProductReadDto> GetProductByIdAsync(Guid id)
         {
             return await _productService.GetProductByIdAsync(id);
         }
 
         [AllowAnonymous]
         [HttpGet()]
-        public async Task<IEnumerable<Product>> GetAllProductAsync(
+        public async Task<IEnumerable<ProductReadDto>> GetAllProductAsync(
             [FromQuery] QueryOptions queryOptions
         )
         {

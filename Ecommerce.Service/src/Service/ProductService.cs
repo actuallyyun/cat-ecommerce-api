@@ -29,13 +29,14 @@ namespace Ecommerce.Service.src.Service
             _mapper = mapper;
         }
 
-        public async Task<Product> CreateProductAsync(ProductCreateDto productCreate)
+        public async Task<ProductReadDto> CreateProductAsync(ProductCreateDto productCreate)
         {
             await ValidateIdAsync(productCreate.CategoryId,"Category");
            
             var newProduct = _mapper.Map<Product>(productCreate);
 
-            return await _productRepository.CreateProductAsync(newProduct);
+            var product= await _productRepository.CreateProductAsync(newProduct);
+            return _mapper.Map<ProductReadDto>(product);
         }
 
         public async Task<bool> DeleteProductByIdAsync(Guid id)
@@ -48,14 +49,17 @@ namespace Ecommerce.Service.src.Service
             return await _productRepository.DeleteProductByIdAsync(id);
         }
 
-        public async Task<IEnumerable<Product>> GetAllProductsAsync(QueryOptions options)
+        public async Task<IEnumerable<ProductReadDto>> GetAllProductsAsync(QueryOptions options)
         {
-            return await _productRepository.GetAllProductsAsync(options);
+            var products= await _productRepository.GetAllProductsAsync(options);
+
+            return _mapper.Map<IEnumerable<ProductReadDto>>(products);
         }
 
-        public async Task<Product> GetProductByIdAsync(Guid id)
+        public async Task<ProductReadDto> GetProductByIdAsync(Guid id)
         {
-            return await _productRepository.GetProductByIdAsync(id);
+            var productFound =await _productRepository.GetProductByIdAsync(id);
+            return _mapper.Map<ProductReadDto>(productFound);
         }
 
         public async Task<bool> UpdateProductByIdAsync(Guid id, ProductUpdateDto product)
@@ -101,9 +105,11 @@ namespace Ecommerce.Service.src.Service
             return await _productRepository.UpdateProductAsync(productFound);
         }
 
-        public async Task<IEnumerable<Review>> GetAllReviews(Guid id)
+        public async Task<IEnumerable<ReviewReadDto>> GetAllReviews(Guid id)
         {
-            return await _reviewRepository.GetReviewsByProductIdAsync(id);
+            var reviews= await _reviewRepository.GetReviewsByProductIdAsync(id);
+            
+            return _mapper.Map<IEnumerable<ReviewReadDto>>(reviews);
         }
 
         private async Task ValidateIdAsync(Guid id, string entityType)

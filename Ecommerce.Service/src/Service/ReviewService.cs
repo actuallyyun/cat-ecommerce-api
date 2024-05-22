@@ -78,6 +78,7 @@ namespace Ecommerce.Service.src.Service
         public async Task<IEnumerable<ReviewReadDto>> GetAllReviewsAsync(QueryOptions options)
         {
             var reviews= await _reviewRepository.GetAllReviewsAsync(options);
+
             return _mapper.Map<IEnumerable<ReviewReadDto>>(reviews);
         }
 

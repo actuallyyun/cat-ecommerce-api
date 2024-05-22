@@ -74,6 +74,8 @@ namespace Ecommerce.WebApi.src.Repo
             else
             {
                 products = await _products
+                   .Include(p=>p.Category)
+                .Include(p=>p.Images)
                     .Where(p => p.Title.Contains(searchKey))
                     .Skip(skipFrom ?? 1)
                     .Take(options?.Limit ?? AppConstants.PER_PAGE)
@@ -86,6 +88,7 @@ namespace Ecommerce.WebApi.src.Repo
 
         public async Task<IEnumerable<Product>> GetProductsByCategoryAsync(Guid catId){
             var products= await _products.Where(p=>p.CategoryId==catId).OrderByDescending(p=>p.Price).ToListAsync();
+            
             foreach(var product in products){
                 var images=await _images.Where(im=>im.ProductId==product.Id).ToListAsync();
                 product.Images=images;
@@ -95,7 +98,8 @@ namespace Ecommerce.WebApi.src.Repo
         }
         public async Task<Product>? GetProductByIdAsync(Guid id)
         {
-            var product= await _products.Include(p=>p.Category).SingleOrDefaultAsync(p => p.Id == id);
+            var product= await _products.Include(p=>p.Category).Include(product=>product.Rev)SingleOrDefaultAsync(p => p.Id == id);
+
             var images=await _images.Where(i=>i.ProductId==id).ToListAsync();
          
             product.Images=images;

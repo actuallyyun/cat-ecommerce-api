@@ -86,7 +86,8 @@ namespace Ecommerce.Service.src.Service
 
         public async Task<IEnumerable<ProductReadDto>>GetProductsByCategoryAsync(Guid id){
             var products=await _productRepo.GetProductsByCategoryAsync(id);
-            return _mapper.Map<IEnumerable<ProductReadDto>>(products);// TODO map to product read dto
+            
+            return _mapper.Map<IEnumerable<ProductReadDto>>(products);
         }
 
         public async Task<bool> DeleteCategoryAsync(Guid categoryId)

@@ -128,6 +128,11 @@ namespace Ecommerce.Controller.src.Controller
             return await _userService.DeleteUserByIdAsync(id);
         }
 
+        [HttpPost("file")]
+        public async Task<string>FakeRouteToHandleFile([FromBody] byte[]file){
+            return "new image url";
+        }
+
 
     }
 }
