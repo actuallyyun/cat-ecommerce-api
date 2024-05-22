@@ -7,7 +7,7 @@ namespace Ecommerce.Service.src.DTO
     {
         public string FirstName { get; set; }
         public string LastName { get; set; }
-        public ImageCreateDto Avatar { get; set; }
+        public string Avatar { get; set; }
         public string Email { get; set; }
         public string Password { get; set; }
     }

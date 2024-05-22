@@ -4,7 +4,6 @@ using Ecommerce.Core.src.Entity;
 using Ecommerce.Service.src.DTO;
 using Ecommerce.Service.src.ServiceAbstraction;
 using Microsoft.AspNetCore.Mvc;
-using static Ecommerce.Service.src.DTO.TokenDto;
 
 namespace Ecommerce.Controller.src.Controller
 {

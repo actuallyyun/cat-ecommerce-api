@@ -29,16 +29,14 @@ namespace Ecommerce.Controller.src.Controller
                 return BadRequest("Review data and images are required.");
             }
 
-            var imageList = new List<ImageCreateDto>();
+            var imageList = new List<string>();
             foreach (var image in reviewForm.Images)
             {
                 if (image.Length > 0) //check image size for max length as well
                 {
-                    using (var ms = new MemoryStream())
-                    {
-                        await image.CopyToAsync(ms);
-                        imageList.Add(new ImageCreateDto(ms.ToArray()));
-                    }
+                    
+                        imageList.Add(image);
+                    
                 }
             }
             var claims = HttpContext.User;

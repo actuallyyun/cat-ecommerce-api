@@ -8,6 +8,7 @@ namespace Ecommerce.Core.src.Entity
     {
         [ForeignKey("ProductId")]
         public Guid ProductId { get; set; }
+        public Product Product {get;set;}
 
         [Required]
         public Guid OrderId { get; set; }

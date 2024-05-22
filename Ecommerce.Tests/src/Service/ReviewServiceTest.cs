@@ -18,7 +18,6 @@ namespace Ecommerce.Tests.src.Service
         private readonly Mock<IMapper> _mockMapper;
         private readonly ReviewService _reviewService;
 
-        private readonly byte[] byteArray = { 1, 2, 3, 4, 5 };
 
         public ReviewServiceTests()
         {
@@ -44,7 +43,7 @@ namespace Ecommerce.Tests.src.Service
                 Avatar="avatar-url.jpg",
                 Email= "jane.doe@example.com",Password= "password123",Salt=[]};
             var product = new Product{
-                Name="Laptop", 
+                Title="Laptop", 
                 Description="High performance laptop", CategoryId=category.Id, Price=1200.00M, Inventory=10};
             
             var reviewDto = new ReviewCreateDto
@@ -54,7 +53,7 @@ namespace Ecommerce.Tests.src.Service
                 IsAnonymous = false,
                 Content = "Excellent product!",
                 Rating = 5,
-                ImageCreateDto = new List<ImageCreateDto> { new ImageCreateDto(byteArray) }
+                ImageCreateDto = new List<string>(["image"])
             };
 
             var expectedReview = new Review
@@ -96,7 +95,7 @@ namespace Ecommerce.Tests.src.Service
                 IsAnonymous = false,
                 Content = "Invalid user test",
                 Rating = 3,
-                ImageCreateDto = new List<ImageCreateDto> { new ImageCreateDto(byteArray) }
+                ImageCreateDto = new List<string>(["image"])
             };
 
             _mockUserRepo.Setup(x => x.GetUserByIdAsync(invalidUserId)).ReturnsAsync((User)null);
@@ -117,7 +116,7 @@ namespace Ecommerce.Tests.src.Service
                 IsAnonymous = false,
                 Content = "Invalid product test",
                 Rating = 3,
-                ImageCreateDto = new List<ImageCreateDto> { new ImageCreateDto(byteArray) }
+                ImageCreateDto = new List<string>(["image"])
             };
 
             _mockUserRepo.Setup(x => x.GetUserByIdAsync(userId)).ReturnsAsync(new User{

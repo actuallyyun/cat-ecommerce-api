@@ -16,23 +16,12 @@ namespace Ecommerce.WebApi.src.Database
                 "Electronics",
                 "Fashion",
                 "Home & Kitchen",
-                "Beauty & Personal Care",
                 "Books",
                 "Toys & Games",
                 "Sports & Outdoors",
-                "Health & Wellness",
-                "Automotive",
-                "Groceries",
-                "Pet Supplies",
-                "Office Supplies",
-                "Jewelry",
                 "Music & Movies",
-                "Tools & Home Improvement",
                 "Baby Products",
                 "Garden & Outdoor",
-                "Luggage & Travel Gear",
-                "Crafts & Sewing",
-                "Computers & Accessories"
             ];
 
             foreach (var cate in categoryList)
@@ -55,10 +44,9 @@ namespace Ecommerce.WebApi.src.Database
             var users = new List<User>();
 
             // customers
-            for (int i = 0; i < 100; i++)
+            for (int i = 0; i < 10; i++)
             {
                 var faker = new Faker();
-                var userId = Guid.NewGuid();
                 var userFirstName = faker.Person.FirstName;
                 var user = new User
                 {
@@ -72,6 +60,7 @@ namespace Ecommerce.WebApi.src.Database
                     Role = UserRole.User
                 };
                 users.Add(user);
+                Thread.Sleep(1); // reduce CPU usage
             }
 
             // create an admin
@@ -96,10 +85,10 @@ namespace Ecommerce.WebApi.src.Database
         {
             var addresses = new List<Address>();
 
-            // users can have 1 to 5 addresses, assigned randomly
+            // users can have 1 to 3 addresses, assigned randomly
             foreach (var user in users)
             {
-                int addressCount = new Random().Next(1, 5);
+                int addressCount = new Random().Next(1, 3);
                 for (int i = 0; i < addressCount; i++)
                 {
                     var faker = new Faker("fi");
@@ -115,6 +104,7 @@ namespace Ecommerce.WebApi.src.Database
                         PhoneNumber = faker.Person.Phone
                     };
                     addresses.Add(address);
+                    Thread.Sleep(1); // reduce CPU usage
                 }
             }
             return addresses;
@@ -122,6 +112,8 @@ namespace Ecommerce.WebApi.src.Database
 
         public static List<Product> GenerateProducts(List<Category> categories)
         {
+            Console.WriteLine("Start seeding");
+
             var products = new List<Product>();
 
             foreach (var category in categories)
@@ -136,14 +128,17 @@ namespace Ecommerce.WebApi.src.Database
                             $"{faker.Commerce.ProductAdjective()} {faker.Commerce.Product()} {faker.Random.Word()}",
                         Description = faker.Commerce.ProductDescription(),
                         Price = decimal.Parse(faker.Commerce.Price()),
-                        Inventory = faker.Commerce.Random.Int(0, 200),
+                        Inventory = faker.Commerce.Random.Int(1, 200),
                         CategoryId = category.Id,
                         Rating = new Random().Next(1, 5),
                     };
 
                     products.Add(product);
+                    Thread.Sleep(1); // reduce CPU usage
                 }
             }
+            Console.WriteLine("Finish seeding");
+
             return products;
         }
 
@@ -152,7 +147,7 @@ namespace Ecommerce.WebApi.src.Database
             var images = new List<ProductImage>();
             foreach (var product in products)
             {
-                for (int i = 0; i < 4; i++)
+                for (int i = 0; i < 3; i++)
                 {
                     var faker = new Faker("en");
                     var image = new ProductImage
@@ -174,7 +169,7 @@ namespace Ecommerce.WebApi.src.Database
 
             foreach (var user in users)
             {
-                int orderCount = new Random().Next(0, 10); // users can have 0-10 orders
+                int orderCount = new Random().Next(1, 3); // users can have 1-3 orders
                 for (int i = 0; i < orderCount; i++)
                 {
                     var faker = new Faker("fi");
@@ -204,7 +199,7 @@ namespace Ecommerce.WebApi.src.Database
             {
                 var faker = new Faker("en");
                 var randomProducts = faker.Random.ListItems(products, 20);
-                int productCount = faker.Random.Int(1, 20);
+                int productCount = faker.Random.Int(1, 3);
                 for (int i = 0; i < productCount; i++)
                 {
                     var randomProduct = randomProducts[i];
@@ -231,11 +226,13 @@ namespace Ecommerce.WebApi.src.Database
         public static List<Review> GenerateReviews(List<User> users, List<Product> products)
         {
             var reviews = new List<Review>();
+            var faker = new Faker("en");
 
-            foreach (var product in products)
+            var randomProducts = faker.Random.ListItems(products, 20);
+
+            foreach (var product in randomProducts)
             {
-                var faker = new Faker("en");
-                int reveiwCount = faker.Random.Int(0, 100);
+                int reveiwCount = faker.Random.Int(0, 10);
                 for (int i = 0; i < reveiwCount; i++)
                 {
                     var randomUser = faker.Random.ListItem(users);

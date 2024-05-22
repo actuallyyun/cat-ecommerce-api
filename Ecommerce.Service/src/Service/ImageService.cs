@@ -22,9 +22,5 @@ namespace Ecommerce.Service.src.Service
             throw new NotImplementedException();
         }
 
-        public Task<bool> UpdateImageAsync(Guid imageId, ImageUpdateDto updateDto)
-        {
-            throw new NotImplementedException();
-        }
     }
 }

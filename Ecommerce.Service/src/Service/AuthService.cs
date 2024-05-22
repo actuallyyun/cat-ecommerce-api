@@ -1,10 +1,8 @@
 using AutoMapper;
 using Ecommerce.Core.src.Common;
-using Ecommerce.Core.src.Entity;
 using Ecommerce.Core.src.RepoAbstraction;
-
+using Ecommerce.Service.src.DTO;
 using Ecommerce.Service.src.ServiceAbstraction;
-using static Ecommerce.Service.src.DTO.TokenDto;
 
 namespace Ecommerce.Service.src.Service
 {

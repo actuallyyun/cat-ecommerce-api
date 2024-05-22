@@ -30,20 +30,11 @@ namespace Ecommerce.Controller.src.Controller
             {
                 return BadRequest("user data and avatar image are required.");
             }
-
-            ImageCreateDto image;
-
-            using (var ms = new MemoryStream())
-            {
-                await userForm.Avatar.CopyToAsync(ms);
-                image = new ImageCreateDto(ms.ToArray());
-            }
-
             var userCreateDto = new UserCreateDto
             {
                 FirstName = userForm.FirstName,
                 LastName = userForm.LastName,
-                Avatar = image,
+                Avatar = userForm.Avatar,
                 Email = userForm.Email,
                 Password = userForm.Password
             };

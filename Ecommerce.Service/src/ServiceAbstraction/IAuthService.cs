@@ -1,5 +1,5 @@
 using Ecommerce.Core.src.Common;
-using static Ecommerce.Service.src.DTO.TokenDto;
+using Ecommerce.Service.src.DTO;
 
 namespace Ecommerce.Service.src.ServiceAbstraction
 {

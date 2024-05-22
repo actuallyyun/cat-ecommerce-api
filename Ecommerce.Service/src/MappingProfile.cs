@@ -1,7 +1,6 @@
 using AutoMapper;
 using Ecommerce.Core.src.Entity;
 using Ecommerce.Service.src.DTO;
-using static Ecommerce.Service.src.DTO.TokenDto;
 
 public class MappingProfile : Profile
 {
@@ -25,7 +24,9 @@ public class MappingProfile : Profile
         CreateMap<ImageCreateDto, ProductImage>()
             .ForMember(dest => dest.ProductId, opt => opt.AllowNull());
 
-        CreateMap<Product,ProductReadDto>();
+        CreateMap<Product,ProductReadDto>().ForMember(
+            dest=>dest.Category,opt=>opt.MapFrom(src => src.Category)
+        );
 
 
         // Order mappings

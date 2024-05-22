@@ -1,5 +1,3 @@
-using Microsoft.AspNetCore.Http;
-
 namespace Ecommerce.Controller.src.DataModel
 {
     public class FormDataModel
@@ -12,7 +10,7 @@ namespace Ecommerce.Controller.src.DataModel
             public decimal Price { get; set; }
 
             public Guid CategoryId { get; set; }
-            public List<IFormFile> Images { get; set; }
+            public List<string> Images { get; set; }
         }
 
         public class ReviewForm
@@ -21,14 +19,14 @@ namespace Ecommerce.Controller.src.DataModel
             public bool IsAnonymous { get; set; }
             public string Content { get; set; }
             public int Rating { get; set; }
-            public List<IFormFile> Images { get; set; }
+            public List<string> Images { get; set; }
         }
 
         public class UserForm
         {
             public string FirstName { get; set;}
             public string LastName { get; set;}
-            public IFormFile Avatar { get; set;}
+            public string Avatar { get; set;}
             public string Email { get; set;}
             public string Password { get; set;}
         }

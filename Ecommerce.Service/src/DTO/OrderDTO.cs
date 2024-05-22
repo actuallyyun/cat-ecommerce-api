@@ -3,6 +3,14 @@ using Ecommerce.Core.src.ValueObject;
 
 namespace Ecommerce.Service.src.DTO
 {
+
+    public class OrderReadDto:BaseEntity{
+         public Guid UserId { get; set; }
+        public OrderStatus Status { get; set; } 
+        public List<OrderItem> OrderItems { get; set; } = new List<OrderItem>();
+
+        public Address Address { get; set; }
+    }
     public class OrderCreateDto
     {
         public Guid UserId { get; set; }

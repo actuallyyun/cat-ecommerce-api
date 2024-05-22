@@ -87,9 +87,9 @@ namespace Ecommerce.Service.src.Service
             {
                 productFound.Description = product.Description;
             }
-            if (product.Name != null)
+            if (product.Title != null)
             {
-                productFound.Name = product.Name;
+                productFound.Title = product.Title;
             }
             //if (product.Images != null)
             //{

@@ -37,7 +37,7 @@ namespace Ecommerce.Tests.src.Service
 
         public static ProductCreateDto InvalidP1 = new ProductCreateDto
         {
-            Name = "product",
+            Title = "product",
             Description = "des",
             Price = -3.4m,
             CategoryId = category.Id,
@@ -46,7 +46,7 @@ namespace Ecommerce.Tests.src.Service
         };
         public static ProductCreateDto InvalidP2 = new ProductCreateDto
         {
-            Name = "product",
+            Title = "product",
             Description = "des",
             Price = 3.4m,
             CategoryId = category.Id,
@@ -55,7 +55,7 @@ namespace Ecommerce.Tests.src.Service
         };
         public static ProductCreateDto InvalidP3 = new ProductCreateDto
         {
-            Name = "product",
+            Title = "product",
             Description = "des",
             Price = -3.4m,
             CategoryId = category.Id,
@@ -65,7 +65,7 @@ namespace Ecommerce.Tests.src.Service
 
         public static ProductCreateDto InvalidP4 = new ProductCreateDto
         {
-            Name = "product",
+            Title = "product",
             Description = "des",
             Price = 3.4m,
             CategoryId = category.Id,
@@ -83,7 +83,7 @@ namespace Ecommerce.Tests.src.Service
 
         public static Product Product1 = new Product
         {
-            Name = "product",
+            Title = "product",
             Description = "des",
             CategoryId = category.Id,
             Price = 3.4m,
@@ -92,7 +92,7 @@ namespace Ecommerce.Tests.src.Service
 
         public static Product Product2 = new Product
         {
-            Name = "product2",
+            Title = "product2",
             Description = "des",
             CategoryId = category.Id,
             Price = 30.4m,
@@ -113,7 +113,7 @@ namespace Ecommerce.Tests.src.Service
             ];
 
         public static ProductUpdateDto ProductUpdate = new ProductUpdateDto{
-            Name="updated product",
+            Title="updated product",
             Description="update me",
             Price=5.6m,
             CategoryId=category.Id,
