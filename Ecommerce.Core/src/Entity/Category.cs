@@ -11,7 +11,7 @@ namespace Ecommerce.Core.src.Entity
         [Required]
         public string Name { get; set; }
         public string Image { get; set; } = AppConstants.CATEGORY_DEFAULT_IMAGE;
-
+        public virtual IEnumerable<Product>? Products { get; set; }
         public Category() { }
         public Category(string name, string image)
         {

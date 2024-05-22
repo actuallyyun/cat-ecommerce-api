@@ -26,6 +26,7 @@ namespace Ecommerce.Core.src.Entity
 
         [Range(0, int.MaxValue)]
         public decimal? Rating { get; set; }
-        public List<ProductImage> Images { get; set; } = new List<ProductImage>();
+public List<ProductImage> Images { get; set; } = new List<ProductImage>();
+        public List<Review>? Reviews { get; set; }=new List<Review>();
     }
 }

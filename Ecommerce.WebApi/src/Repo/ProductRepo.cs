@@ -83,7 +83,7 @@ namespace Ecommerce.WebApi.src.Repo
         }
         public async Task<Product>? GetProductByIdAsync(Guid id)
         {
-            return await _products.FirstOrDefaultAsync(p => p.Id == id);
+            return await _products.SingleOrDefaultAsync(p => p.Id == id);
         }
 
         public async Task<bool> UpdateProductAsync(Product product)

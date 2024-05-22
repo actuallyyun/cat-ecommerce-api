@@ -88,6 +88,14 @@ namespace Ecommerce.WebApi.src.Data
                 entity.HasKey(e => e.Id);
             });
 
+
+            modelBuilder.Entity<Product>()
+            .HasOne(p=>p.Category)
+            .WithMany(c=>c.Products)
+            .HasForeignKey(p=>p.CategoryId)
+            .OnDelete(DeleteBehavior.SetNull);
+
+
             modelBuilder
                 .Entity<ProductImage>()
                 .HasOne(pi => pi.Product)

@@ -112,7 +112,6 @@ namespace Ecommerce.WebApi.src.Database
 
         public static List<Product> GenerateProducts(List<Category> categories)
         {
-            Console.WriteLine("Start seeding");
 
             var products = new List<Product>();
 
@@ -137,7 +136,6 @@ namespace Ecommerce.WebApi.src.Database
                     Thread.Sleep(1); // reduce CPU usage
                 }
             }
-            Console.WriteLine("Finish seeding");
 
             return products;
         }
@@ -162,6 +160,8 @@ namespace Ecommerce.WebApi.src.Database
 
             return images;
         }
+
+
 
         public static List<Order> GenerateOrders(List<User> users, List<Address> addresses)
         {
