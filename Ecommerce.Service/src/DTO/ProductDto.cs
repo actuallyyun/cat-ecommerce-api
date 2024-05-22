@@ -11,6 +11,7 @@ namespace Ecommerce.Service.src.DTO
         public int Inventory { get; set; }
         public decimal? Rating { get; set; }
         public IEnumerable<ImageReadDto>? Images { get; set; }
+        public IEnumerable<ReviewReadDto>? Reviews { get; set; }
     }
 
     public class ProductCreateDto

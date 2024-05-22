@@ -251,25 +251,6 @@ namespace Ecommerce.WebApi.src.Database
             return reviews;
         }
 
-        public static List<ReviewImage> GenerateReviewImages(List<Review> reviews)
-        {
-            var images = new List<ReviewImage>();
-            foreach (var review in reviews)
-            {
-                for (int i = 0; i < 4; i++)
-                {
-                    var faker = new Faker("en");
-                    var image = new ReviewImage
-                    {
-                        Id = Guid.NewGuid(),
-                        Url = faker.Image.PicsumUrl(),
-                        ReviewId = review.Id,
-                    };
-                    images.Add(image);
-                }
-            }
 
-            return images;
-        }
     }
 }

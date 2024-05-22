@@ -19,7 +19,6 @@ namespace Ecommerce.Controller.src.DataModel
             public bool IsAnonymous { get; set; }
             public string Content { get; set; }
             public int Rating { get; set; }
-            public List<string> Images { get; set; }
         }
 
         public class UserForm

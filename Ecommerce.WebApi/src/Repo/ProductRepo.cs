@@ -16,6 +16,8 @@ namespace Ecommerce.WebApi.src.Repo
         private readonly DbSet<ProductImage> _images;
 
         private readonly DbSet<Category> _categories;
+                private readonly DbSet<Review> _reviews;
+
     
         public ProductRepo(EcommerceDbContext context)
         {
@@ -23,6 +25,7 @@ namespace Ecommerce.WebApi.src.Repo
             _products = _context.Products;
             _images = _context.ProductImages;
             _categories=_context.Categories;
+            _reviews=_context.Reviews;
         }
 
         public async Task<Product> CreateProductAsync(Product product)
@@ -92,17 +95,21 @@ namespace Ecommerce.WebApi.src.Repo
             foreach(var product in products){
                 var images=await _images.Where(im=>im.ProductId==product.Id).ToListAsync();
                 product.Images=images;
-                var category=await _categories.SingleOrDefaultAsync(ca=>ca.Id==product.CategoryId);
             }
             return products;
         }
         public async Task<Product>? GetProductByIdAsync(Guid id)
         {
-            var product= await _products.Include(p=>p.Category).Include(product=>product.Rev)SingleOrDefaultAsync(p => p.Id == id);
-
+            var product= await _products.Include(p=>p.Category).SingleOrDefaultAsync(p => p.Id == id);
+            if(product==null){
+                return null;
+            }
             var images=await _images.Where(i=>i.ProductId==id).ToListAsync();
-         
+            var reviews=await _reviews.Where(r=>r.ProductId==id).ToListAsync();
+
             product.Images=images;
+            product.Reviews=reviews;
+
             return product;
         }
 

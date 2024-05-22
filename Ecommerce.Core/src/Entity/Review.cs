@@ -10,10 +10,13 @@ public class Review : BaseEntity
     [Required]
     [ForeignKey("UserId")]
     public Guid UserId { get; set; }
+    public User User{get;set;}
 
     [Required]
     [ForeignKey("ProductId")]
     public Guid ProductId { get; set; }
+
+    public Product Product {get;set;}=null!;//reference
 
     [Required]
     public bool IsAnonymous { get; set; }
@@ -37,5 +40,4 @@ public class Review : BaseEntity
             _rating = value;
         }
     }
-    public IEnumerable<ReviewImage> Images { get; set; } 
 }

@@ -12,8 +12,6 @@ namespace Ecommerce.WebApi.src.Data
         protected readonly IConfiguration configuration;
         public DbSet<Category> Categories { get; set; }
         public DbSet<ProductImage> ProductImages { get; set; }
-        public DbSet<ReviewImage> ReviewImages { get; set; }
-
         public DbSet<Product> Products { get; set; }
         public DbSet<Order> Orders { get; set; }
         public DbSet<Review> Reviews { get; set; }
@@ -95,19 +93,26 @@ namespace Ecommerce.WebApi.src.Data
                 .HasForeignKey(p => p.CategoryId)
                 .OnDelete(DeleteBehavior.SetNull);
 
+            modelBuilder
+                .Entity<Review>()
+                .HasOne(r => r.Product)
+                .WithMany(p => p.Reviews)
+                .HasForeignKey(r => r.ProductId)
+                .OnDelete(DeleteBehavior.SetNull);
+
+            modelBuilder
+                .Entity<Review>()
+                .HasOne(r => r.User)
+                .WithMany()
+                .HasForeignKey(u => u.UserId)
+                .OnDelete(DeleteBehavior.SetNull);
+
             //modelBuilder
             //    .Entity<ProductImage>()
             //    .HasOne(pi => pi.Product)
             //    .WithMany(p => p.Images)
             //    .HasForeignKey(pi => pi.ProductId)
             //    .OnDelete(DeleteBehavior.Cascade);
-
-            modelBuilder
-                .Entity<ReviewImage>()
-                .HasOne(pi => pi.Review)
-                .WithMany(p => p.Images)
-                .HasForeignKey(pi => pi.ReviewId)
-                .OnDelete(DeleteBehavior.Cascade);
 
             // Seed database
 
@@ -134,9 +139,6 @@ namespace Ecommerce.WebApi.src.Data
 
             var reviews = SeedData.GenerateReviews(users, products);
             modelBuilder.Entity<Review>().HasData(reviews);
-
-            var reviewImages = SeedData.GenerateReviewImages(reviews);
-            modelBuilder.Entity<ReviewImage>().HasData(reviewImages);
         }
     }
 }

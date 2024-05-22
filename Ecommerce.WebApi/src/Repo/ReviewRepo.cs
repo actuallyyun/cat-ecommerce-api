@@ -1,8 +1,10 @@
 using System.Data.Common;
+using AutoMapper;
 using Ecommerce.Core.src.Common;
 using Ecommerce.Core.src.Entity;
 using Ecommerce.Core.src.RepoAbstraction;
 using Ecommerce.Core.src.ValueObject;
+using Ecommerce.Service.src.DTO;
 using Ecommerce.WebApi.src.Data;
 using Microsoft.EntityFrameworkCore;
 
@@ -12,34 +14,19 @@ namespace Ecommerce.WebApi.src.Repo
     {
         private readonly EcommerceDbContext _context;
         private readonly DbSet<Review> _reviews;
-        private readonly DbSet<ReviewImage> _images;
 
         public ReviewRepo(EcommerceDbContext context)
         {
             _context = context;
             _reviews = _context.Reviews;
-            _images = _context.ReviewImages;
         }
 
         public async Task<Review> CreateReviewAsync(Review review)
         {
-            using (var transaction = await _context.Database.BeginTransactionAsync())
-            {
-                try
-                {
-                    await _reviews.AddAsync(review);
-                    foreach (var image in review.Images)
-                    {
-                        await _images.AddAsync(image);
-                    }
-                    await _context.SaveChangesAsync();
-                    return review;
-                }
-                catch (DbException)
-                {
-                    throw;
-                }
-            }
+            await _reviews.AddAsync(review);
+
+            await _context.SaveChangesAsync();
+            return review;
         }
 
         public async Task<bool> DeleteReviewByIdAsync(Guid id)
@@ -58,7 +45,6 @@ namespace Ecommerce.WebApi.src.Repo
             if (options?.SortOrder == SortOrder.ASC)
             {
                 reviews = await _reviews
-                    .Include(r => r.Images)
                     .Where(r => r.Content.Contains(query.SearchKey))
                     .Skip(query.SkipFrom)
                     .Take(options?.Limit ?? AppConstants.PER_PAGE)
@@ -68,7 +54,6 @@ namespace Ecommerce.WebApi.src.Repo
             else
             {
                 reviews = await _reviews
-                    .Include(r => r.Images)
                     .Where(r => r.Content.Contains(query.SearchKey))
                     .Skip(query.SkipFrom)
                     .Take(options?.Limit ?? AppConstants.PER_PAGE)
@@ -81,9 +66,7 @@ namespace Ecommerce.WebApi.src.Repo
 
         public async Task<Review> GetReviewByIdAsync(Guid id)
         {
-            var review = await _reviews
-                .Include(r => r.Images)
-                .SingleOrDefaultAsync(r => r.Id == id);
+            var review = await _reviews.SingleOrDefaultAsync(r => r.Id == id);
             if (review == null)
             {
                 throw new KeyNotFoundException($"Review with ID {id} not found.");
@@ -100,7 +83,6 @@ namespace Ecommerce.WebApi.src.Repo
                         .SetProperty(r => r.IsAnonymous, review.IsAnonymous)
                         .SetProperty(r => r.Content, review.Content)
                         .SetProperty(r => r.Rating, review.Rating)
-                        .SetProperty(r => r.Images, review.Images)
                 );
 
             return true;
@@ -109,17 +91,14 @@ namespace Ecommerce.WebApi.src.Repo
         public async Task<IEnumerable<Review>> GetReviewsByProductIdAsync(Guid productId)
         {
             return await _reviews
-                .Include(r => r.Images)
+                .Include(review => review.User)
                 .Where(r => r.ProductId == productId)
                 .ToListAsync();
         }
 
         public async Task<IEnumerable<Review>> GetReviewsByUserIdAsync(Guid userId)
         {
-            return await _reviews
-                .Include(r => r.Images)
-                .Where(r => r.UserId == userId)
-                .ToListAsync();
+            return await _reviews.Where(r => r.UserId == userId).ToListAsync();
         }
     }
 }

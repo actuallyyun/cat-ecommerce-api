@@ -37,14 +37,11 @@ public class MappingProfile : Profile
             .ForMember(dest => dest.OrderId, opt => opt.Ignore());
 
         // Review mappings
-        CreateMap<Review, ReviewReadDto>();
-        
-        CreateMap<ReviewImage, ImageReadDto>()
-            .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
-            .ForMember(dest => dest.ImageUrl, opt => opt.MapFrom(src => src.Url));
+        CreateMap<Review, ReviewReadDto>()
+            .ForMember(dest => dest.Content, opt => opt.MapFrom(src => src.Content))
+            .ForMember(dest => dest.User, opt => opt.MapFrom(src => src.User));
 
-        CreateMap<ReviewCreateDto, Review>()
-            .ForMember(dest => dest.Images, opt => opt.MapFrom(src => src.ImageCreateDto));
+        CreateMap<ReviewCreateDto, Review>();
 
         // Category mappings
         CreateMap<Category, CategoryReadDto>();

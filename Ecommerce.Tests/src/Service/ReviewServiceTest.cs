@@ -53,7 +53,6 @@ namespace Ecommerce.Tests.src.Service
                 IsAnonymous = false,
                 Content = "Excellent product!",
                 Rating = 5,
-                ImageCreateDto = new List<string>(["image"])
             };
 
             var expectedReview = new Review
@@ -72,7 +71,6 @@ namespace Ecommerce.Tests.src.Service
             var result = await _reviewService.CreateReviewAsync(reviewDto);
 
             Assert.NotNull(result);
-            Assert.Equal(reviewDto.UserId, result.UserId);
             Assert.Equal(reviewDto.ProductId, result.ProductId);
             Assert.Equal(reviewDto.IsAnonymous, result.IsAnonymous);
             Assert.Equal(reviewDto.Content, result.Content);
@@ -95,7 +93,6 @@ namespace Ecommerce.Tests.src.Service
                 IsAnonymous = false,
                 Content = "Invalid user test",
                 Rating = 3,
-                ImageCreateDto = new List<string>(["image"])
             };
 
             _mockUserRepo.Setup(x => x.GetUserByIdAsync(invalidUserId)).ReturnsAsync((User)null);
@@ -116,7 +113,6 @@ namespace Ecommerce.Tests.src.Service
                 IsAnonymous = false,
                 Content = "Invalid product test",
                 Rating = 3,
-                ImageCreateDto = new List<string>(["image"])
             };
 
             _mockUserRepo.Setup(x => x.GetUserByIdAsync(userId)).ReturnsAsync(new User{

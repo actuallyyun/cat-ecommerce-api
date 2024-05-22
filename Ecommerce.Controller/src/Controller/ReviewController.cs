@@ -24,21 +24,10 @@ namespace Ecommerce.Controller.src.Controller
         [HttpPost()]
         public async Task<ActionResult<ReviewReadDto>> CreateReview(ReviewForm reviewForm)
         {
-            if (reviewForm == null || reviewForm.Images == null || reviewForm.Images.Count == 0)
+            if (reviewForm == null )
             {
-                return BadRequest("Review data and images are required.");
-            }
-
-            var imageList = new List<string>();
-            foreach (var image in reviewForm.Images)
-            {
-                if (image.Length > 0) //check image size for max length as well
-                {
-                    
-                        imageList.Add(image);
-                    
-                }
-            }
+                return BadRequest("Review data is required.");
+            }  
             var claims = HttpContext.User;
             var userId = Guid.Parse(claims.FindFirst(ClaimTypes.NameIdentifier).Value);
 
@@ -48,7 +37,6 @@ namespace Ecommerce.Controller.src.Controller
                 IsAnonymous=reviewForm.IsAnonymous,
                 Content=reviewForm.Content,
                 Rating=reviewForm.Rating,
-                ImageCreateDto=imageList
              };
             return await _reviewService.CreateReviewAsync(reviewCreateDto);
         }
@@ -79,6 +67,9 @@ namespace Ecommerce.Controller.src.Controller
         {
             return await _reviewService.GetAllReviewsAsync(queryOptions);
         }
+
+  
+
 
         [Authorize]
         [HttpDelete("{id}")]

@@ -70,9 +70,10 @@ namespace Ecommerce.Controller.src.Controller
 
         [AllowAnonymous]
         [HttpGet("{id}")]
-        public async Task<ProductReadDto> GetProductByIdAsync(Guid id)
+        public async Task<ActionResult<ProductReadDto>> GetProductByIdAsync(Guid id)
         {
-            return await _productService.GetProductByIdAsync(id);
+            var res= await _productService.GetProductByIdAsync(id);
+            return res==null?NotFound():Ok(res);
         }
 
         [AllowAnonymous]

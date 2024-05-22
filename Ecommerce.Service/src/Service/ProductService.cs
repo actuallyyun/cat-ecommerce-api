@@ -108,7 +108,7 @@ namespace Ecommerce.Service.src.Service
         public async Task<IEnumerable<ReviewReadDto>> GetAllReviews(Guid id)
         {
             var reviews= await _reviewRepository.GetReviewsByProductIdAsync(id);
-            
+            Console.WriteLine(reviews);
             return _mapper.Map<IEnumerable<ReviewReadDto>>(reviews);
         }
 
