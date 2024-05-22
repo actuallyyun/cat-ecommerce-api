@@ -59,7 +59,7 @@ namespace Ecommerce.Controller.src.Controller
         {
             try
             {
-                return await _userService.GetAllUsersAsync(options);
+                return await _userService.GetAllUserAsync(options);
             }
             catch (Exception ex)
             {
@@ -80,15 +80,15 @@ namespace Ecommerce.Controller.src.Controller
         [HttpGet("{id}/reviews")]
         public async Task<IEnumerable<Review>> GetUserReviewsByUserIdAsync([FromRoute] Guid id)
         {
-            return await _userService.GetAllReviewsAsync(id);
+            return await _userService.GetReviewsByUserIdAsync(id);
         }
 
         // only admin can get user orders by user id
         [Authorize(Roles = "Admin")]
         [HttpGet("{id}/orders")]
-        public async Task<IEnumerable<Order>> GetUserOrdersByUserIdAsync([FromRoute] Guid id)
+        public async Task<IEnumerable<OrderReadDto>> GetUserOrdersByUserIdAsync([FromRoute] Guid id)
         {
-            return await _userService.GetAllOrdersAsync(id);
+            return await _userService.GetAllUserOrdersAsync(id);
         }
 
         // user needs to be logged in to check her own profile
@@ -109,16 +109,16 @@ namespace Ecommerce.Controller.src.Controller
         {
             var claims = HttpContext.User; // not user obbject, but user claims
             var userId = Guid.Parse(claims.FindFirst(ClaimTypes.NameIdentifier).Value);
-            return await _userService.GetAllReviewsAsync(userId);
+            return await _userService.GetReviewsByUserIdAsync(userId);
         }
 
         [Authorize()] // user can get her own orders
         [HttpGet("orders")]
-        public async Task<IEnumerable<Order>> ListOrdersAsync()
+        public async Task<IEnumerable<OrderReadDto>> ListOrdersAsync()
         {
             var claims = HttpContext.User; // not user obbject, but user claims
             var userId = Guid.Parse(claims.FindFirst(ClaimTypes.NameIdentifier).Value);
-            return await _userService.GetAllOrdersAsync(userId);
+            return await _userService.GetAllUserOrdersAsync(userId);
         }
 
         [Authorize(Roles = "Admin")]

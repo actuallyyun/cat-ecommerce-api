@@ -9,9 +9,10 @@ namespace Ecommerce.Service.src.ServiceAbstraction
         Task<UserReadDto> CreateUserAsync(UserCreateDto user);
         Task<bool> UpdateUserByIdAsync(Guid id, UserUpdateDto user);
         Task<UserReadDto> GetUserByIdAsync(Guid id);
-        Task<IEnumerable<Review>> GetAllReviewsAsync(Guid id);
-        Task<IEnumerable<Order>> GetAllOrdersAsync(Guid id);
-        Task<IEnumerable<UserReadDto>> GetAllUsersAsync(QueryOptions options);
+        Task<IEnumerable<Review>> GetReviewsByUserIdAsync(Guid id);
+        Task<IEnumerable<OrderReadDto>> GetAllUserOrdersAsync(Guid id);
+        Task<IEnumerable<UserReadDto>> GetAllUserAsync(QueryOptions options);
+
         Task<bool> DeleteUserByIdAsync(Guid id);
     }
 }

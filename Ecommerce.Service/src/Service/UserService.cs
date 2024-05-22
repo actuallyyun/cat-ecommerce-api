@@ -58,7 +58,7 @@ namespace Ecommerce.Service.src.Service
             return _mapper.Map<UserReadDto>(user);
         }
 
-        public async Task<IEnumerable<Review>> GetAllReviewsAsync(Guid id){
+        public async Task<IEnumerable<Review>> GetReviewsByUserIdAsync(Guid id){
             return await _reviewRepo.GetReviewsByUserIdAsync(id);
         }
 
@@ -80,10 +80,12 @@ namespace Ecommerce.Service.src.Service
                 existingUser.LastName=userDto.LastName;
             }
             if(userDto.Avatar!=null){
-                existingUser.Avatar=AppConstants.CATEGORY_DEFAULT_IMAGE;
+                existingUser.Avatar=userDto.Avatar;
             }
             if(userDto.Password!=null){
-                existingUser.Password=userDto.Password;
+                var hashedPassword=_passwordService.HashPassword(userDto.Password,out byte[]salt);
+                existingUser.Password=hashedPassword;
+                existingUser.Salt=salt;
             }
 
             return await _userRepo.UpdateUserByIdAsync(existingUser);
@@ -101,9 +103,17 @@ namespace Ecommerce.Service.src.Service
             return await _userRepo.DeleteUserByIdAsync(id);
         }
 
-        public async Task<IEnumerable<Order>> GetAllOrdersAsync(Guid id)//get orders of a user
+        public async Task<IEnumerable<OrderReadDto>> GetAllUserOrdersAsync(Guid id)//get orders of a user
         {
-            return await _orderRepo.GetAllUserOrdersAsync(id);
+            var orders= await _orderRepo.GetAllUserOrdersAsync(id);
+            return _mapper.Map<IEnumerable<OrderReadDto>>(orders);
+        }
+
+        public async Task<IEnumerable<UserReadDto>> GetAllUserAsync(QueryOptions options)
+        {
+        var users=await _userRepo.GetAllUsersAsync(options);
+        return 
+        _mapper.Map<IEnumerable<UserReadDto>>(users);
         }
     }
 }

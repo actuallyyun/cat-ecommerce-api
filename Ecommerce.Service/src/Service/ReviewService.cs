@@ -27,15 +27,15 @@ namespace Ecommerce.Service.src.Service
             _mapper = mapper;
         }
 
-        public async Task<Review> CreateReviewAsync(ReviewCreateDto reviewDto)
+        public async Task<ReviewReadDto> CreateReviewAsync(ReviewCreateDto reviewDto)
         {
             await ValidateIdAsync(reviewDto.UserId, "User");
             await ValidateIdAsync(reviewDto.ProductId, "Product");
 
             var review = _mapper.Map<Review>(reviewDto); // Use AutoMapper to map from DTO to Entity
 
-            await _reviewRepository.CreateReviewAsync(review);
-            return review;
+            var reviewCreated= _reviewRepository.CreateReviewAsync(review);
+            return _mapper.Map<ReviewReadDto>(reviewCreated);
         }
 
         public async Task<bool> UpdateReviewByIdAsync(
@@ -75,9 +75,10 @@ namespace Ecommerce.Service.src.Service
             return await _reviewRepository.UpdateReviewByIdAsync(review);
         }
 
-        public async Task<IEnumerable<Review>> GetAllReviewsAsync(QueryOptions options)
+        public async Task<IEnumerable<ReviewReadDto>> GetAllReviewsAsync(QueryOptions options)
         {
-            return await _reviewRepository.GetAllReviewsAsync(options);
+            var reviews= await _reviewRepository.GetAllReviewsAsync(options);
+            return _mapper.Map<IEnumerable<ReviewReadDto>>(reviews);
         }
 
         public async Task<bool> DeleteReviewByIdAsync(Guid userId, Guid id)
@@ -97,9 +98,10 @@ namespace Ecommerce.Service.src.Service
             return await _reviewRepository.DeleteReviewByIdAsync(id);
         }
 
-        public async Task<Review> GetReviewByIdAsync(Guid id)
+        public async Task<ReviewReadDto> GetReviewByIdAsync(Guid id)
         {
-            return await _reviewRepository.GetReviewByIdAsync(id);
+            var review= await _reviewRepository.GetReviewByIdAsync(id);
+            return _mapper.Map<ReviewReadDto>(review);
         }
 
         private async Task ValidateIdAsync(Guid id, string entityType)

@@ -22,7 +22,7 @@ namespace Ecommerce.Controller.src.Controller
         [Consumes("multipart/form-data")]
         [Authorize]
         [HttpPost()]
-        public async Task<ActionResult<Review>> CreateReview(ReviewForm reviewForm)
+        public async Task<ActionResult<ReviewReadDto>> CreateReview(ReviewForm reviewForm)
         {
             if (reviewForm == null || reviewForm.Images == null || reviewForm.Images.Count == 0)
             {
@@ -68,14 +68,14 @@ namespace Ecommerce.Controller.src.Controller
 
         [AllowAnonymous]
         [HttpGet("{id}")]
-        public async Task<Review> RetrieveSingleReview([FromRoute] Guid id)
+        public async Task<ReviewReadDto> RetrieveSingleReview([FromRoute] Guid id)
         {
             return await _reviewService.GetReviewByIdAsync(id);
         }
 
         [AllowAnonymous]
         [HttpGet()]
-        public async Task<IEnumerable<Review>> ListReviews([FromQuery] QueryOptions queryOptions)
+        public async Task<IEnumerable<ReviewReadDto>> ListReviews([FromQuery] QueryOptions queryOptions)
         {
             return await _reviewService.GetAllReviewsAsync(queryOptions);
         }
