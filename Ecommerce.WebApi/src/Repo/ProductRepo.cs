@@ -3,6 +3,7 @@ using Ecommerce.Core.src.Common;
 using Ecommerce.Core.src.Entity;
 using Ecommerce.Core.src.RepoAbstraction;
 using Ecommerce.Core.src.ValueObject;
+using Ecommerce.Service.src.DTO;
 using Ecommerce.WebApi.src.Data;
 using Microsoft.EntityFrameworkCore;
 
@@ -15,6 +16,7 @@ namespace Ecommerce.WebApi.src.Repo
         private readonly DbSet<ProductImage> _images;
 
         private readonly DbSet<Category> _categories;
+    
         public ProductRepo(EcommerceDbContext context)
         {
             _context = context;
@@ -61,6 +63,8 @@ namespace Ecommerce.WebApi.src.Repo
             if (options?.SortOrder == SortOrder.ASC)
             {
                 products = await _products
+                .Include(p=>p.Category)
+                .Include(p=>p.Images)
                     .Where(p => p.Title.Contains(searchKey))
                     .Skip(skipFrom ?? 1)
                     .Take(options?.Limit ?? AppConstants.PER_PAGE)
@@ -91,7 +95,11 @@ namespace Ecommerce.WebApi.src.Repo
         }
         public async Task<Product>? GetProductByIdAsync(Guid id)
         {
-            return await _products.SingleOrDefaultAsync(p => p.Id == id);
+            var product= await _products.Include(p=>p.Category).SingleOrDefaultAsync(p => p.Id == id);
+            var images=await _images.Where(i=>i.ProductId==id).ToListAsync();
+         
+            product.Images=images;
+            return product;
         }
 
         public async Task<bool> UpdateProductAsync(Product product)

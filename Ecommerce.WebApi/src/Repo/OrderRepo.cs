@@ -107,7 +107,6 @@ namespace Ecommerce.WebApi.src.Repo
                     setters
                         .SetProperty(u => u.Address, order.Address)
                         .SetProperty(u => u.Status, order.Status)
-                        .SetProperty(u => u.UpdatedAt, DateTime.Now)
                 );
             await _context.SaveChangesAsync();
             return true;

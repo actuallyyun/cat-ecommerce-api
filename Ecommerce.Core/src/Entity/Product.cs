@@ -16,9 +16,7 @@ namespace Ecommerce.Core.src.Entity
         public decimal Price { get; set; }
 
         public Guid CategoryId { get; set; }
-
-        [ForeignKey("CategoryId")]
-        public Category Category { get; set; }
+        public virtual Category? Category { get; set; }
 
         [Required]
         [Range(0, int.MaxValue, ErrorMessage = "Inventory must be greater than or equal to 0")]
@@ -26,7 +24,7 @@ namespace Ecommerce.Core.src.Entity
 
         [Range(0, int.MaxValue)]
         public decimal? Rating { get; set; }
-public List<ProductImage> Images { get; set; } = new List<ProductImage>();
+        public IEnumerable<ProductImage> Images { get; set; } 
         public List<Review>? Reviews { get; set; }=new List<Review>();
     }
 }

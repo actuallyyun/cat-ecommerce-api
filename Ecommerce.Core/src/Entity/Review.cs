@@ -37,5 +37,5 @@ public class Review : BaseEntity
             _rating = value;
         }
     }
-    public List<ReviewImage> Images { get; set; } = new List<ReviewImage>();
+    public IEnumerable<ReviewImage> Images { get; set; } 
 }

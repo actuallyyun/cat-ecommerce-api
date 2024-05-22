@@ -30,7 +30,6 @@ namespace Ecommerce.WebApi.src.Repo
                 setters
                     .SetProperty(a => a.AddressLine, address.AddressLine)
                     .SetProperty(a => a.Country, address.Country)
-                    .SetProperty(a => a.UpdatedAt, address.UpdatedAt)
                     .SetProperty(a => a.PhoneNumber, address.PhoneNumber)
                     .SetProperty(a => a.PostalCode, address.PostalCode)
             );

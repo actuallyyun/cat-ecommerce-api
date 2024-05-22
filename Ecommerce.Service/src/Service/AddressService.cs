@@ -59,7 +59,6 @@ namespace Ecommerce.Service.src.Service
                 addressFound.Country = address.Country ?? addressFound.Country;
                 addressFound.PhoneNumber = address.PhoneNumber ?? addressFound.PhoneNumber;
                 addressFound.PostalCode = address.PostalCode ?? addressFound.PostalCode;
-                addressFound.UpdatedAt = DateTime.UtcNow;
             }
             catch (Exception)
             {

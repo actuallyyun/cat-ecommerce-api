@@ -88,20 +88,19 @@ namespace Ecommerce.WebApi.src.Data
                 entity.HasKey(e => e.Id);
             });
 
-
-            modelBuilder.Entity<Product>()
-            .HasOne(p=>p.Category)
-            .WithMany(c=>c.Products)
-            .HasForeignKey(p=>p.CategoryId)
-            .OnDelete(DeleteBehavior.SetNull);
-
-
             modelBuilder
-                .Entity<ProductImage>()
-                .HasOne(pi => pi.Product)
-                .WithMany(p => p.Images)
-                .HasForeignKey(pi => pi.ProductId)
-                .OnDelete(DeleteBehavior.Cascade);
+                .Entity<Product>()
+                .HasOne(p => p.Category)
+                .WithMany()
+                .HasForeignKey(p => p.CategoryId)
+                .OnDelete(DeleteBehavior.SetNull);
+
+            //modelBuilder
+            //    .Entity<ProductImage>()
+            //    .HasOne(pi => pi.Product)
+            //    .WithMany(p => p.Images)
+            //    .HasForeignKey(pi => pi.ProductId)
+            //    .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder
                 .Entity<ReviewImage>()
@@ -136,7 +135,7 @@ namespace Ecommerce.WebApi.src.Data
             var reviews = SeedData.GenerateReviews(users, products);
             modelBuilder.Entity<Review>().HasData(reviews);
 
-              var reviewImages = SeedData.GenerateReviewImages(reviews);
+            var reviewImages = SeedData.GenerateReviewImages(reviews);
             modelBuilder.Entity<ReviewImage>().HasData(reviewImages);
         }
     }

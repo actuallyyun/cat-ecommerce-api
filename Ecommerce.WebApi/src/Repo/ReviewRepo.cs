@@ -58,6 +58,7 @@ namespace Ecommerce.WebApi.src.Repo
             if (options?.SortOrder == SortOrder.ASC)
             {
                 reviews = await _reviews
+                    .Include(r => r.Images)
                     .Where(r => r.Content.Contains(query.SearchKey))
                     .Skip(query.SkipFrom)
                     .Take(options?.Limit ?? AppConstants.PER_PAGE)
@@ -67,6 +68,7 @@ namespace Ecommerce.WebApi.src.Repo
             else
             {
                 reviews = await _reviews
+                    .Include(r => r.Images)
                     .Where(r => r.Content.Contains(query.SearchKey))
                     .Skip(query.SkipFrom)
                     .Take(options?.Limit ?? AppConstants.PER_PAGE)
@@ -79,7 +81,9 @@ namespace Ecommerce.WebApi.src.Repo
 
         public async Task<Review> GetReviewByIdAsync(Guid id)
         {
-            var review = await _reviews.SingleOrDefaultAsync(r => r.Id == id);
+            var review = await _reviews
+                .Include(r => r.Images)
+                .SingleOrDefaultAsync(r => r.Id == id);
             if (review == null)
             {
                 throw new KeyNotFoundException($"Review with ID {id} not found.");
@@ -104,12 +108,18 @@ namespace Ecommerce.WebApi.src.Repo
 
         public async Task<IEnumerable<Review>> GetReviewsByProductIdAsync(Guid productId)
         {
-            return await _reviews.Where(r => r.ProductId == productId).ToListAsync();
+            return await _reviews
+                .Include(r => r.Images)
+                .Where(r => r.ProductId == productId)
+                .ToListAsync();
         }
 
         public async Task<IEnumerable<Review>> GetReviewsByUserIdAsync(Guid userId)
         {
-            return await _reviews.Where(r => r.UserId == userId).ToListAsync();
+            return await _reviews
+                .Include(r => r.Images)
+                .Where(r => r.UserId == userId)
+                .ToListAsync();
         }
     }
 }
