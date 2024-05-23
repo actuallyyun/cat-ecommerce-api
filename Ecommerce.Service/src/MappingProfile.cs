@@ -6,8 +6,16 @@ public class MappingProfile : Profile
 {
     public MappingProfile()
     {
+
+        // Address mapping
+
+        CreateMap<AddressCreateDto,Address>();
+        CreateMap<Address,AddressReadDto>();
+        
         // Token mapping
-        CreateMap<ResponseToken, ResponseTokenReadDto>();
+        CreateMap<ResponseToken, ResponseTokenReadDto>()
+        .ForMember(dest=>dest.AccessToken,opt=>opt.MapFrom(src=>src.AccessToken))
+        .ForMember(dest=>dest.RefreshToken,opt=>opt.MapFrom(src=>src.RefreshToken));
 
         // User mappings
         CreateMap<User, UserReadDto>();

@@ -26,15 +26,14 @@ namespace Ecommerce.Controller.src.Controller
 
         [Authorize]
         [HttpPost()]
-        public async Task<ActionResult<Address>> CreateAddressAsync(
+        public async Task<ActionResult<AddressReadDto>> CreateAddressAsync(
             [FromBody] AddressCreateDto addressCreate
         )
         {
             var claims = HttpContext.User;
             var userId = Guid.Parse(claims.FindFirst(ClaimTypes.NameIdentifier).Value);
 
-            addressCreate.UserId = userId;
-            return await _addressService.CreateAddressAsync(addressCreate);
+            return await _addressService.CreateAddressAsync(userId,addressCreate);
         }
 
         [Authorize]
@@ -60,15 +59,6 @@ namespace Ecommerce.Controller.src.Controller
 
             var res = await _addressService.GetAddressByIdAsync(id, userId);
             return res == null ? NotFound() : Ok(res);
-        }
-
-        [Authorize]
-        [HttpGet()]
-        public async Task<IEnumerable<Address>> ListAddressByUserId()
-        {
-            var claims = HttpContext.User;
-            var userId = Guid.Parse(claims.FindFirst(ClaimTypes.NameIdentifier).Value);
-            return await _addressService.GetAllUserAddressesAsync(userId);
         }
 
         [Authorize]

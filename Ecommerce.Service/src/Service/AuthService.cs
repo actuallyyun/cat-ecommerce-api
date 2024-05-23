@@ -1,5 +1,6 @@
 using AutoMapper;
 using Ecommerce.Core.src.Common;
+using Ecommerce.Core.src.Entity;
 using Ecommerce.Core.src.RepoAbstraction;
 using Ecommerce.Service.src.DTO;
 using Ecommerce.Service.src.ServiceAbstraction;
@@ -42,7 +43,7 @@ namespace Ecommerce.Service.src.Service
             if (isValidPassword)
             {
                 var token=await _tokenService.GenerateToken(user);
-                return _mapper.Map<ResponseTokenReadDto>(token);
+                return new ResponseTokenReadDto{AccessToken=token.AccessToken,RefreshToken=token.RefreshToken};
             }
             else
             {

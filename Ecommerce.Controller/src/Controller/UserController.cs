@@ -15,10 +15,12 @@ namespace Ecommerce.Controller.src.Controller
     public class UserController : ControllerBase
     {
         private readonly IUserService _userService;
+        private readonly IAddressService _addressService;
 
-        public UserController(IUserService userService)
+        public UserController(IUserService userService,IAddressService addressService)
         {
             _userService = userService;
+            _addressService=addressService;
         }
 
         [AllowAnonymous]
@@ -83,7 +85,7 @@ namespace Ecommerce.Controller.src.Controller
         [HttpGet("profile")]
         public async Task<UserReadDto> GetUserProfileAsync()
         {
-            var claims = HttpContext.User; // not user obbject, but user claims
+            var claims = HttpContext.User; 
             var userId = Guid.Parse(claims.FindFirst(ClaimTypes.NameIdentifier).Value);
 
             return await _userService.GetUserByIdAsync(userId);
@@ -106,6 +108,15 @@ namespace Ecommerce.Controller.src.Controller
             var claims = HttpContext.User; // not user obbject, but user claims
             var userId = Guid.Parse(claims.FindFirst(ClaimTypes.NameIdentifier).Value);
             return await _userService.GetAllUserOrdersAsync(userId);
+        }
+
+                [Authorize()] // user can get her own orders
+        [HttpGet("addresses")]
+        public async Task<IEnumerable<AddressReadDto>> ListAddressesAsync()
+        {
+            var claims = HttpContext.User; // not user obbject, but user claims
+            var userId = Guid.Parse(claims.FindFirst(ClaimTypes.NameIdentifier).Value);
+            return await _addressService.GetAllUserAddressesAsync(userId);
         }
 
         [Authorize(Roles = "Admin")]

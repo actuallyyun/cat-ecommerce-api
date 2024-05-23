@@ -14,14 +14,18 @@ namespace Ecommerce.Service.src.Service
         private readonly IUserRepository _userRepo;
         private readonly IMapper _mapper;
 
-        public AddressService(IAddressRepository addressRepo, IUserRepository userRepo,IMapper mapper)
+        public AddressService(
+            IAddressRepository addressRepo,
+            IUserRepository userRepo,
+            IMapper mapper
+        )
         {
             _addressRepo = addressRepo;
             _userRepo = userRepo;
-            _mapper=mapper;
+            _mapper = mapper;
         }
 
-        public async Task<Address> CreateAddressAsync(AddressCreateDto address)
+        public async Task<AddressReadDto> CreateAddressAsync(Guid userId,AddressCreateDto address)
         {
             var validator = new CustomValidator();
             if (address.PhoneNumber != null)
@@ -33,9 +37,18 @@ namespace Ecommerce.Service.src.Service
                 }
             }
 
-            var newAddress = _mapper.Map<Address>(address);
+            var addressCreate=new Address{
+                UserId=userId,
+                FirstName=address.FirstName,
+                LastName=address.LastName,
+                AddressLine=address.AddressLine,
+                PostalCode=address.PostalCode,
+                PhoneNumber=address.PhoneNumber,
+                Country=address.Country,
+            };
 
-            return await _addressRepo.CreateAddressAsync(newAddress);
+            var newAddress= await _addressRepo.CreateAddressAsync(addressCreate);
+            return _mapper.Map<AddressReadDto>(newAddress);
         }
 
         public async Task<bool> UpdateAddressByIdAsync(
@@ -79,9 +92,10 @@ namespace Ecommerce.Service.src.Service
             return await _addressRepo.GetAddressByIdAsync(addressId);
         }
 
-        public async Task<IEnumerable<Address>> GetAllUserAddressesAsync(Guid userId)
+        public async Task<IEnumerable<AddressReadDto>> GetAllUserAddressesAsync(Guid userId)
         {
-            return await _addressRepo.GetAllUserAddressesAsync(userId);
+            var addresses = await _addressRepo.GetAllUserAddressesAsync(userId);
+            return _mapper.Map<IEnumerable<AddressReadDto>>(addresses);
         }
 
         private async Task IsOwner(Guid addressId, Guid userId)
