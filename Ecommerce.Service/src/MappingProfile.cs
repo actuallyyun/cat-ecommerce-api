@@ -24,7 +24,7 @@ public class MappingProfile : Profile
 
         // Product mappings
         CreateMap<ProductCreateDto, Product>()
-            .ForMember(dest => dest.Images, opt => opt.MapFrom(src => src.ImageCreateDto));
+            .ForMember(dest => dest.Images, opt => opt.Ignore());
 
         CreateMap<ImageCreateDto, ProductImage>()
             .ForMember(dest => dest.ProductId, opt => opt.AllowNull());

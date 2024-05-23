@@ -4,7 +4,6 @@ using Ecommerce.Service.src.DTO;
 using Ecommerce.Service.src.ServiceAbstraction;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using static Ecommerce.Controller.src.DataModel.FormDataModel;
 
 namespace Ecommerce.Controller.src.Controller
 {

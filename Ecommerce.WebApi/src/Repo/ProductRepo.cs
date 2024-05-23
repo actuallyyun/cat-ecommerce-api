@@ -39,10 +39,13 @@ namespace Ecommerce.WebApi.src.Repo
                         await _images.AddAsync(image);
                     }
                     await _context.SaveChangesAsync();
+                    transaction.Commit();
+
                     return product;
                 }
                 catch (DbException)
                 {
+                    transaction.Rollback();
                     throw;
                 }
             }

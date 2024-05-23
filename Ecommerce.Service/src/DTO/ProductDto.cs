@@ -21,7 +21,7 @@ namespace Ecommerce.Service.src.DTO
         public decimal Price { get; set; }
         public Guid CategoryId { get; set; }
         public int Inventory { get; set; }
-        public List<string>? ImageCreateDto { get; set; }
+        public List<string> Images { get; set; }
     }
 
     public class ProductUpdateDto

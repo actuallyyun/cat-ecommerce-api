@@ -91,7 +91,7 @@ namespace Ecommerce.WebApi.src.Repo
 
         public async Task<IEnumerable<Order>> GetAllUserOrdersAsync(Guid userId)
         {
-            return await _orders.Where(o => o.UserId == userId).ToListAsync(); // ignore queryoptions for now
+            return await _orders.Include(order=>order.OrderItems).Include(o=>o.Address).Where(o => o.UserId == userId).ToListAsync(); // ignore queryoptions for now
         }
 
         public async Task<Order>? GetOrderByIdAsync(Guid orderId)

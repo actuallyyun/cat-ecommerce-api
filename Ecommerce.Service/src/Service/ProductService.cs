@@ -33,7 +33,16 @@ namespace Ecommerce.Service.src.Service
         {
             await ValidateIdAsync(productCreate.CategoryId,"Category");
            
+            var images=new List<ProductImage>();
+            foreach(var img in productCreate.Images){
+                var newImg=new ProductImage{
+                    Id=Guid.NewGuid(),
+                    Url=img,
+                };
+                images.Add(newImg);
+            }
             var newProduct = _mapper.Map<Product>(productCreate);
+            newProduct.Images=images;
 
             var product= await _productRepository.CreateProductAsync(newProduct);
             return _mapper.Map<ProductReadDto>(product);
