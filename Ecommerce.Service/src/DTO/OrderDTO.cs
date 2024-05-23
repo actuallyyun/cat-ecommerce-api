@@ -21,10 +21,16 @@ namespace Ecommerce.Service.src.DTO
     public class OrderItemCreateDto
     {
         public Guid ProductId { get; set; }
-
         public int Quantity { get; set; }
 
-        public decimal Price { get; set; }
+    }
+
+        public class OrderItemReadDto
+    {
+        public Guid ProductId { get; set; }
+        public int Quantity { get; set; }
+        public decimal Price{ get; set; }
+
     }
 
     public class OrderUpdateDto

@@ -6,16 +6,15 @@ public class MappingProfile : Profile
 {
     public MappingProfile()
     {
-
         // Address mapping
 
-        CreateMap<AddressCreateDto,Address>();
-        CreateMap<Address,AddressReadDto>();
-        
+        CreateMap<AddressCreateDto, Address>();
+        CreateMap<Address, AddressReadDto>();
+
         // Token mapping
         CreateMap<ResponseToken, ResponseTokenReadDto>()
-        .ForMember(dest=>dest.AccessToken,opt=>opt.MapFrom(src=>src.AccessToken))
-        .ForMember(dest=>dest.RefreshToken,opt=>opt.MapFrom(src=>src.RefreshToken));
+            .ForMember(dest => dest.AccessToken, opt => opt.MapFrom(src => src.AccessToken))
+            .ForMember(dest => dest.RefreshToken, opt => opt.MapFrom(src => src.RefreshToken));
 
         // User mappings
         CreateMap<User, UserReadDto>();
@@ -43,6 +42,11 @@ public class MappingProfile : Profile
 
         CreateMap<OrderItemCreateDto, OrderItem>()
             .ForMember(dest => dest.OrderId, opt => opt.Ignore());
+
+        CreateMap<Order, OrderReadDto>()
+            .ForMember(dest => dest.OrderItems, opt => opt.MapFrom(src => src.OrderItems));
+
+        CreateMap<OrderItem, OrderItemReadDto>();
 
         // Review mappings
         CreateMap<Review, ReviewReadDto>()

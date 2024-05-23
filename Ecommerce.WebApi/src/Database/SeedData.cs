@@ -213,7 +213,6 @@ namespace Ecommerce.WebApi.src.Database
                         OrderId = order.Id,
                         ProductId = randomProduct.Id,
                         Quantity = quantity,
-                        Price = price,
                     };
 
                     orderItems.Add(orderItem);

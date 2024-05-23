@@ -18,7 +18,7 @@ namespace Ecommerce.Core.src.Entity
         public OrderStatus Status { get; set; } = OrderStatus.Created;
 
         // represent one to many relationship with OrderItem
-        public List<OrderItem> OrderItems { get; set; } = new List<OrderItem>();
+        public List<OrderItem> OrderItems { get; set; }
 
         // Navigation property
         [ForeignKey("AddressId")]

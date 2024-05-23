@@ -15,7 +15,7 @@ namespace Ecommerce.Service.src.Service
         private readonly IUserRepository _userRepository;
         private readonly IAddressRepository _addressRepository;
         private readonly IProductRepository _productRepo;
-        private readonly IMapper  _mapper;
+        private readonly IMapper _mapper;
 
         public OrderService(
             IOrderRepository orderRepository,
@@ -32,18 +32,28 @@ namespace Ecommerce.Service.src.Service
             _mapper = mapper;
         }
 
-        public async Task<Order> CreateOrderAsync(OrderCreateDto orderDto)
+        public async Task<OrderReadDto> CreateOrderAsync(OrderCreateDto orderDto)
         {
             await ValidateIdAsync(orderDto.AddressId, "Address");
-            
-            var order=_mapper.Map<Order>(orderDto);
+            List<OrderItem> orderItems = new List<OrderItem>();
 
-            foreach (var item in orderDto.OrderItemCreateDto)
+            foreach (var itemDto in orderDto.OrderItemCreateDto)
             {
-                await ValidateIdAsync(item.ProductId, "Product");
-            }
+                var product = await _productRepo.GetProductByIdAsync(itemDto.ProductId);
 
-            return await _orderRepository.CreateOrderAsync(order);
+                var orderItem = new OrderItem
+                {
+                    ProductId = itemDto.ProductId,
+                    Quantity = itemDto.Quantity,
+                    Price = product.Price,
+                };
+                orderItems.Add(orderItem);
+            }
+            var order = _mapper.Map<Order>(orderDto);
+            order.OrderItems = orderItems;
+
+            var newOrder= await _orderRepository.CreateOrderAsync(order);
+            return _mapper.Map<OrderReadDto>(newOrder);
         }
 
         public async Task<bool> DeleteOrderByIdAsync(Guid id)
@@ -57,24 +67,26 @@ namespace Ecommerce.Service.src.Service
             return true;
         }
 
-        public async Task<IEnumerable<Order>> GetAllOrdersAsync(QueryOptions? options)
+        public async Task<IEnumerable<OrderReadDto>> GetAllOrdersAsync(QueryOptions? options)
         {
-            return await _orderRepository.GetAllOrdersAsync(options);
+            var orders= await _orderRepository.GetAllOrdersAsync(options);
+            return _mapper.Map<IEnumerable<OrderReadDto>>(orders);
         }
 
-        public async Task<IEnumerable<Order>> GetAllOrdersByUserAsync(Guid userId)
+        public async Task<IEnumerable<OrderReadDto>> GetAllOrdersByUserAsync(Guid userId)
         {
-            return await _orderRepository.GetAllUserOrdersAsync(userId);
+            var orders= await _orderRepository.GetAllUserOrdersAsync(userId);
+            return _mapper.Map<IEnumerable<OrderReadDto>>(orders);
         }
 
-        public async Task<Order> GetOrderByIdAsync(Guid id)
+        public async Task<OrderReadDto> GetOrderByIdAsync(Guid id)
         {
             var order = await _orderRepository.GetOrderByIdAsync(id);
             if (order == null)
             {
                 throw new ArgumentException("Order not found");
             }
-            return order;
+            return _mapper.Map<OrderReadDto>(order);
         }
 
         public async Task<bool> UpdateOrderByIdAsync(Guid id, OrderUpdateDto order)

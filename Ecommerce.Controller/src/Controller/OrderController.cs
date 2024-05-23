@@ -22,7 +22,7 @@ namespace Ecommerce.Controller.src.Controller
 
         [Authorize]
         [HttpPost()]
-        public async Task<Order> CreateOrderAsync(OrderCreateDto order)
+        public async Task<OrderReadDto> CreateOrderAsync(OrderCreateDto order)
         {
             var claims = HttpContext.User;
             var userId = Guid.Parse(claims.FindFirst(ClaimTypes.NameIdentifier).Value);
@@ -40,7 +40,7 @@ namespace Ecommerce.Controller.src.Controller
 
         [Authorize()]
         [HttpGet("{id}")]
-        public async Task<Order> RetrieveOrderAsync([FromRoute] Guid id)
+        public async Task<OrderReadDto> RetrieveOrderAsync([FromRoute] Guid id)
         {
             var orderFound = await _orderService.GetOrderByIdAsync(id);
             
@@ -57,7 +57,7 @@ namespace Ecommerce.Controller.src.Controller
 
         [Authorize(Roles = "Admin")] // only allow admins to list all orders
         [HttpGet()]
-        public async Task<IEnumerable<Order>> ListOrdersAsync([FromQuery] QueryOptions options)
+        public async Task<IEnumerable<OrderReadDto>> ListOrdersAsync([FromQuery] QueryOptions options)
         {
             return await _orderService.GetAllOrdersAsync(options);
         }

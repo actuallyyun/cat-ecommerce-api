@@ -6,11 +6,11 @@ namespace Ecommerce.Service.src.ServiceAbstraction
 {
     public interface IOrderService
     {
-        Task<Order> CreateOrderAsync(OrderCreateDto order);
+        Task<OrderReadDto> CreateOrderAsync(OrderCreateDto order);
         Task<bool> UpdateOrderByIdAsync(Guid id, OrderUpdateDto order);
-        Task<Order> GetOrderByIdAsync(Guid id);
-        Task<IEnumerable<Order>> GetAllOrdersAsync(QueryOptions? options);
-        Task<IEnumerable<Order>> GetAllOrdersByUserAsync(Guid userId);
+        Task<OrderReadDto> GetOrderByIdAsync(Guid id);
+        Task<IEnumerable<OrderReadDto>> GetAllOrdersAsync(QueryOptions? options);
+        Task<IEnumerable<OrderReadDto>> GetAllOrdersByUserAsync(Guid userId);
         Task<bool> DeleteOrderByIdAsync(Guid id);
     }
 }
