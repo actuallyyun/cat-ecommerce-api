@@ -21,23 +21,10 @@ namespace Ecommerce.Controller.src.Controller
             _userService = userService;
         }
 
-        [Consumes("multipart/form-data")]
         [AllowAnonymous]
         [HttpPost()]
-        public async Task<ActionResult<UserReadDto>> CreateFromFormAsync([FromForm] UserForm userForm)
+        public async Task<ActionResult<UserReadDto>> CreateUserAsync([FromBody] UserCreateDto userCreateDto)
         {
-            if (userForm == null || userForm.Avatar == null)
-            {
-                return BadRequest("user data and avatar image are required.");
-            }
-            var userCreateDto = new UserCreateDto
-            {
-                FirstName = userForm.FirstName,
-                LastName = userForm.LastName,
-                Avatar = userForm.Avatar,
-                Email = userForm.Email,
-                Password = userForm.Password
-            };
             return await _userService.CreateUserAsync(userCreateDto);
         }
 
@@ -127,12 +114,6 @@ namespace Ecommerce.Controller.src.Controller
         {
             return await _userService.DeleteUserByIdAsync(id);
         }
-
-        [HttpPost("file")]
-        public async Task<string>FakeRouteToHandleFile([FromBody] byte[]file){
-            return "new image url";
-        }
-
 
     }
 }

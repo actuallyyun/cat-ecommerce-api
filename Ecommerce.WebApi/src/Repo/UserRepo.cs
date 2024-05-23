@@ -12,8 +12,8 @@ namespace Ecommerce.WebApi.src.Repo
     {
         private readonly EcommerceDbContext _context;
         private readonly DbSet<User> _users;
-     
-        public UserRepo(EcommerceDbContext context, IMapper mapper)
+
+        public UserRepo(EcommerceDbContext context)
         {
             _context = context;
             _users = _context.Users;
@@ -21,20 +21,9 @@ namespace Ecommerce.WebApi.src.Repo
 
         public async Task<User> CreateUserAsync(User user)
         {
-            using (var transaction = await _context.Database.BeginTransactionAsync())
-            {
-                try
-                {
-                    await _users.AddAsync(user);
-
-                    await _context.SaveChangesAsync();
-                    return user;
-                }
-                catch (DbException)
-                {
-                    throw;
-                }
-            }
+            await _users.AddAsync(user);
+            await _context.SaveChangesAsync();
+            return user;
         }
 
         public async Task<bool> DeleteUserByIdAsync(Guid id)

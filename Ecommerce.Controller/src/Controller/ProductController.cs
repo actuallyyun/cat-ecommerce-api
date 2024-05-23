@@ -6,12 +6,11 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using static Ecommerce.Controller.src.DataModel.FormDataModel;
 
-
 namespace Ecommerce.Controller.src.Controller
 {
     [ApiController]
     [Route("api/v1/products")]
-    public class ProductController:ControllerBase
+    public class ProductController : ControllerBase
     {
         private readonly IProductService _productService;
 
@@ -20,37 +19,12 @@ namespace Ecommerce.Controller.src.Controller
             _productService = productService;
         }
 
-        [Consumes("multipart/form-data")]
-        [Authorize(Roles = "Admin")] 
+        [Authorize(Roles = "Admin")]
         [HttpPost()]
-        public async Task<ActionResult<ProductReadDto>> CreateFromFormAsync(
-            [FromForm] ProductForm productForm
+        public async Task<ActionResult<ProductReadDto>> CreateAsync(
+            [FromBody] ProductCreateDto productCreateDto
         )
         {
-            if (productForm == null || productForm.Images == null || productForm.Images.Count == 0)
-            {
-                return BadRequest("Product data and images are required.");
-            }
-
-            var imageList = new List<string>();
-            foreach (var image in productForm.Images)
-            {
-                if (image.Length > 0) //check image size for max length as well
-                {
-                
-                        imageList.Add(image);
-                    
-                }
-            }
-            var productCreateDto = new ProductCreateDto
-            {
-                Inventory = productForm.Inventory,
-                Title = productForm.Name,
-                Description = productForm.Description,
-                Price = productForm.Price,
-                ImageCreateDto = imageList,
-                CategoryId=productForm.CategoryId,
-            };
             return await _productService.CreateProductAsync(productCreateDto);
         }
 
@@ -72,8 +46,8 @@ namespace Ecommerce.Controller.src.Controller
         [HttpGet("{id}")]
         public async Task<ActionResult<ProductReadDto>> GetProductByIdAsync(Guid id)
         {
-            var res= await _productService.GetProductByIdAsync(id);
-            return res==null?NotFound():Ok(res);
+            var res = await _productService.GetProductByIdAsync(id);
+            return res == null ? NotFound() : Ok(res);
         }
 
         [AllowAnonymous]
@@ -91,7 +65,5 @@ namespace Ecommerce.Controller.src.Controller
         {
             return await _productService.DeleteProductByIdAsync(id);
         }
-
-        
     }
 }
