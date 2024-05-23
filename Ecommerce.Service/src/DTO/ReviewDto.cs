@@ -20,11 +20,11 @@ namespace Ecommerce.Service.src.DTO
 
     public class ReviewReadDto:BaseEntity
     {
-        public Guid Id { get; }
-        public UserReadDto User{ get; }
-        public Guid ProductId { get; }
-        public bool IsAnonymous { get; }
-        public string Content { get; }
-        public int Rating { get; }
+        public Guid Id { get; set;}
+        public UserReadDto User{ get; set;}
+        public Guid ProductId { get;set; }
+        public bool IsAnonymous { get; set;}
+        public string Content { get; set;}
+        public int Rating { get;set; }
     }
 }
