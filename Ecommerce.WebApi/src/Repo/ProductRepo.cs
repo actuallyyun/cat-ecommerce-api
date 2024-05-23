@@ -141,6 +141,7 @@ namespace Ecommerce.WebApi.src.Repo
                             );
                     }
                     await _context.SaveChangesAsync();
+                    transaction.Commit();
 
                     return true;
                 }

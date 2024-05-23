@@ -76,7 +76,7 @@ namespace Ecommerce.Service.src.Service
             var productFound = await _productRepository.GetProductByIdAsync(id);
             if (productFound == null)
             {
-                throw new ArgumentException("product not found");
+                throw new ArgumentException("Product not found");
             }
             if (product.Price != null)
             {
@@ -104,13 +104,7 @@ namespace Ecommerce.Service.src.Service
             {
                 productFound.Title = product.Title;
             }
-            //if (product.Images != null)
-            //{
-            //    productFound.Images.Clear();
-            //    productFound.Images.AddRange(
-            //        product.Images.Select(data => new ProductImage(productFound.Id, data))
-            //    );
-            //}
+        
             return await _productRepository.UpdateProductAsync(productFound);
         }
 
