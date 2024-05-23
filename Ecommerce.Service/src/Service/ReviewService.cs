@@ -33,7 +33,8 @@ namespace Ecommerce.Service.src.Service
 
             var review = _mapper.Map<Review>(reviewDto); // Use AutoMapper to map from DTO to Entity
 
-            var reviewCreated= _reviewRepository.CreateReviewAsync(review);
+            var reviewCreated= await _reviewRepository.CreateReviewAsync(review);
+            
             return _mapper.Map<ReviewReadDto>(reviewCreated);
         }
 
@@ -82,7 +83,7 @@ namespace Ecommerce.Service.src.Service
                 throw new ArgumentException("Review not found with the specified ID.");
             }
             
-            if (id != userId)
+            if (existingReview.UserId != userId)
             {
                 throw new UnauthorizedAccessException(
                     "Unauthorized. You can only delete your own reviews."

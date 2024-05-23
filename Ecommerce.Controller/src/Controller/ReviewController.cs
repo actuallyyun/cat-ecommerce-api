@@ -19,15 +19,10 @@ namespace Ecommerce.Controller.src.Controller
             _reviewService = reviewService;
         }
 
-        [Consumes("multipart/form-data")]
         [Authorize]
         [HttpPost()]
         public async Task<ActionResult<ReviewReadDto>> CreateReview(ReviewForm reviewForm)
         {
-            if (reviewForm == null )
-            {
-                return BadRequest("Review data is required.");
-            }  
             var claims = HttpContext.User;
             var userId = Guid.Parse(claims.FindFirst(ClaimTypes.NameIdentifier).Value);
 
