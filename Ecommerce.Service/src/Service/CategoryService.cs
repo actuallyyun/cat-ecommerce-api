@@ -1,4 +1,5 @@
 using AutoMapper;
+using Ecommerce.Core.src.Common;
 using Ecommerce.Core.src.Entity;
 using Ecommerce.Core.src.RepoAbstraction;
 using Ecommerce.Core.src.RepositoryAbstraction;
@@ -84,8 +85,8 @@ namespace Ecommerce.Service.src.Service
         ));
         }
 
-        public async Task<IEnumerable<ProductReadDto>>GetProductsByCategoryAsync(Guid id){
-            var products=await _productRepo.GetProductsByCategoryAsync(id);
+        public async Task<IEnumerable<ProductReadDto>>GetProductsByCategoryAsync(Guid id,QueryOptions queryOptions){
+            var products=await _productRepo.GetProductsByCategoryAsync(id,queryOptions);
             
             return _mapper.Map<IEnumerable<ProductReadDto>>(products);
         }

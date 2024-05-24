@@ -99,7 +99,7 @@ namespace Ecommerce.WebApi.src.Repo
             return products;
         }
 
-        public async Task<IEnumerable<Product>> GetProductsByCategoryAsync(Guid catId)
+        public async Task<IEnumerable<Product>> GetProductsByCategoryAsync(Guid catId,QueryOptions queryOptions)
         {
             var products = await _products
                 .Where(p => p.CategoryId == catId)

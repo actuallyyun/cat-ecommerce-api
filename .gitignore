@@ -107,7 +107,6 @@ frontend/package-*.json
 #ignore files for local testing and documentation purpose
 http/
 DOCUMENTATIONS.md
-public/
 NOTES.md
 
 # ignore migrations

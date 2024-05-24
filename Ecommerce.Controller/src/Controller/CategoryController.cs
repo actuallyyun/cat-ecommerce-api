@@ -1,3 +1,4 @@
+using Ecommerce.Core.src.Common;
 using Ecommerce.Core.src.Entity;
 using Ecommerce.Service.src.DTO;
 using Ecommerce.Service.src.ServiceAbstraction;
@@ -54,9 +55,9 @@ namespace Ecommerce.Controller.src.Controller
 
         [AllowAnonymous]
         [HttpGet("{id}/products")]
-        public async Task<IEnumerable<ProductReadDto>> ListProductsByCategory([FromRoute] Guid id)
+        public async Task<IEnumerable<ProductReadDto>> ListProductsByCategory([FromRoute] Guid id,QueryOptions queryOptions)
         {
-            return await _categoryService.GetProductsByCategoryAsync(id);
+            return await _categoryService.GetProductsByCategoryAsync(id,queryOptions);
         }
 
         [Authorize(Roles = "Admin")]
