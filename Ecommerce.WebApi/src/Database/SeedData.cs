@@ -117,7 +117,7 @@ namespace Ecommerce.WebApi.src.Database
 
             foreach (var category in categories)
             {
-                for (int i = 0; i < 20; i++)
+                for (int i = 0; i < 30; i++)
                 {
                     var faker = new Faker();
                     var product = new Product
@@ -227,7 +227,7 @@ namespace Ecommerce.WebApi.src.Database
             var reviews = new List<Review>();
             var faker = new Faker("en");
 
-            var randomProducts = faker.Random.ListItems(products, 20);
+            var randomProducts = faker.Random.ListItems(products, 40);
 
             foreach (var product in randomProducts)
             {

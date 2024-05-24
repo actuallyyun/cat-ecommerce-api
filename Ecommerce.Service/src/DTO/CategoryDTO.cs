@@ -14,9 +14,9 @@ public class CategoryUpdateDto
 
 public class CategoryReadDto
 {
-    public Guid Id { get; }
-    public string Name { get; }
-    public string Image { get; }
+    public Guid Id { get; set;}
+    public string Name { get; set;}
+    public string Image { get; set;}
 
     public CategoryReadDto(Guid id, string name, string image)
 

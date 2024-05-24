@@ -6,6 +6,7 @@ using Ecommerce.Core.src.ValueObject;
 using Ecommerce.Service.src.DTO;
 using Ecommerce.WebApi.src.Data;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 
 namespace Ecommerce.WebApi.src.Repo
 {
@@ -16,16 +17,15 @@ namespace Ecommerce.WebApi.src.Repo
         private readonly DbSet<ProductImage> _images;
 
         private readonly DbSet<Category> _categories;
-                private readonly DbSet<Review> _reviews;
+        private readonly DbSet<Review> _reviews;
 
-    
         public ProductRepo(EcommerceDbContext context)
         {
             _context = context;
             _products = _context.Products;
             _images = _context.ProductImages;
-            _categories=_context.Categories;
-            _reviews=_context.Reviews;
+            _categories = _context.Categories;
+            _reviews = _context.Reviews;
         }
 
         public async Task<Product> CreateProductAsync(Product product)
@@ -35,7 +35,8 @@ namespace Ecommerce.WebApi.src.Repo
                 try
                 {
                     await _products.AddAsync(product);
-                    foreach(var image in product.Images){
+                    foreach (var image in product.Images)
+                    {
                         await _images.AddAsync(image);
                     }
                     await _context.SaveChangesAsync();
@@ -61,17 +62,24 @@ namespace Ecommerce.WebApi.src.Repo
         public async Task<IEnumerable<Product>> GetAllProductsAsync(QueryOptions? options)
         {
             var searchKey = options?.SearchKey ?? null;
-            var skipFrom = (options?.StartingAfter == null ? options?.StartingAfter : 0) + 1;
+            var skipFrom = options?.StartingAfter == null ? 1 :(options?.StartingAfter+1);
             var sortBy = options?.SortBy ?? AppConstants.DEFAULT_SORT_BY;
+            var query = _products.AsQueryable();
 
             IEnumerable<Product> products;
-
+            
+            // first filter by search key
+            if(!string.IsNullOrEmpty(searchKey)){
+          
+             var title = searchKey.ToLower();
+                query = query.Where(p => p.Title.ToLower().Contains(title));
+            };
+            // then query based on sort order
             if (options?.SortOrder == SortOrder.ASC)
             {
-                products = await _products
-                .Include(p=>p.Category)
-                .Include(p=>p.Images)
-                    .Where(p => p.Title.Contains(searchKey))
+                products = await query
+                    .Include(p => p.Category)
+                    .Include(p => p.Images)
                     .Skip(skipFrom ?? 1)
                     .Take(options?.Limit ?? AppConstants.PER_PAGE)
                     .OrderBy(p => sortBy)
@@ -79,10 +87,9 @@ namespace Ecommerce.WebApi.src.Repo
             }
             else
             {
-                products = await _products
-                   .Include(p=>p.Category)
-                .Include(p=>p.Images)
-                    .Where(p => p.Title.Contains(searchKey))
+                products = await query
+                    .Include(p => p.Category)
+                    .Include(p => p.Images)
                     .Skip(skipFrom ?? 1)
                     .Take(options?.Limit ?? AppConstants.PER_PAGE)
                     .OrderByDescending(p => sortBy)
@@ -92,26 +99,35 @@ namespace Ecommerce.WebApi.src.Repo
             return products;
         }
 
-        public async Task<IEnumerable<Product>> GetProductsByCategoryAsync(Guid catId){
-            var products= await _products.Where(p=>p.CategoryId==catId).OrderByDescending(p=>p.Price).ToListAsync();
-            
-            foreach(var product in products){
-                var images=await _images.Where(im=>im.ProductId==product.Id).ToListAsync();
-                product.Images=images;
+        public async Task<IEnumerable<Product>> GetProductsByCategoryAsync(Guid catId)
+        {
+            var products = await _products
+                .Where(p => p.CategoryId == catId)
+                .OrderByDescending(p => p.Price)
+                .ToListAsync();
+
+            foreach (var product in products)
+            {
+                var images = await _images.Where(im => im.ProductId == product.Id).ToListAsync();
+                product.Images = images;
             }
             return products;
         }
+
         public async Task<Product>? GetProductByIdAsync(Guid id)
         {
-            var product= await _products.Include(p=>p.Category).SingleOrDefaultAsync(p => p.Id == id);
-            if(product==null){
+            var product = await _products
+                .Include(p => p.Category)
+                .SingleOrDefaultAsync(p => p.Id == id);
+            if (product == null)
+            {
                 return null;
             }
-            var images=await _images.Where(i=>i.ProductId==id).ToListAsync();
-            var reviews=await _reviews.Where(r=>r.ProductId==id).ToListAsync();
+            var images = await _images.Where(i => i.ProductId == id).ToListAsync();
+            var reviews = await _reviews.Where(r => r.ProductId == id).ToListAsync();
 
-            product.Images=images;
-            product.Reviews=reviews;
+            product.Images = images;
+            product.Reviews = reviews;
 
             return product;
         }
