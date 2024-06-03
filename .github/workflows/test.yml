@@ -1,0 +1,11 @@
+name: Test ASP backend
+on: [push]
+jobs:
+    run_unit_tests:
+    
+        runs-on: ubuntu-latest
+        steps:
+            
+            - name: Display dotnet version
+              run: dotnet --version
+
