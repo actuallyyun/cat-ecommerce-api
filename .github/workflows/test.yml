@@ -6,6 +6,15 @@ jobs:
         runs-on: ubuntu-latest
         steps:
             
-            - name: Display dotnet version
-              run: dotnet --version
-
+       
+              - uses: actions/checkout@v4
+              - name: Setup dotnet
+                uses: actions/setup-dotnet@v4
+                with:
+                  dotnet-version: '8.0.x'
+              - name: Install dependencies
+                run: dotnet restore
+              - name: Build
+                run: dotnet build
+              - name: Test with the dotnet CLI
+                run: dotnet test
