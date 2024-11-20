@@ -9,7 +9,7 @@ namespace Ecommerce.Core.src.RepoAbstraction
         Task<bool> UpdateProductAsync(Product product);
         Task<Product>? GetProductByIdAsync(Guid id);
         Task<IEnumerable<Product>> GetAllProductsAsync(QueryOptions options);
-        Task<IEnumerable<Product>> GetProductsByCategoryAsync(Guid catId,QueryOptions queryOptions);
+        Task<IEnumerable<Product>> GetProductsByCategoryAsync(Guid catId);
         Task<bool> DeleteProductByIdAsync(Guid id);
 
     }
