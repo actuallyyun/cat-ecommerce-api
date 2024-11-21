@@ -356,6 +356,8 @@ Testing technologies used are:
 
 To run tests: `dotnet test`
 
+## Deploy project on Azure web app 
+
 
 ## License
 This project is licensed under the MIT License. 

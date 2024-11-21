@@ -55,9 +55,9 @@ namespace Ecommerce.Controller.src.Controller
 
         [AllowAnonymous]
         [HttpGet("{id}/products")]
-        public async Task<IEnumerable<ProductReadDto>> ListProductsByCategory([FromRoute] Guid id,QueryOptions queryOptions)
+        public async Task<IEnumerable<ProductReadDto>> ListProductsByCategory([FromRoute] Guid id)
         {
-            return await _categoryService.GetProductsByCategoryAsync(id,queryOptions);
+            return await _categoryService.GetProductsByCategoryAsync(id);
         }
 
         [Authorize(Roles = "Admin")]

@@ -85,8 +85,8 @@ namespace Ecommerce.Service.src.Service
         ));
         }
 
-        public async Task<IEnumerable<ProductReadDto>>GetProductsByCategoryAsync(Guid id,QueryOptions queryOptions){
-            var products=await _productRepo.GetProductsByCategoryAsync(id,queryOptions);
+        public async Task<IEnumerable<ProductReadDto>>GetProductsByCategoryAsync(Guid id){
+            var products=await _productRepo.GetProductsByCategoryAsync(id);
             
             return _mapper.Map<IEnumerable<ProductReadDto>>(products);
         }

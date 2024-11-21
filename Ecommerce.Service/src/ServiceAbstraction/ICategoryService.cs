@@ -11,7 +11,7 @@ namespace Ecommerce.Service.src.ServiceAbstraction
         Task<bool> UpdateCategoryAsync(Guid id, CategoryUpdateDto categoryDto);
         Task<CategoryReadDto> GetCategoryByIdAsync(Guid categoryId);
         Task<IEnumerable<CategoryReadDto>> GetAllCategoriesAsync();
-        Task<IEnumerable<ProductReadDto>>GetProductsByCategoryAsync(Guid id ,QueryOptions queryOptions);
+        Task<IEnumerable<ProductReadDto>>GetProductsByCategoryAsync(Guid id );
         Task<bool> DeleteCategoryAsync(Guid categoryId);
     }
 }
