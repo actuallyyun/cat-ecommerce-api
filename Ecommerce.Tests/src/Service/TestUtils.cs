@@ -42,7 +42,7 @@ namespace Ecommerce.Tests.src.Service
             Price = -3.4m,
             CategoryId = category.Id,
             Inventory = 100,
-            ImageCreateDto = []
+            Images = []
         };
         public static ProductCreateDto InvalidP2 = new ProductCreateDto
         {
@@ -51,7 +51,7 @@ namespace Ecommerce.Tests.src.Service
             Price = 3.4m,
             CategoryId = category.Id,
             Inventory = -100,
-            ImageCreateDto = []
+            Images = []
         };
         public static ProductCreateDto InvalidP3 = new ProductCreateDto
         {
@@ -60,7 +60,7 @@ namespace Ecommerce.Tests.src.Service
             Price = -3.4m,
             CategoryId = category.Id,
             Inventory = 0,
-            ImageCreateDto = []
+            Images = []
         };
 
         public static ProductCreateDto InvalidP4 = new ProductCreateDto
@@ -70,7 +70,7 @@ namespace Ecommerce.Tests.src.Service
             Price = 3.4m,
             CategoryId = category.Id,
             Inventory = 100,
-            ImageCreateDto = []
+            Images = []
         };
 
         public static IEnumerable<object[]> InvalidProductCreateData =>
@@ -124,12 +124,10 @@ namespace Ecommerce.Tests.src.Service
         public static Order order = new Order{UserId=user.Id, AddressId=address1.Id, Status=OrderStatus.Created};
         public static OrderItemCreateDto orderItemDto1 = new OrderItemCreateDto{
             ProductId=Product1.Id, 
-            Quantity=4, 
-            Price=4.5m};
+            Quantity=4};
         public static OrderItemCreateDto orderItemDto2 = new OrderItemCreateDto{
             ProductId=Product2.Id, 
-            Quantity=4, 
-            Price=4.5m};
+            Quantity=4};
         public static OrderItem orderItem = new OrderItem{
             
             ProductId=Product1.Id, 

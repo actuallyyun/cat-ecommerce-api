@@ -30,7 +30,7 @@ namespace Ecommerce.WebApi.src.Database
                 {
                     Id = Guid.NewGuid(),
                     Name = cate,
-                    Image = faker.Image.PicsumUrl(),
+                    Image = faker.Image.LoremFlickrUrl(),
                 };
                 categories.Add(category);
             }
@@ -151,7 +151,7 @@ namespace Ecommerce.WebApi.src.Database
                     var image = new ProductImage
                     {
                         Id = Guid.NewGuid(),
-                        Url = faker.Image.PicsumUrl(),
+                        Url = faker.Image.LoremFlickrUrl(),
                         ProductId = product.Id,
                     };
                     images.Add(image);
