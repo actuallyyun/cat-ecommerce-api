@@ -24,9 +24,9 @@ This repository contains the backend server for a fullstack ecommerce project bu
 
 This repository is dedicated to the backend server. The frontend server is hosted in a separate repository. The frontend project must be connected to this backend server to complete the fullstack application.
 
-- **Frontend Repository**: [Frontend Repository Link](https://github.com/actuallyyun/frontend-project)
+- **Frontend Repository**: [Frontend Repository Link](https://github.com/actuallyyun/catagonia-fe)
 
-- **Frontend Live**: [Frontend Live](https://fs17-frontend-project-mauve.vercel.app/)
+- **Frontend Live**: [Frontend Live](https://catagonia-fe-hdsd.vercel.app/)
 
 ## Technologies
 
